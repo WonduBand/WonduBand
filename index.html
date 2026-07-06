@@ -356,6 +356,7 @@
     .text-head { padding: 0.8rem 1rem 0.7rem; gap: 0.5rem; }
     .text-head .th-num { display: none; }
     .text-head .th-title { font-size: 1.05rem; }
+    .text-head .th-badge { display: none !important; }
     .text-body { padding: 1rem 1.1rem 1.6rem; }
   }
 </style>
@@ -408,8 +409,8 @@
         <div class="th-num" id="thNum">// TRACK_01</div>
         <div class="th-title" id="thTitle">The Signal</div>
         <div class="th-badge" id="thBadge" style="display:none;">INSTRUMENTAL</div>
-        <button class="text-nav-btn th-play-btn" id="thPlayBtn" title="Play this track">▶</button>
-        <button class="text-nav-btn" id="nextBtn" title="Next track">▶</button>
+        <button class="text-nav-btn th-play-btn" id="thPlayBtn" title="Play this track">▶︎</button>
+        <button class="text-nav-btn" id="nextBtn" title="Next track">▶︎</button>
       </div>
       <div class="text-body" id="textBody"></div>
     </section>
@@ -417,9 +418,9 @@
   </div>
 
   <div class="mini-player" id="miniPlayer">
-    <button class="mp-btn" id="mpPrev" title="Previous track">⏮</button>
-    <button class="mp-btn mp-play" id="mpPlayPause" title="Play / Pause">▶</button>
-    <button class="mp-btn" id="mpNext" title="Next track">⏭</button>
+    <button class="mp-btn" id="mpPrev" title="Previous track">⏮︎</button>
+    <button class="mp-btn mp-play" id="mpPlayPause" title="Play / Pause">▶︎</button>
+    <button class="mp-btn" id="mpNext" title="Next track">⏭︎</button>
     <div class="mp-info">
       <div class="mp-title" id="mpTitle">—</div>
       <div class="mp-album" id="mpAlbum">—</div>
@@ -1176,7 +1177,7 @@ function renderTrackNav() {
     row.className = 'track-row' + (i === state.track ? ' active' : '');
     row.dataset.idx = i;
     row.innerHTML = `
-      <button class="row-play-btn" title="Play ${t.title}">▶</button>
+      <button class="row-play-btn" title="Play ${t.title}">▶︎</button>
       <span class="t-num">${String(i+1).padStart(2,'0')}</span>
       <span class="t-title">${t.title}</span>
       ${t.instrumental ? '<span class="t-inst">INST</span>' : ''}
@@ -1260,7 +1261,7 @@ function renderText() {
       item.className = 'ao-track-item';
       item.dataset.idx = i;
       item.innerHTML = `
-        <button class="row-play-btn" title="Play ${t.title}">▶</button>
+        <button class="row-play-btn" title="Play ${t.title}">▶︎</button>
         <span class="aot-num">${String(i+1).padStart(2,'0')}</span>
         <span class="aot-title">${t.title}</span>
         ${t.instrumental ? '<span class="aot-inst">INST</span>' : ''}
@@ -1492,15 +1493,15 @@ function refreshPlayingIndicators() {
     const btn = row.querySelector('.row-play-btn');
     const isThis = isRowPlaying(state.album, idx);
     row.classList.toggle('playing', isThis && !audioPlayer.paused);
-    if (btn) btn.textContent = (isThis && !audioPlayer.paused) ? '⏸' : '▶';
+    if (btn) btn.textContent = (isThis && !audioPlayer.paused) ? '⏸︎' : '▶︎';
   });
   const mainBtn = document.getElementById('thPlayBtn');
   if (mainBtn && !mainBtn.disabled) {
     const isThis = isRowPlaying(state.album, state.track);
-    mainBtn.textContent = (isThis && !audioPlayer.paused) ? '⏸' : '▶';
+    mainBtn.textContent = (isThis && !audioPlayer.paused) ? '⏸︎' : '▶︎';
   }
   const mpBtn = document.getElementById('mpPlayPause');
-  if (mpBtn) mpBtn.textContent = audioPlayer.paused ? '▶' : '⏸';
+  if (mpBtn) mpBtn.textContent = audioPlayer.paused ? '▶︎' : '⏸︎';
 }
 
 function formatTime(s) {
