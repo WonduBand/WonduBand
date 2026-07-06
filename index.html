@@ -162,7 +162,11 @@
     background: var(--bg-panel); border-top: 1px solid var(--border);
     transition: border-color 0.5s ease, background 0.5s ease;
   }
-  .mini-player.active { display: flex; }
+  .mini-player.active { display: flex; animation: miniPlayerIn 0.4s cubic-bezier(.4,0,.2,1); }
+  @keyframes miniPlayerIn { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .mp-btn, .row-play-btn, .text-nav-btn, .mobile-tab-btn, .album-tab, .cover-row, .track-row, .ao-track-item { transition: transform 0.15s ease, background 0.15s ease, border-color 0.2s ease, color 0.2s ease; }
+  .mp-btn:active, .row-play-btn:active, .text-nav-btn:active, .th-play-btn:active { transform: scale(0.88); }
+  .mobile-tab-btn:active { transform: scale(0.94); }
   /* ── PURE CSS TRANSPORT ICONS (no emoji/unicode glyphs, renders identically everywhere) ── */
   .icon { display: inline-block; position: relative; }
   .icon-tri-right { width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 8px solid currentColor; }
@@ -270,6 +274,8 @@
   .text-nav-btn:disabled { opacity: 0.25; cursor: default; }
 
   .text-body { flex: 1; overflow-y: auto; padding: 1.2rem 1.6rem 2.2rem; }
+  @keyframes contentFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .text-body > * { animation: contentFadeIn 0.35s ease both; }
 
   .track-note {
     padding: 0.75rem 1rem; margin-bottom: 1.3rem;
@@ -303,6 +309,12 @@
 
   .album-overview { padding: 0.4rem 0 1rem; }
   .ao-tagline { font-size: 0.95rem; font-style: italic; color: #ddd; line-height: 1.7; margin-bottom: 1.4rem; }
+  .ao-intro {
+    padding: 0.9rem 1.1rem; margin-bottom: 1.6rem;
+    background: rgba(255,255,255,0.02); border-left: 2px solid var(--accent);
+    font-size: 0.8rem; color: #999; font-style: italic; line-height: 1.75;
+    transition: border-color 0.5s ease;
+  }
   .ao-meta { display: flex; flex-wrap: wrap; gap: 1.2rem 1.8rem; margin-bottom: 1.6rem; padding-bottom: 1.4rem; border-bottom: 1px solid var(--border); transition: border-color 0.5s ease; }
   .ao-meta div { font-size: 0.62rem; letter-spacing: 0.12em; color: var(--text-dim); text-transform: uppercase; transition: color 0.5s ease; }
   .ao-meta span { color: var(--accent); display: block; margin-top: 0.2rem; font-size: 0.75rem; transition: color 0.5s ease; }
@@ -348,11 +360,31 @@
       overflow: hidden;
     }
 
-    /* Only the active mobile view is shown; the rest are hidden entirely */
-    .sidebar, .cover-pane, .text-pane { display: none; height: 100%; max-height: none; border: none; }
-    .app-main[data-view="tracks"] .sidebar { display: flex; }
-    .app-main[data-view="cover"] .cover-pane { display: flex; height: 100%; }
-    .app-main[data-view="lyrics"] .text-pane { display: flex; }
+    /* All three panes stay mounted and slide horizontally; only one is in view at a time */
+    .sidebar, .cover-pane, .text-pane {
+      display: flex; position: absolute; inset: 0;
+      height: 100%; max-height: none; border: none;
+      transition: transform 0.38s cubic-bezier(.4,0,.2,1);
+      will-change: transform;
+    }
+    .cover-pane { flex-direction: column; }
+
+    /* Default resting order: tracks | cover | lyrics, left to right */
+    .sidebar { transform: translateX(-100%); }
+    .cover-pane { transform: translateX(0%); }
+    .text-pane { transform: translateX(100%); }
+
+    .app-main[data-view="tracks"] .sidebar { transform: translateX(0%); }
+    .app-main[data-view="tracks"] .cover-pane { transform: translateX(100%); }
+    .app-main[data-view="tracks"] .text-pane { transform: translateX(200%); }
+
+    .app-main[data-view="cover"] .sidebar { transform: translateX(-100%); }
+    .app-main[data-view="cover"] .cover-pane { transform: translateX(0%); }
+    .app-main[data-view="cover"] .text-pane { transform: translateX(100%); }
+
+    .app-main[data-view="lyrics"] .sidebar { transform: translateX(-200%); }
+    .app-main[data-view="lyrics"] .cover-pane { transform: translateX(-100%); }
+    .app-main[data-view="lyrics"] .text-pane { transform: translateX(0%); }
 
     .text-body { max-height: none; }
 
@@ -961,6 +993,7 @@ const typeToClass = {
 const ALBUMS = {
   1: {
     roman: 'I', title: 'Ignition', cover: 'Cover_Album1.png',
+    intro: '2147. Earth is dying, and for the first time in a year the Signal has gone quiet — as if it is waiting. Eight thousand names have been drawn from eight billion lives, and a ship larger than anything humanity has ever built sits fuelled in orbit. This is the story of the last goodbye, and the first light of the engines that carry them away.',
     label: '// Album I of IV — Aether Odyssey //',
     tagline: '"We heard you calling… we\'re coming home."',
     meta: [['MISSION YEAR','2147.04.09'],['VESSEL','A.S. AETHER'],['SOULS ABOARD','8,000'],['DESTINATION','ELYSIUM / PROXIMA CENTAURI']],
@@ -995,6 +1028,7 @@ const ALBUMS = {
   },
   2: {
     roman: 'II', title: 'The Drift', cover: 'Cover_Album2.png',
+    intro: 'The Aether is decades from home and still years from anywhere. Earth has gone silent behind them, and Elysium is only a rumour of green on a distant sensor. This is the story of the years between — the Pulse that never stops, and a crew learning to live inside a single heartbeat of steel.',
     label: '// Album II of IV — Aether Odyssey //',
     tagline: '"The void is not empty — it is patient."',
     meta: [['MISSION YEAR','2148–2184'],['VESSEL','A.S. AETHER'],['SOULS ABOARD','8,000'],['STATUS','IN TRANSIT']],
@@ -1034,6 +1068,7 @@ const ALBUMS = {
   },
   3: {
     roman: 'III', title: 'Genesis', cover: 'Cover_Album3.png',
+    intro: 'After decades adrift, the engines finally reverse. Elysium fills the forward viewport, and eight thousand people who have never once touched real soil are about to become a civilization. This is the story of the landing — the first breath of alien air, and everything they build to make a new world feel like home.',
     label: '// Album III of IV — Aether Odyssey //',
     tagline: '"We are not the end of the human story — we are somewhere in the middle."',
     meta: [['MISSION YEAR','2184–2201'],['LOCATION','ELYSIUM / PROXIMA CENTAURI'],['COLONY POP.','8,000 → 30,000'],['STATUS','PLANETFALL COMPLETE']],
@@ -1072,6 +1107,7 @@ const ALBUMS = {
   },
   4: {
     roman: 'IV', title: 'New Pantheon', cover: 'Cover_Album4.png',
+    intro: 'Centuries have passed. The colony the original eight thousand built has grown into something they could never have imagined — a species standing at the edge of its own biology, its own mortality, its own stars. This is the story of ascension: what humanity becomes when it finally answers the Signal it once only followed.',
     label: '// Album IV of IV — Aether Odyssey //',
     tagline: '"Humanity no longer follows the stars. It claims them."',
     meta: [['ERA','POST-ASCENSION'],['ORIGIN','ELYSIUM COLONY'],['STATUS','TRANSCENDENT'],['REACH','GALACTIC']],
@@ -1261,6 +1297,7 @@ function renderText() {
     div.className = 'album-overview';
     div.innerHTML = `
       <div class="ao-tagline">${meta.tagline}</div>
+      ${meta.intro ? `<div class="ao-intro">${meta.intro}</div>` : ''}
       <div class="ao-meta">${meta.meta.map(([k,v]) => `<div>${k}<span>${v}</span></div>`).join('')}</div>
       <div class="ao-list-label">// Tracklist</div>
     `;
@@ -1501,8 +1538,10 @@ function refreshPlayingIndicators() {
     const idx = parseInt(row.dataset.idx, 10);
     const btn = row.querySelector('.row-play-btn');
     const isThis = isRowPlaying(state.album, idx);
-    row.classList.toggle('playing', isThis && !audioPlayer.paused);
-    if (btn) btn.innerHTML = `<span class="icon ${(isThis && !audioPlayer.paused) ? 'icon-pause' : 'icon-tri-right'}"></span>`;
+    const nowPlaying = isThis && !audioPlayer.paused;
+    row.classList.toggle('playing', nowPlaying);
+    if (btn) btn.innerHTML = `<span class="icon ${nowPlaying ? 'icon-pause' : 'icon-tri-right'}"></span>`;
+    if (nowPlaying) row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
   const mainBtn = document.getElementById('thPlayBtn');
   if (mainBtn && !mainBtn.disabled) {
