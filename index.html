@@ -163,6 +163,15 @@
     transition: border-color 0.5s ease, background 0.5s ease;
   }
   .mini-player.active { display: flex; }
+  /* ── PURE CSS TRANSPORT ICONS (no emoji/unicode glyphs, renders identically everywhere) ── */
+  .icon { display: inline-block; position: relative; }
+  .icon-tri-right { width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 8px solid currentColor; }
+  .icon-tri-left { width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-right: 8px solid currentColor; }
+  .icon-pause { width: 8px; height: 10px; }
+  .icon-pause::before, .icon-pause::after { content: ''; position: absolute; top: 0; width: 3px; height: 10px; background: currentColor; }
+  .icon-pause::before { left: 0; }
+  .icon-pause::after { left: 5px; }
+
   .mp-btn {
     background: transparent; border: 1px solid var(--border); color: var(--text-dim);
     width: 2rem; height: 2rem; border-radius: 50%; flex-shrink: 0;
@@ -405,12 +414,12 @@
 
     <section class="text-pane">
       <div class="text-head">
-        <button class="text-nav-btn" id="prevBtn" title="Previous track">◀</button>
+        <button class="text-nav-btn" id="prevBtn" title="Previous track"><span class="icon icon-tri-left"></span></button>
         <div class="th-num" id="thNum">// TRACK_01</div>
         <div class="th-title" id="thTitle">The Signal</div>
         <div class="th-badge" id="thBadge" style="display:none;">INSTRUMENTAL</div>
-        <button class="text-nav-btn th-play-btn" id="thPlayBtn" title="Play this track">▶︎</button>
-        <button class="text-nav-btn" id="nextBtn" title="Next track">▶︎</button>
+        <button class="text-nav-btn th-play-btn" id="thPlayBtn" title="Play this track"><span class="icon icon-tri-right"></span></button>
+        <button class="text-nav-btn" id="nextBtn" title="Next track"><span class="icon icon-tri-right"></span></button>
       </div>
       <div class="text-body" id="textBody"></div>
     </section>
@@ -418,9 +427,9 @@
   </div>
 
   <div class="mini-player" id="miniPlayer">
-    <button class="mp-btn" id="mpPrev" title="Previous track">⏮︎</button>
-    <button class="mp-btn mp-play" id="mpPlayPause" title="Play / Pause">▶︎</button>
-    <button class="mp-btn" id="mpNext" title="Next track">⏭︎</button>
+    <button class="mp-btn" id="mpPrev" title="Previous track"><span class="icon icon-tri-left"></span></button>
+    <button class="mp-btn mp-play" id="mpPlayPause" title="Play / Pause"><span class="icon icon-tri-right"></span></button>
+    <button class="mp-btn" id="mpNext" title="Next track"><span class="icon icon-tri-right"></span></button>
     <div class="mp-info">
       <div class="mp-title" id="mpTitle">—</div>
       <div class="mp-album" id="mpAlbum">—</div>
@@ -1177,7 +1186,7 @@ function renderTrackNav() {
     row.className = 'track-row' + (i === state.track ? ' active' : '');
     row.dataset.idx = i;
     row.innerHTML = `
-      <button class="row-play-btn" title="Play ${t.title}">▶︎</button>
+      <button class="row-play-btn" title="Play ${t.title}"><span class="icon icon-tri-right"></span></button>
       <span class="t-num">${String(i+1).padStart(2,'0')}</span>
       <span class="t-title">${t.title}</span>
       ${t.instrumental ? '<span class="t-inst">INST</span>' : ''}
@@ -1261,7 +1270,7 @@ function renderText() {
       item.className = 'ao-track-item';
       item.dataset.idx = i;
       item.innerHTML = `
-        <button class="row-play-btn" title="Play ${t.title}">▶︎</button>
+        <button class="row-play-btn" title="Play ${t.title}"><span class="icon icon-tri-right"></span></button>
         <span class="aot-num">${String(i+1).padStart(2,'0')}</span>
         <span class="aot-title">${t.title}</span>
         ${t.instrumental ? '<span class="aot-inst">INST</span>' : ''}
@@ -1493,15 +1502,15 @@ function refreshPlayingIndicators() {
     const btn = row.querySelector('.row-play-btn');
     const isThis = isRowPlaying(state.album, idx);
     row.classList.toggle('playing', isThis && !audioPlayer.paused);
-    if (btn) btn.textContent = (isThis && !audioPlayer.paused) ? '⏸︎' : '▶︎';
+    if (btn) btn.innerHTML = `<span class="icon ${(isThis && !audioPlayer.paused) ? 'icon-pause' : 'icon-tri-right'}"></span>`;
   });
   const mainBtn = document.getElementById('thPlayBtn');
   if (mainBtn && !mainBtn.disabled) {
     const isThis = isRowPlaying(state.album, state.track);
-    mainBtn.textContent = (isThis && !audioPlayer.paused) ? '⏸︎' : '▶︎';
+    mainBtn.innerHTML = `<span class="icon ${(isThis && !audioPlayer.paused) ? 'icon-pause' : 'icon-tri-right'}"></span>`;
   }
   const mpBtn = document.getElementById('mpPlayPause');
-  if (mpBtn) mpBtn.textContent = audioPlayer.paused ? '▶︎' : '⏸︎';
+  if (mpBtn) mpBtn.innerHTML = `<span class="icon ${audioPlayer.paused ? 'icon-tri-right' : 'icon-pause'}"></span>`;
 }
 
 function formatTime(s) {
