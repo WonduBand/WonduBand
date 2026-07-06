@@ -162,7 +162,20 @@
     background: var(--bg-panel); border-top: 1px solid var(--border);
     transition: border-color 0.5s ease, background 0.5s ease;
   }
-  .mini-player.active { display: flex; }
+  .mini-player.active { display: flex; animation: miniPlayerIn 0.4s cubic-bezier(.4,0,.2,1); }
+  @keyframes miniPlayerIn { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .mp-btn, .row-play-btn, .text-nav-btn, .mobile-tab-btn, .album-tab, .cover-row, .track-row, .ao-track-item { transition: transform 0.15s ease, background 0.15s ease, border-color 0.2s ease, color 0.2s ease; }
+  .mp-btn:active, .row-play-btn:active, .text-nav-btn:active, .th-play-btn:active { transform: scale(0.88); }
+  .mobile-tab-btn:active { transform: scale(0.94); }
+  /* ── PURE CSS TRANSPORT ICONS (no emoji/unicode glyphs, renders identically everywhere) ── */
+  .icon { display: inline-block; position: relative; }
+  .icon-tri-right { width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 8px solid currentColor; }
+  .icon-tri-left { width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-right: 8px solid currentColor; }
+  .icon-pause { width: 8px; height: 10px; }
+  .icon-pause::before, .icon-pause::after { content: ''; position: absolute; top: 0; width: 3px; height: 10px; background: currentColor; }
+  .icon-pause::before { left: 0; }
+  .icon-pause::after { left: 5px; }
+
   .mp-btn {
     background: transparent; border: 1px solid var(--border); color: var(--text-dim);
     width: 2rem; height: 2rem; border-radius: 50%; flex-shrink: 0;
@@ -261,6 +274,13 @@
   .text-nav-btn:disabled { opacity: 0.25; cursor: default; }
 
   .text-body { flex: 1; overflow-y: auto; padding: 1.2rem 1.6rem 2.2rem; }
+  @keyframes contentFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .text-body > * { animation: contentFadeIn 0.35s ease both; }
+  @keyframes fadeInLeft { from { opacity: 0; transform: translateX(-28px); } to { opacity: 1; transform: translateX(0); } }
+  @media (min-width: 981px) {
+    .cover-bottom { animation: fadeInLeft 0.4s ease both; }
+    .text-body > * { animation: fadeInLeft 0.4s ease both; }
+  }
 
   .track-note {
     padding: 0.75rem 1rem; margin-bottom: 1.3rem;
@@ -294,6 +314,12 @@
 
   .album-overview { padding: 0.4rem 0 1rem; }
   .ao-tagline { font-size: 0.95rem; font-style: italic; color: #ddd; line-height: 1.7; margin-bottom: 1.4rem; }
+  .ao-intro {
+    padding: 0.9rem 1.1rem; margin-bottom: 1.6rem;
+    background: rgba(255,255,255,0.02); border-left: 2px solid var(--accent);
+    font-size: 0.8rem; color: #999; font-style: italic; line-height: 1.75;
+    transition: border-color 0.5s ease;
+  }
   .ao-meta { display: flex; flex-wrap: wrap; gap: 1.2rem 1.8rem; margin-bottom: 1.6rem; padding-bottom: 1.4rem; border-bottom: 1px solid var(--border); transition: border-color 0.5s ease; }
   .ao-meta div { font-size: 0.62rem; letter-spacing: 0.12em; color: var(--text-dim); text-transform: uppercase; transition: color 0.5s ease; }
   .ao-meta span { color: var(--accent); display: block; margin-top: 0.2rem; font-size: 0.75rem; transition: color 0.5s ease; }
@@ -339,11 +365,31 @@
       overflow: hidden;
     }
 
-    /* Only the active mobile view is shown; the rest are hidden entirely */
-    .sidebar, .cover-pane, .text-pane { display: none; height: 100%; max-height: none; border: none; }
-    .app-main[data-view="tracks"] .sidebar { display: flex; }
-    .app-main[data-view="cover"] .cover-pane { display: flex; height: 100%; }
-    .app-main[data-view="lyrics"] .text-pane { display: flex; }
+    /* All three panes stay mounted and slide horizontally; only one is in view at a time */
+    .sidebar, .cover-pane, .text-pane {
+      display: flex; position: absolute; inset: 0;
+      height: 100%; max-height: none; border: none;
+      transition: transform 0.38s cubic-bezier(.4,0,.2,1);
+      will-change: transform;
+    }
+    .cover-pane { flex-direction: column; }
+
+    /* Default resting order: tracks | cover | lyrics, left to right */
+    .sidebar { transform: translateX(-100%); }
+    .cover-pane { transform: translateX(0%); }
+    .text-pane { transform: translateX(100%); }
+
+    .app-main[data-view="tracks"] .sidebar { transform: translateX(0%); }
+    .app-main[data-view="tracks"] .cover-pane { transform: translateX(100%); }
+    .app-main[data-view="tracks"] .text-pane { transform: translateX(200%); }
+
+    .app-main[data-view="cover"] .sidebar { transform: translateX(-100%); }
+    .app-main[data-view="cover"] .cover-pane { transform: translateX(0%); }
+    .app-main[data-view="cover"] .text-pane { transform: translateX(100%); }
+
+    .app-main[data-view="lyrics"] .sidebar { transform: translateX(-200%); }
+    .app-main[data-view="lyrics"] .cover-pane { transform: translateX(-100%); }
+    .app-main[data-view="lyrics"] .text-pane { transform: translateX(0%); }
 
     .text-body { max-height: none; }
 
@@ -356,6 +402,7 @@
     .text-head { padding: 0.8rem 1rem 0.7rem; gap: 0.5rem; }
     .text-head .th-num { display: none; }
     .text-head .th-title { font-size: 1.05rem; }
+    .text-head .th-badge { display: none !important; }
     .text-body { padding: 1rem 1.1rem 1.6rem; }
   }
 </style>
@@ -404,12 +451,12 @@
 
     <section class="text-pane">
       <div class="text-head">
-        <button class="text-nav-btn" id="prevBtn" title="Previous track">◀</button>
+        <button class="text-nav-btn" id="prevBtn" title="Previous track"><span class="icon icon-tri-left"></span></button>
         <div class="th-num" id="thNum">// TRACK_01</div>
         <div class="th-title" id="thTitle">The Signal</div>
         <div class="th-badge" id="thBadge" style="display:none;">INSTRUMENTAL</div>
-        <button class="text-nav-btn th-play-btn" id="thPlayBtn" title="Play this track">▶</button>
-        <button class="text-nav-btn" id="nextBtn" title="Next track">▶</button>
+        <button class="text-nav-btn th-play-btn" id="thPlayBtn" title="Play this track"><span class="icon icon-tri-right"></span></button>
+        <button class="text-nav-btn" id="nextBtn" title="Next track"><span class="icon icon-tri-right"></span></button>
       </div>
       <div class="text-body" id="textBody"></div>
     </section>
@@ -417,9 +464,9 @@
   </div>
 
   <div class="mini-player" id="miniPlayer">
-    <button class="mp-btn" id="mpPrev" title="Previous track">⏮</button>
-    <button class="mp-btn mp-play" id="mpPlayPause" title="Play / Pause">▶</button>
-    <button class="mp-btn" id="mpNext" title="Next track">⏭</button>
+    <button class="mp-btn" id="mpPrev" title="Previous track"><span class="icon icon-tri-left"></span></button>
+    <button class="mp-btn mp-play" id="mpPlayPause" title="Play / Pause"><span class="icon icon-tri-right"></span></button>
+    <button class="mp-btn" id="mpNext" title="Next track"><span class="icon icon-tri-right"></span></button>
     <div class="mp-info">
       <div class="mp-title" id="mpTitle">—</div>
       <div class="mp-album" id="mpAlbum">—</div>
@@ -433,9 +480,9 @@
   </div>
 
   <div class="mobile-tabbar" id="mobileTabbar">
-    <button class="mobile-tab-btn" data-view="tracks"><span class="mtb-icon">☰</span>Tracks</button>
+    <button class="mobile-tab-btn active" data-view="tracks"><span class="mtb-icon">☰</span>Tracks</button>
     <button class="mobile-tab-btn" data-view="cover"><span class="mtb-icon">◈</span>Cover</button>
-    <button class="mobile-tab-btn active" data-view="lyrics"><span class="mtb-icon">▤</span>Lyrics</button>
+    <button class="mobile-tab-btn" data-view="lyrics"><span class="mtb-icon">▤</span>Lyrics</button>
   </div>
 </div>
 
@@ -951,6 +998,7 @@ const typeToClass = {
 const ALBUMS = {
   1: {
     roman: 'I', title: 'Ignition', cover: 'Cover_Album1.png',
+    intro: '2147. Earth is dying, and for the first time in a year the signal has gone quiet — as if it is waiting. Eight thousand names have been drawn from eight billion lives, and a ship larger than anything humanity has ever attempted is taking shape on Earth. This is the story of the last goodbye, and the first sparks of the engines that will carry them away.',
     label: '// Album I of IV — Aether Odyssey //',
     tagline: '"We heard you calling… we\'re coming home."',
     meta: [['MISSION YEAR','2147.04.09'],['VESSEL','A.S. AETHER'],['SOULS ABOARD','8,000'],['DESTINATION','ELYSIUM / PROXIMA CENTAURI']],
@@ -985,6 +1033,7 @@ const ALBUMS = {
   },
   2: {
     roman: 'II', title: 'The Drift', cover: 'Cover_Album2.png',
+    intro: 'The Aether is decades from home and still years from anywhere. Earth has gone silent behind them, and Elysium is only a rumour of green on a distant sensor. This is the story of the years between — the Pulse that never stops, and a crew learning to live inside a single heartbeat of steel.',
     label: '// Album II of IV — Aether Odyssey //',
     tagline: '"The void is not empty — it is patient."',
     meta: [['MISSION YEAR','2148–2184'],['VESSEL','A.S. AETHER'],['SOULS ABOARD','8,000'],['STATUS','IN TRANSIT']],
@@ -1024,6 +1073,7 @@ const ALBUMS = {
   },
   3: {
     roman: 'III', title: 'Genesis', cover: 'Cover_Album3.png',
+    intro: 'After decades adrift, the engines finally reverse. Elysium fills the forward viewport, and eight thousand people who have never once touched real soil are about to become a civilization. This is the story of the landing — the first breath of alien air, and everything they build to make a new world feel like home.',
     label: '// Album III of IV — Aether Odyssey //',
     tagline: '"We are not the end of the human story — we are somewhere in the middle."',
     meta: [['MISSION YEAR','2184–2201'],['LOCATION','ELYSIUM / PROXIMA CENTAURI'],['COLONY POP.','8,000 → 30,000'],['STATUS','PLANETFALL COMPLETE']],
@@ -1062,6 +1112,7 @@ const ALBUMS = {
   },
   4: {
     roman: 'IV', title: 'New Pantheon', cover: 'Cover_Album4.png',
+    intro: 'Centuries have passed. The colony the original eight thousand built has grown into something they could never have imagined — a species standing at the edge of its own biology, its own mortality, its own stars. This is the story of ascension: what humanity becomes when it finally answers the Signal it once only followed.',
     label: '// Album IV of IV — Aether Odyssey //',
     tagline: '"Humanity no longer follows the stars. It claims them."',
     meta: [['ERA','POST-ASCENSION'],['ORIGIN','ELYSIUM COLONY'],['STATUS','TRANSCENDENT'],['REACH','GALACTIC']],
@@ -1176,7 +1227,7 @@ function renderTrackNav() {
     row.className = 'track-row' + (i === state.track ? ' active' : '');
     row.dataset.idx = i;
     row.innerHTML = `
-      <button class="row-play-btn" title="Play ${t.title}">▶</button>
+      <button class="row-play-btn" title="Play ${t.title}"><span class="icon icon-tri-right"></span></button>
       <span class="t-num">${String(i+1).padStart(2,'0')}</span>
       <span class="t-title">${t.title}</span>
       ${t.instrumental ? '<span class="t-inst">INST</span>' : ''}
@@ -1195,6 +1246,13 @@ function renderTrackNav() {
 function renderCover() {
   const meta = ALBUMS[state.album];
   const track = state.track >= 0 ? meta.tracks[state.track] : null;
+
+  const coverBottom = document.querySelector('.cover-bottom');
+  if (coverBottom) {
+    coverBottom.style.animation = 'none';
+    void coverBottom.offsetWidth;
+    coverBottom.style.animation = '';
+  }
 
   document.getElementById('coverEyebrow').textContent = meta.label;
   document.getElementById('coverTitle').textContent = meta.title;
@@ -1251,28 +1309,9 @@ function renderText() {
     div.className = 'album-overview';
     div.innerHTML = `
       <div class="ao-tagline">${meta.tagline}</div>
+      ${meta.intro ? `<div class="ao-intro">${meta.intro}</div>` : ''}
       <div class="ao-meta">${meta.meta.map(([k,v]) => `<div>${k}<span>${v}</span></div>`).join('')}</div>
-      <div class="ao-list-label">// Tracklist</div>
     `;
-    const list = document.createElement('div');
-    meta.tracks.forEach((t, i) => {
-      const item = document.createElement('div');
-      item.className = 'ao-track-item';
-      item.dataset.idx = i;
-      item.innerHTML = `
-        <button class="row-play-btn" title="Play ${t.title}">▶</button>
-        <span class="aot-num">${String(i+1).padStart(2,'0')}</span>
-        <span class="aot-title">${t.title}</span>
-        ${t.instrumental ? '<span class="aot-inst">INST</span>' : ''}
-      `;
-      item.addEventListener('click', () => selectTrack(i));
-      item.querySelector('.row-play-btn').addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleOrPlay(state.album, i);
-      });
-      list.appendChild(item);
-    });
-    div.appendChild(list);
     body.appendChild(div);
     refreshPlayingIndicators();
     return;
@@ -1340,7 +1379,6 @@ function selectTrack(i) {
   renderTrackNav();
   renderCover();
   renderText();
-  if (i !== -1) setMobileView('lyrics');
 }
 
 function stepTrack(dir) {
@@ -1406,7 +1444,6 @@ function playTrackDirect(albumNum, idx) {
   renderCover();
   renderText();
   loadAndPlay(albumNum, idx);
-  setMobileView('lyrics');
 }
 
 // Same track already loaded → toggle pause/resume. Different track → start it fresh.
@@ -1491,16 +1528,18 @@ function refreshPlayingIndicators() {
     const idx = parseInt(row.dataset.idx, 10);
     const btn = row.querySelector('.row-play-btn');
     const isThis = isRowPlaying(state.album, idx);
-    row.classList.toggle('playing', isThis && !audioPlayer.paused);
-    if (btn) btn.textContent = (isThis && !audioPlayer.paused) ? '⏸' : '▶';
+    const nowPlaying = isThis && !audioPlayer.paused;
+    row.classList.toggle('playing', nowPlaying);
+    if (btn) btn.innerHTML = `<span class="icon ${nowPlaying ? 'icon-pause' : 'icon-tri-right'}"></span>`;
+    if (nowPlaying) row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
   const mainBtn = document.getElementById('thPlayBtn');
   if (mainBtn && !mainBtn.disabled) {
     const isThis = isRowPlaying(state.album, state.track);
-    mainBtn.textContent = (isThis && !audioPlayer.paused) ? '⏸' : '▶';
+    mainBtn.innerHTML = `<span class="icon ${(isThis && !audioPlayer.paused) ? 'icon-pause' : 'icon-tri-right'}"></span>`;
   }
   const mpBtn = document.getElementById('mpPlayPause');
-  if (mpBtn) mpBtn.textContent = audioPlayer.paused ? '▶' : '⏸';
+  if (mpBtn) mpBtn.innerHTML = `<span class="icon ${audioPlayer.paused ? 'icon-tri-right' : 'icon-pause'}"></span>`;
 }
 
 function formatTime(s) {
@@ -1575,7 +1614,7 @@ function setMobileView(view) {
 mobileTabButtons.forEach(btn => {
   btn.addEventListener('click', () => setMobileView(btn.dataset.view));
 });
-setMobileView('lyrics');
+setMobileView('tracks');
 
 // ── FULLSCREEN TOGGLE ──
 const fsBtn = document.getElementById('fullscreenBtn');
