@@ -993,7 +993,7 @@ const typeToClass = {
 const ALBUMS = {
   1: {
     roman: 'I', title: 'Ignition', cover: 'Cover_Album1.png',
-    intro: '2147. Earth is dying, and for the first time in a year the Signal has gone quiet — as if it is waiting. Eight thousand names have been drawn from eight billion lives, and a ship larger than anything humanity has ever built sits fuelled in orbit. This is the story of the last goodbye, and the first light of the engines that carry them away.',
+    intro: '2147. Earth is dying, and for the first time in a year the signal has gone quiet — as if it is waiting. Eight thousand names have been drawn from eight billion lives, and a ship larger than anything humanity has ever attempted is taking shape on Earth. This is the story of the last goodbye, and the first sparks of the engines that will carry them away.',
     label: '// Album I of IV — Aether Odyssey //',
     tagline: '"We heard you calling… we\'re coming home."',
     meta: [['MISSION YEAR','2147.04.09'],['VESSEL','A.S. AETHER'],['SOULS ABOARD','8,000'],['DESTINATION','ELYSIUM / PROXIMA CENTAURI']],
@@ -1299,27 +1299,7 @@ function renderText() {
       <div class="ao-tagline">${meta.tagline}</div>
       ${meta.intro ? `<div class="ao-intro">${meta.intro}</div>` : ''}
       <div class="ao-meta">${meta.meta.map(([k,v]) => `<div>${k}<span>${v}</span></div>`).join('')}</div>
-      <div class="ao-list-label">// Tracklist</div>
     `;
-    const list = document.createElement('div');
-    meta.tracks.forEach((t, i) => {
-      const item = document.createElement('div');
-      item.className = 'ao-track-item';
-      item.dataset.idx = i;
-      item.innerHTML = `
-        <button class="row-play-btn" title="Play ${t.title}"><span class="icon icon-tri-right"></span></button>
-        <span class="aot-num">${String(i+1).padStart(2,'0')}</span>
-        <span class="aot-title">${t.title}</span>
-        ${t.instrumental ? '<span class="aot-inst">INST</span>' : ''}
-      `;
-      item.addEventListener('click', () => selectTrack(i));
-      item.querySelector('.row-play-btn').addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleOrPlay(state.album, i);
-      });
-      list.appendChild(item);
-    });
-    div.appendChild(list);
     body.appendChild(div);
     refreshPlayingIndicators();
     return;
