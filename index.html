@@ -480,9 +480,9 @@
   </div>
 
   <div class="mobile-tabbar" id="mobileTabbar">
-    <button class="mobile-tab-btn" data-view="tracks"><span class="mtb-icon">☰</span>Tracks</button>
+    <button class="mobile-tab-btn active" data-view="tracks"><span class="mtb-icon">☰</span>Tracks</button>
     <button class="mobile-tab-btn" data-view="cover"><span class="mtb-icon">◈</span>Cover</button>
-    <button class="mobile-tab-btn active" data-view="lyrics"><span class="mtb-icon">▤</span>Lyrics</button>
+    <button class="mobile-tab-btn" data-view="lyrics"><span class="mtb-icon">▤</span>Lyrics</button>
   </div>
 </div>
 
@@ -1379,7 +1379,6 @@ function selectTrack(i) {
   renderTrackNav();
   renderCover();
   renderText();
-  if (i !== -1) setMobileView('lyrics');
 }
 
 function stepTrack(dir) {
@@ -1445,7 +1444,6 @@ function playTrackDirect(albumNum, idx) {
   renderCover();
   renderText();
   loadAndPlay(albumNum, idx);
-  setMobileView('lyrics');
 }
 
 // Same track already loaded → toggle pause/resume. Different track → start it fresh.
@@ -1616,7 +1614,7 @@ function setMobileView(view) {
 mobileTabButtons.forEach(btn => {
   btn.addEventListener('click', () => setMobileView(btn.dataset.view));
 });
-setMobileView('lyrics');
+setMobileView('tracks');
 
 // ── FULLSCREEN TOGGLE ──
 const fsBtn = document.getElementById('fullscreenBtn');
