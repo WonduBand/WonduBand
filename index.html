@@ -1196,20 +1196,20 @@ function initPulseCanvas() {
     pulseCtx.shadowColor = '#eaf6ff';
     pulseCtx.shadowBlur = isPlaying ? 5 : 2;
 
-    for (let i = 0; i < spikeCount; i++) {
+    for (let i = 0; i < spikeCount / 2; i++) {
       let v;
       if (isPlaying) {
-        const bin = Math.floor((i / spikeCount) * binCount);
+        const bin = Math.floor((i / (spikeCount / 2)) * binCount);
         v = freqData[bin] / 255;
       } else {
         v = 0.08 + 0.1 * (Math.sin(pulseT * 1.4 + i * 0.5) * 0.5 + 0.5)
                  + 0.04 * (Math.sin(pulseT * 0.6 + i * 0.2) * 0.5 + 0.5);
       }
       const spikeH = Math.max(1.5, v * (H * 0.46));
-      const x = i * spikeWidth;
-      pulseCtx.fillStyle = i % 5 === 0 ? meta.ice : '#eaf6ff';
+      pulseCtx.fillStyle = i % 3 === 0 ? meta.mid : meta.ice;
       pulseCtx.globalAlpha = isPlaying ? (0.55 + v * 0.5) : 0.4;
-      pulseCtx.fillRect(x, H/2 - spikeH, Math.max(1, spikeWidth - 1), spikeH * 2);
+      pulseCtx.fillRect(W/2 + i * spikeWidth, H/2 - spikeH, Math.max(1, spikeWidth - 1), spikeH * 2);
+      pulseCtx.fillRect(W/2 - (i + 1) * spikeWidth, H/2 - spikeH, Math.max(1, spikeWidth - 1), spikeH * 2);
     }
     pulseCtx.globalAlpha = 1;
 
