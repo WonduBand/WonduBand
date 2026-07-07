@@ -1181,6 +1181,27 @@ function initPulseCanvas() {
     const meta = ALBUMS[state.album];
     const W = canvas.offsetWidth, H = canvas.offsetHeight;
     pulseCtx.clearRect(0,0,W,H);
+
+    const isPlaying = analyser && audioCtx && audioCtx.state === 'running' && !audioPlayer.paused;
+
+    if (isPlaying) {
+      analyser.getByteFrequencyData(freqData);
+      const barCount = freqData.length;
+      const barWidth = W / barCount;
+      pulseCtx.shadowColor = meta.ice; pulseCtx.shadowBlur = 6;
+      for (let i = 0; i < barCount; i++) {
+        const v = freqData[i] / 255;
+        const barH = Math.max(2, v * (H * 0.92));
+        const x = i * barWidth;
+        pulseCtx.fillStyle = i % 2 === 0 ? meta.mid : meta.ice;
+        pulseCtx.globalAlpha = 0.55 + v * 0.45;
+        pulseCtx.fillRect(x, (H - barH) / 2, Math.max(1, barWidth - 1), barH);
+      }
+      pulseCtx.globalAlpha = 1;
+      pulseAnim = requestAnimationFrame(draw);
+      return;
+    }
+
     pulseCtx.beginPath(); pulseCtx.strokeStyle = meta.mid; pulseCtx.lineWidth = 1.2;
     pulseCtx.shadowColor = meta.ice; pulseCtx.shadowBlur = 8;
     for (let x = 0; x <= W; x++) {
@@ -1429,6 +1450,28 @@ const AUDIO_PATH = ''; // e.g. 'audio/' if your mp3s live in a subfolder
 const audioPlayer = new Audio();
 let playingAlbum = null;
 let playingIdx = null;
+let audioCtx = null;
+let analyser = null;
+let freqData = null;
+
+function ensureAudioAnalyser() {
+  if (analyser) {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return;
+  }
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const source = audioCtx.createMediaElementSource(audioPlayer);
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 128;
+    analyser.smoothingTimeConstant = 0.82;
+    source.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    freqData = new Uint8Array(analyser.frequencyBinCount);
+  } catch (e) {
+    console.warn('Web Audio visualizer unavailable:', e);
+  }
+}
 
 function trackFileName(albumNum, idx) {
   const t = ALBUMS[albumNum].tracks[idx];
@@ -1469,6 +1512,7 @@ function loadAndPlay(albumNum, idx) {
   playingIdx = idx;
   const file = trackFileName(albumNum, idx);
   audioPlayer.src = AUDIO_PATH + file;
+  ensureAudioAnalyser();
   audioPlayer.play().catch(err => console.warn('Playback failed — check the file exists:', file, err));
   updateMiniPlayer(albumNum, idx);
   refreshPlayingIndicators();
@@ -1477,6 +1521,7 @@ function loadAndPlay(albumNum, idx) {
 function togglePlayPause() {
   if (!audioPlayer.src) return;
   if (audioPlayer.paused) {
+    ensureAudioAnalyser();
     audioPlayer.play().catch(err => {
       console.warn('Resume failed, retrying after reload:', err);
       const t = audioPlayer.currentTime;
