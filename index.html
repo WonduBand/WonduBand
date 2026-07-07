@@ -1183,34 +1183,43 @@ function initPulseCanvas() {
     pulseCtx.clearRect(0,0,W,H);
 
     // Solid backing panel so the readout always reads clearly against any artwork
-    pulseCtx.fillStyle = 'rgba(0,0,0,0.55)';
+    pulseCtx.fillStyle = 'rgba(4,10,18,0.72)';
     pulseCtx.fillRect(0, 0, W, H);
 
     const isPlaying = analyser && audioCtx && audioCtx.state === 'running' && !audioPlayer.paused;
     if (isPlaying) analyser.getByteFrequencyData(freqData);
 
-    const barCount = 48;
-    const barWidth = W / barCount;
+    const spikeCount = 110;
+    const spikeWidth = W / spikeCount;
     const binCount = freqData ? freqData.length : 0;
 
-    for (let i = 0; i < barCount; i++) {
+    pulseCtx.shadowColor = '#eaf6ff';
+    pulseCtx.shadowBlur = isPlaying ? 5 : 2;
+
+    for (let i = 0; i < spikeCount; i++) {
       let v;
       if (isPlaying) {
-        const bin = Math.floor((i / barCount) * binCount);
+        const bin = Math.floor((i / spikeCount) * binCount);
         v = freqData[bin] / 255;
       } else {
-        v = 0.16 + 0.14 * (Math.sin(pulseT * 1.4 + i * 0.4) * 0.5 + 0.5)
-                 + 0.06 * (Math.sin(pulseT * 0.6 + i * 0.15) * 0.5 + 0.5);
+        v = 0.08 + 0.1 * (Math.sin(pulseT * 1.4 + i * 0.5) * 0.5 + 0.5)
+                 + 0.04 * (Math.sin(pulseT * 0.6 + i * 0.2) * 0.5 + 0.5);
       }
-      const barH = Math.max(2, v * (H * 0.92));
-      const x = i * barWidth;
-      pulseCtx.fillStyle = i % 2 === 0 ? meta.mid : meta.ice;
-      pulseCtx.shadowColor = meta.ice;
-      pulseCtx.shadowBlur = isPlaying ? 6 : 3;
-      pulseCtx.globalAlpha = isPlaying ? (0.55 + v * 0.45) : 0.55;
-      pulseCtx.fillRect(x, (H - barH) / 2, Math.max(1, barWidth - 1), barH);
+      const spikeH = Math.max(1.5, v * (H * 0.46));
+      const x = i * spikeWidth;
+      pulseCtx.fillStyle = i % 5 === 0 ? meta.ice : '#eaf6ff';
+      pulseCtx.globalAlpha = isPlaying ? (0.55 + v * 0.5) : 0.4;
+      pulseCtx.fillRect(x, H/2 - spikeH, Math.max(1, spikeWidth - 1), spikeH * 2);
     }
     pulseCtx.globalAlpha = 1;
+
+    pulseCtx.strokeStyle = meta.mid + '55';
+    pulseCtx.lineWidth = 1;
+    pulseCtx.shadowBlur = 0;
+    pulseCtx.beginPath();
+    pulseCtx.moveTo(0, H/2);
+    pulseCtx.lineTo(W, H/2);
+    pulseCtx.stroke();
 
     pulseT += 0.03;
     pulseAnim = requestAnimationFrame(draw);
