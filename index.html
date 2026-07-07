@@ -1182,40 +1182,44 @@ function initPulseCanvas() {
     const W = canvas.offsetWidth, H = canvas.offsetHeight;
     pulseCtx.clearRect(0,0,W,H);
 
-    const isPlaying = analyser && audioCtx && audioCtx.state === 'running' && !audioPlayer.paused;
+    let amp1 = 8, amp2 = 5, amp3 = 3, amp1b = 11, amp2b = 4, speedMult = 1;
 
+    const isPlaying = analyser && audioCtx && audioCtx.state === 'running' && !audioPlayer.paused;
     if (isPlaying) {
       analyser.getByteFrequencyData(freqData);
-      const barCount = freqData.length;
-      const barWidth = W / barCount;
-      pulseCtx.shadowColor = meta.ice; pulseCtx.shadowBlur = 6;
-      for (let i = 0; i < barCount; i++) {
-        const v = freqData[i] / 255;
-        const barH = Math.max(2, v * (H * 0.92));
-        const x = i * barWidth;
-        pulseCtx.fillStyle = i % 2 === 0 ? meta.mid : meta.ice;
-        pulseCtx.globalAlpha = 0.55 + v * 0.45;
-        pulseCtx.fillRect(x, (H - barH) / 2, Math.max(1, barWidth - 1), barH);
-      }
-      pulseCtx.globalAlpha = 1;
-      pulseAnim = requestAnimationFrame(draw);
-      return;
+      const n = freqData.length;
+      const bandAvg = (from, to) => {
+        let sum = 0;
+        for (let i = from; i < to; i++) sum += freqData[i];
+        return sum / (to - from) / 255;
+      };
+      const bass = bandAvg(0, Math.floor(n * 0.15));
+      const mid = bandAvg(Math.floor(n * 0.15), Math.floor(n * 0.5));
+      const treble = bandAvg(Math.floor(n * 0.5), n);
+      const energy = (bass + mid + treble) / 3;
+
+      amp1 = 8 + bass * 26;
+      amp2 = 5 + mid * 16;
+      amp3 = 3 + treble * 12;
+      amp1b = 11 + mid * 18;
+      amp2b = 4 + treble * 10;
+      speedMult = 1 + energy * 1.6;
     }
 
     pulseCtx.beginPath(); pulseCtx.strokeStyle = meta.mid; pulseCtx.lineWidth = 1.2;
     pulseCtx.shadowColor = meta.ice; pulseCtx.shadowBlur = 8;
     for (let x = 0; x <= W; x++) {
-      const y = H/2 + Math.sin(x*0.02+pulseT)*8 + Math.sin(x*0.008+pulseT*0.6)*5 + Math.sin(x*0.035+pulseT*1.4)*3;
+      const y = H/2 + Math.sin(x*0.02+pulseT)*amp1 + Math.sin(x*0.008+pulseT*0.6)*amp2 + Math.sin(x*0.035+pulseT*1.4)*amp3;
       x===0 ? pulseCtx.moveTo(x,y) : pulseCtx.lineTo(x,y);
     }
     pulseCtx.stroke();
     pulseCtx.beginPath(); pulseCtx.strokeStyle = meta.ice + '44'; pulseCtx.lineWidth = 0.8; pulseCtx.shadowBlur = 4;
     for (let x = 0; x <= W; x++) {
-      const y = H/2 + Math.sin(x*0.014+pulseT*0.8+1.5)*11 + Math.sin(x*0.028+pulseT*0.4)*4;
+      const y = H/2 + Math.sin(x*0.014+pulseT*0.8+1.5)*amp1b + Math.sin(x*0.028+pulseT*0.4)*amp2b;
       x===0 ? pulseCtx.moveTo(x,y) : pulseCtx.lineTo(x,y);
     }
     pulseCtx.stroke();
-    pulseT += 0.012;
+    pulseT += 0.012 * speedMult;
     pulseAnim = requestAnimationFrame(draw);
   }
   resize(); window.addEventListener('resize', resize); draw();
