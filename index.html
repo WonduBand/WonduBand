@@ -220,6 +220,14 @@
     display: flex; align-items: stretch; justify-content: stretch;
   }
   .cover-img-wrap { position: absolute; inset: 0; }
+  .cover-glow {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(circle at 50% 60%, var(--accent) 0%, transparent 65%);
+    opacity: 0.18;
+    transition: background 0.6s ease;
+  }
+  .cover-glow.pulsing { animation: coverGlowPulse 2.2s ease-in-out infinite; }
+  @keyframes coverGlowPulse { 0%, 100% { opacity: 0.14; } 50% { opacity: 0.42; } }
   .cover-img {
     width: 100%; height: 100%; object-fit: cover;
     opacity: 0.92; transition: opacity 0.4s ease;
@@ -432,6 +440,7 @@
       <div class="cover-img-wrap">
         <img class="cover-img" id="coverImg" src="" alt="">
         <div class="cover-fallback" id="coverFallback" style="display:none;"></div>
+        <div class="cover-glow" id="coverGlow"></div>
       </div>
       <div class="cover-scrim"></div>
       <div class="cover-content">
@@ -1540,6 +1549,8 @@ function refreshPlayingIndicators() {
   }
   const mpBtn = document.getElementById('mpPlayPause');
   if (mpBtn) mpBtn.innerHTML = `<span class="icon ${audioPlayer.paused ? 'icon-tri-right' : 'icon-pause'}"></span>`;
+  const glow = document.getElementById('coverGlow');
+  if (glow) glow.classList.toggle('pulsing', !audioPlayer.paused);
 }
 
 function formatTime(s) {
