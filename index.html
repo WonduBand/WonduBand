@@ -261,6 +261,7 @@
   }
   .cover-tagline { font-size: 0.8rem; font-style: italic; color: #ddd; margin-top: 0.6rem; max-width: 480px; }
   .cover-meta { display:flex; flex-wrap: wrap; gap: 1.4rem; margin-top: 1.1rem; font-size: 0.58rem; letter-spacing: 0.1em; color: rgba(255,255,255,0.5); text-transform: uppercase; }
+  .cover-song-note { display: none; font-size: 0.85rem; font-style: italic; color: rgba(255,255,255,0.78); line-height: 1.75; max-width: 560px; margin-top: 0.6rem; }
   .cover-meta span { color: var(--accent); transition: color 0.5s ease; }
   .cover-pulse { width: 100%; height: 34px; margin-top: 0.9rem; display:block; }
 
@@ -288,6 +289,10 @@
   @media (min-width: 981px) {
     .cover-bottom { animation: fadeInLeft 0.4s ease both; }
     .text-body > * { animation: fadeInLeft 0.4s ease both; }
+    .cover-pane.track-selected .cover-tagline,
+    .cover-pane.track-selected .cover-meta { display: none; }
+    .cover-pane.track-selected .cover-song-note { display: block; }
+    .track-note { display: none; }
   }
 
   .track-note {
@@ -381,6 +386,15 @@
       will-change: transform;
     }
     .cover-pane { flex-direction: column; }
+    .cover-pane.track-selected .cover-top,
+    .cover-pane.track-selected .cover-eyebrow,
+    .cover-pane.track-selected .cover-title,
+    .cover-pane.track-selected .cover-tagline,
+    .cover-pane.track-selected .cover-meta { display: none; }
+    .cover-pulse {
+      position: fixed; left: 0; right: 0; bottom: 0;
+      width: 100%; margin: 0;
+    }
 
     /* Default resting order: tracks | cover | lyrics, left to right */
     .sidebar { transform: translateX(-100%); }
@@ -453,6 +467,7 @@
           <div class="cover-title" id="coverTitle">Ignition</div>
           <div class="cover-tagline" id="coverTagline"></div>
           <div class="cover-meta" id="coverMeta"></div>
+          <div class="cover-song-note" id="coverSongNote"></div>
           <canvas class="cover-pulse" id="coverPulse"></canvas>
         </div>
       </div>
@@ -848,7 +863,7 @@ const tracksAlbum3 = [
 const tracksAlbum4 = [
 {
     title: "Godseed", image: "01__Godseed.png",
-    note: "It is approximately 2300. The colony on Elysium is now a civilisation of hundreds of thousands, spanning continents, reaching into orbit. The original eight thousand are long gone — their grandchildren's grandchildren walk the streets of cities they could never have imagined. The Signal, which has pulsed without interruption since before any living person was born, has begun to change its frequency. The first scientists to notice it call it a response. The first ascended humans — those who have completed the neural integration process — say they can feel it in a way no instrument can measure.",
+    note: "It is approximately 2300. The colony on Elysium has grown into a civilisation of hundreds of thousands, and the original eight thousand are long gone. The Signal, unbroken since before any living person was born, has begun to change its frequency. The first ascended humans say they can feel it in a way no instrument can measure.",
     sections: [
       {label:"VERSE_01",type:"verse",text:`In the silence before the storm\nWe lay the first of many stones\nCenturies of blood and bone\nHave grown this single seed we've sown\n\nThe Signal sings inside our veins\nA language older than our names\nWe hear it now, we understand\nThe future burning in our hands`},
       {label:"PRE-CHORUS",type:"pre",text:`We were ash, we were shadow\nWe were lost in the dark\nBut the Signal rewrote us\nRight down to the heart`},
@@ -863,7 +878,7 @@ const tracksAlbum4 = [
   },
   {
     title: "Architects of Tomorrow", image: "02__Architects_of_Tomorrow.png",
-    note: "The New Ark Programme was proposed by a council of engineers whose great-grandparents were born aboard the original Aether. Where that first ship was built in desperation — welded together by a dying world in eleven years of impossible labour — these new vessels are being designed with the patience of a civilisation that no longer fears extinction. They are not built to escape. They are built to explore. The banner in the orbital shipyard reads: ONE SEGMENT TODAY. A WORLD FOREVER.",
+    note: "The New Ark Programme was proposed by engineers whose great-grandparents were born aboard the original Aether. Where that first ship was welded together in eleven desperate years, these new vessels are built with the patience of a civilisation that no longer fears extinction. They are not built to escape — they are built to explore.",
     sections: [
       {label:"VERSE_01",type:"verse",text:`Blueprint minds with lightning eyes\nWe draft the bones of paradise\nEvery wire, every weld\nA prayer to futures still unspelled\n\nNo map exists for where we go\nWe make the road, we make it glow\nOur hands have calluses like stars\nThe scars of building who we are`},
       {label:"CHORUS",type:"chorus",text:`We are the architects of tomorrow\nEvery dream we build becomes a world\nBreak the mold, reshape the sorrow\nLet the flag of who we are unfurl\nArchitects — we don't tear down\nWe raise cities where there was no ground\nArchitects of tomorrow!`},
@@ -875,7 +890,7 @@ const tracksAlbum4 = [
   },
   {
     title: "Pantheon Rising", image: "03__Pantheon_Rising.png",
-    note: "The vote is held in the summer of 2341 — Elysian calendar, under two moons. The question on the ballot is simple in language and incomprehensible in implication: voluntary neural ascension, the merging of human consciousness with the integrated Signal network. The result is not unanimous. But it is decisive. The first subjects enter the transformation chambers while crowds watch through the glass — some in tears, some in silence, one small boy with his hand pressed against the window as if trying to reach through.",
+    note: "The vote is held in the summer of 2341, under two moons. The question is simple in language and enormous in implication: voluntary neural ascension, merging human consciousness with the Signal network. The result is decisive. The first subjects enter the transformation chambers as crowds watch through the glass, some in tears, some in silence.",
     sections: [
       {label:"VERSE_01",type:"verse",text:`There comes a moment before the storm\nWhen the world holds its breath and reforms\nWe stood at the edge of everything human\nAnd looked at the sky and chose to keep moving\n\nThey asked us to stop, to wait, to decide\nIf gods were something we had the right to be inside\nWe looked at our hands — still blood, still bone\nAnd said: even this is not our final home`},
       {label:"PRE-CHORUS",type:"pre",text:`The vote was unanimous\nThe silence after — enormous\nWe didn't mourn what we were leaving\nWe rose`},
@@ -888,7 +903,7 @@ const tracksAlbum4 = [
   },
   {
     title: "Stellar Forges", image: "04__Stellar_Forge.png",
-    note: "The Dyson Swarm Initiative around Proxima Centauri has been under construction for forty years. The display on the engineering station reads 47% complete. The lead engineer was born after the vote, has never known a world without ascended humans, and will not live to see the project finished. She has already enrolled her daughter in the continuation programme. This is what the colony has learned to do: begin things that outlast any single life, and trust that what comes after will carry them forward.",
+    note: "The Dyson Swarm Initiative around Proxima Centauri has been under construction for forty years and reads 47% complete. The lead engineer was born after the vote and will not live to see it finished — she has already enrolled her daughter in the continuation programme. This is what the colony has learned: begin things that outlast any single life.",
     sections: [
       {label:"VERSE_01",type:"verse",text:`We cracked the star and caught the fire\nWe wrapped a sun in living wire\nThe Forges breathe in million-year shifts\nWhere matter bends and science lifts\n\nNo ore from earth, no rust, no rot —\nThe raw material: light and thought\nWe pour the mold in zero-G\nAnd birth a world for those to be`},
       {label:"CHORUS",type:"chorus",text:`Stellar Forges burning bright!\nHammering the dark with light!\nWe are the makers — forge and flame\nStellar Forges — stake our claim!\nEvery star a place to stand\nEvery orbit — in our hands!`},
@@ -900,7 +915,7 @@ const tracksAlbum4 = [
   },
   {
     title: "Children of Eternity", image: "05__Children_Of_Eternity.png",
-    note: "By 2380, the last generation with living memory of grandparents who walked Elysium's soil as original colonists is ageing. They gather in the Memorial Hall — a vast crystalline archive where every voice carried aboard the Aether is preserved — and they place their hands against the pillars and listen. The man in the hall has been coming here for thirty years. The pillar he visits records a woman who died in 2117, thirty years before the launch, who never knew her granddaughter would cross the stars. He visits anyway. It feels like the right thing to do.",
+    note: "By 2380, the last generation with living memory of the original colonists is ageing. They gather in the Memorial Hall, a crystalline archive holding every voice carried aboard the Aether, and press their hands to the pillars to listen. One man has visited the same pillar for thirty years — a woman who died before the launch, who never knew her granddaughter would cross the stars.",
     sections: [
       {label:"VERSE_01",type:"verse",text:`I still remember what it felt like\nTo feel the cold before the warmth\nTo wake up aching in the morning\nNot knowing what the day was for\n\nI still remember what it meant to\nReach out and touch a hand and feel it fade\nThe beautiful, terrifying fleeting —\nThe price that every mortal being paid`},
       {label:"PRE-CHORUS",type:"pre",text:`We were never meant to last forever\nBut forever chose us anyway\nAnd I am not afraid —\nI am not afraid`},
@@ -914,7 +929,7 @@ const tracksAlbum4 = [
   },
   {
     title: "We Walk Among Stars", image: "06__We_Walk_Among_The_Stars.png",
-    note: "The ascended move without ships now. The sensation — described inadequately by every poet who has attempted it — is closest to the feeling reported by the Aether's crew in year three, when someone floated a pencil in a corridor and eight thousand people understood simultaneously that the old rules no longer applied. Except now the corridor is a nebula. And the pencil is a star. A child born in the ascended generation watches infant suns form in a gas cloud three light-years wide, and feels something her ancestors would have called wonder — but quieter, and without the ache.",
+    note: "The ascended move without ships now. The sensation echoes what the Aether's crew felt in year three, when a floated pencil showed eight thousand people the old rules no longer applied — except now the corridor is a nebula, and the pencil is a star. A child of the ascended generation watches infant suns form, and feels something quieter than wonder.",
     sections: [
       {label:"VERSE_01",type:"verse",text:`No ship required — no hull to breach\nThe galaxy is finally in reach\nWe move like light between the dark\nWe are the vessel and the ark\n\nA nebula — a nursery\nWhere infant suns are born and breathe\nWe watch the stars take their first steps\nThe way our parents watched us once`},
       {label:"CHORUS",type:"chorus",text:`We walk among the stars — free!\nNo gravity can hold what we've become\nWe walk among the stars — see\nEvery sun is just another home\nNo more searching, no more lost\nThe universe is ours at any cost\nWe walk — we walk among the stars!`},
@@ -926,7 +941,7 @@ const tracksAlbum4 = [
   },
   {
     title: "The New Olympus", image: "07__New_Olympus.png",
-    note: "New Olympus — the first fully artificial habitat, a ringworld inscribed with the words DEDICATED TO ALL WHO BUILT TOMORROW — is completed in the year 2487. It took two hundred and nineteen years to construct. The civilisation that finished it is almost unrecognisable from the one that began it. At the dedication ceremony, six hundred thousand people stand in silence after the final panel locks into place. The silence lasts nine seconds. It was not planned. Later, no one can explain why they all stopped at the same moment. Some say they heard something.",
+    note: "New Olympus, the first fully artificial habitat, is completed in 2487 after two hundred and nineteen years of construction. At the dedication, six hundred thousand people fall silent the instant the final panel locks — a silence that lasts nine unplanned seconds. No one can later explain why they all stopped at once. Some say they heard something.",
     sections: [
       {label:"VERSE_01",type:"verse",text:`They built it with the hands of ten thousand minds\nEvery alloy forged from stellar finds\nA world of rings spinning in the black\nNo planet needed — no looking back\n\nThey named it Olympus — because why not?\nWe've earned the name that history forgot\nThe old gods needed mountains — we made the sky\nThey needed clouds — we learned to fly`},
       {label:"CHORUS",type:"chorus",text:`The New Olympus burning in the night!\nThe New Olympus blazing out of sight!\nWe built a heaven with our mortal hands\nThe New Olympus — come and understand:\nWe are the gods the myths described\nThe New Olympus — alive!`},
@@ -938,7 +953,7 @@ const tracksAlbum4 = [
   },
   {
     title: "Echoes of the Fallen", image: "08__Echoes_Of_The_Fallen.png",
-    note: "The Aether hangs inside the Museum of Origins on New Olympus, suspended in a hall large enough to hold it whole. The banners above read: THE FIRST ARK. 2147. 8,000 SOULS. ONE DESTINATION. A FUTURE. Children wave at it the way children wave at things too large and too old to be entirely real. A father stands with his daughter and tries to explain what it means — that every person alive, across every settled system, traces their line back to the eight thousand who stood at the gate and did not look back. She is six years old. She waves anyway.",
+    note: "The Aether hangs inside the Museum of Origins on New Olympus, suspended in a hall built to hold it whole. The plaque reads: THE FIRST ARK. 2147. 8,000 SOULS. ONE DESTINATION. A FUTURE. A father tells his six-year-old daughter that every person alive traces back to the eight thousand who did not look back. She waves at the ship anyway.",
     sections: [
       {label:"VERSE_01",type:"verse",text:`I've read every name in the archives\nEvery name that was carried aboard\nEvery child who slept through the long drift\nEvery soul who kept faith through the void\n\nThere was a woman who watched the launch from a hill\nHer daughter was one of the Chosen\nShe never saw the stars up close\nBut her daughter brought her there — in her heartbeat`},
       {label:"PRE-CHORUS",type:"pre",text:`We didn't leave them behind\nWe carried them here\nThey are the reason\nWe didn't surrender to fear`},
@@ -952,7 +967,7 @@ const tracksAlbum4 = [
   },
   {
     title: "Seed the Void", image: "09__Seed_The_Void.png",
-    note: "In 2501, ten thousand probes are launched without ceremony from a platform above the Elysian atmosphere. Each carries the compressed archive of everything humanity has been — its biology, its languages, its music, its grief, its hope — aimed at systems where the models suggest the conditions for life. They will take between two hundred and four thousand years to arrive. The people who launch them understand they are not sending a message to anyone who exists. They are sending it to whoever will exist. And in the moment of launch — watching the probes scatter into the dark like seeds thrown into a field — someone says quietly: this is what the Signal was. This is exactly what the Signal was.",
+    note: "In 2501, ten thousand probes launch without ceremony above the Elysian atmosphere, each carrying the compressed archive of everything humanity has been — biology, language, music, grief, hope. They will take two hundred to four thousand years to arrive, sent not to anyone who exists but to whoever will. Watching them scatter, someone says quietly: this is what the Signal was.",
     sections: [
       {label:"VERSE_01",type:"verse",text:`Ten thousand probes armed with the code of life\nEach one a bottle thrown into the night\nNot conquest — invitation\nA gift to worlds that don't know yet\n\nWe load them up with everything we learned\nThe price we paid, the distances we burned\nThe story of the Aether's long migration\nPressed into every one of them like a heartbeat`},
       {label:"PRE-CHORUS",type:"pre",text:`Count down — and release them\nWatch them scatter into the black\nThey are our children now\nAnd they are never coming back`},
@@ -966,7 +981,7 @@ const tracksAlbum4 = [
   },
   {
     title: "Divine Protocol", image: "10__Divine_Protocol.png",
-    note: "The debate in the Grand Chamber lasts nineteen days. The question — whether the ascended have the moral authority to seed worlds with life, to set civilisations in motion that will never know their origin — is the most consequential in the colony's history. On the twelfth day, someone reads aloud from the Aether's original mission brief: *we go not to conquer but to continue.* The chamber goes quiet. The First Law is encoded three days later: to create without controlling, to offer without demanding, to be the gardeners of the galaxy and never its landlords. Outside the windows of the chamber, a thousand ships hang in orbit, waiting.",
+    note: "The debate in the Grand Chamber lasts nineteen days: do the ascended have the moral authority to seed worlds with life that will never know its origin? On the twelfth day, someone reads from the Aether's original mission brief — we go not to conquer but to continue. The First Law is encoded three days later: to create without controlling, never to be the galaxy's landlords.",
     sections: [
       {label:"VERSE_01",type:"verse",text:`We stood at the edge of what gods do\nAnd someone had the nerve to ask:\nWho gave us this authority?\nWho handed us this mask?\n\nWe answer to no law we didn't write\nWe answer to no god we didn't make\nDoes the power we possess\nGive us the power to create?`},
       {label:"PRE-CHORUS",type:"pre",text:`And the silence in the chamber was the loudest thing\nSince the Aether tore through Earth's last ring\nWe did not fight\nWe simply sat with the weight of it`},
@@ -979,7 +994,7 @@ const tracksAlbum4 = [
   },
   {
     title: "Eternal Pantheon", image: "11__Eternal_Pantheon.png",
-    note: "It is sometime after 2600. No single year matters anymore. Somewhere in the settled systems, a child is learning the old songs — the ones from the Aether, the ones from the crossing. She knows the Signal melody by heart because her grandmother hummed it, and her grandmother's grandmother heard it on a ship that smelled of recycled air and fear. She does not know what Earth looked like. She knows it was blue. A new ship is being named in a shipyard she will never visit. It is called the Second Aether. The Signal — ancient, patient, built by hands that will not exist for centuries yet — pulses on. It has always been pulsing. It always will.",
+    note: "It is sometime after 2600; no single year matters anymore. A child learns the old songs by heart, passed down from a grandmother who heard them on a ship that smelled of recycled air and fear. She doesn't know what Earth looked like — only that it was blue. A new ship, the Second Aether, is being named in a yard she will never visit. The Signal pulses on. It always will.",
     sections: [
       {label:"VERSE_01",type:"verse",text:`It began with a signal in the dark\nA voice we didn't recognize as ours\nIt began with a planet burning out\nAnd eight thousand hearts still beating — still about\n\nWe crossed the void we thought would swallow us\nWe built a world from everything we trust\nWe became the thing the Signal promised:\nNot survivors — something luminous`},
       {label:"PRE-CHORUS",type:"pre",text:`From the ignition to the pantheon\nFrom the last blue light to the eternal sun\nThis is not an ending\nThis is where we have begun`},
@@ -1283,6 +1298,8 @@ function renderCover() {
   const meta = ALBUMS[state.album];
   const track = state.track >= 0 ? meta.tracks[state.track] : null;
 
+  document.querySelector('.cover-pane').classList.toggle('track-selected', !!track);
+
   const coverBottom = document.querySelector('.cover-bottom');
   if (coverBottom) {
     coverBottom.style.animation = 'none';
@@ -1291,8 +1308,9 @@ function renderCover() {
   }
 
   document.getElementById('coverEyebrow').textContent = meta.label;
-  document.getElementById('coverTitle').textContent = meta.title;
+  document.getElementById('coverTitle').textContent = track ? track.title : meta.title;
   document.getElementById('coverTagline').textContent = meta.tagline;
+  document.getElementById('coverSongNote').textContent = track ? (track.note || '') : '';
 
   const metaEl = document.getElementById('coverMeta');
   metaEl.innerHTML = meta.meta.map(([k,v]) => `<div>${k} <span>${v}</span></div>`).join('');
