@@ -88,18 +88,28 @@
     transition: border-color 0.5s ease;
   }
   .album-tab {
-    font-family:'Share Tech Mono',monospace; background: transparent;
+    font-family:'Share Tech Mono',monospace;
     border: 1px solid #333; color: #666; cursor: pointer;
     font-size: 0.6rem; letter-spacing: 0.1em; padding: 0.5rem 0.3rem;
     text-transform: uppercase; text-align: center; transition: all 0.2s;
-    line-height: 1.5;
+    line-height: 1.5; position: relative; overflow: hidden;
+    background-image: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.88) 100%), var(--tab-cover, none);
+    background-size: cover; background-position: center top;
   }
-  .album-tab .num { display:block; font-size:0.9rem; font-weight:bold; }
+  .album-tab .num { display:block; font-size:0.9rem; font-weight:bold; position: relative; z-index: 1; text-shadow: 0 1px 4px rgba(0,0,0,0.85); }
+  .album-tab .title-text { visibility: hidden; position: relative; z-index: 1; }
   .album-tab:hover { border-color: #888; color: #ccc; }
-  .album-tab.active-1 { border-color:#1a6fc4; color:#4db8ff; background:#4db8ff14; }
-  .album-tab.active-2 { border-color:#6b24c4; color:#b06dff; background:#b06dff14; }
-  .album-tab.active-3 { border-color:#1a8a40; color:#4dff8a; background:#4dff8a14; }
-  .album-tab.active-4 { border-color:#c47a00; color:#ffc840; background:#ffc84014; }
+  .album-tab.active-1 { border-color:#1a6fc4; color:#4db8ff; }
+  .album-tab.active-2 { border-color:#6b24c4; color:#b06dff; }
+  .album-tab.active-3 { border-color:#1a8a40; color:#4dff8a; }
+  .album-tab.active-4 { border-color:#c47a00; color:#ffc840; }
+  .album-tab.active-1::after, .album-tab.active-2::after, .album-tab.active-3::after, .album-tab.active-4::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+  }
+  .album-tab.active-1::after { background: linear-gradient(180deg, rgba(77,184,255,0.08) 0%, rgba(77,184,255,0.22) 100%); }
+  .album-tab.active-2::after { background: linear-gradient(180deg, rgba(176,109,255,0.08) 0%, rgba(176,109,255,0.22) 100%); }
+  .album-tab.active-3::after { background: linear-gradient(180deg, rgba(77,255,138,0.08) 0%, rgba(77,255,138,0.22) 100%); }
+  .album-tab.active-4::after { background: linear-gradient(180deg, rgba(255,200,64,0.08) 0%, rgba(255,200,64,0.22) 100%); }
 
   .track-nav {
     flex: 1; overflow-y: auto; padding: 0.4rem;
@@ -1268,7 +1278,8 @@ function renderAlbumTabs() {
     const meta = ALBUMS[num];
     const btn = document.createElement('button');
     btn.className = 'album-tab' + (state.album === num ? ' active-' + num : '');
-    btn.innerHTML = `<span class="num">${meta.roman}</span>${meta.title}`;
+    btn.style.setProperty('--tab-cover', `url(${meta.cover})`);
+    btn.innerHTML = `<span class="num">${meta.roman}</span><span class="title-text">${meta.title}</span>`;
     btn.addEventListener('click', () => selectAlbum(num));
     el.appendChild(btn);
   });
