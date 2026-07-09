@@ -52,12 +52,18 @@
     padding: 0.7rem 1.4rem; border-bottom: 1px solid var(--border);
     background: var(--bg-panel);
     transition: border-color 0.5s ease, background 0.5s ease;
-    z-index: 10;
+    z-index: 10; position: relative;
   }
   .topbar-brand { display: flex; align-items: baseline; gap: 0.8rem; }
   .topbar-title { font-family:'Rajdhani',sans-serif; font-weight:700; letter-spacing:0.3em; font-size:1rem; text-transform:uppercase; color:#eee; }
   .topbar-sub { font-size:0.58rem; letter-spacing:0.2em; color: var(--text-dim); text-transform:uppercase; transition: color 0.5s ease; }
   .topbar-stamp { font-size:0.55rem; letter-spacing:0.2em; color: var(--accent); text-transform:uppercase; transition: color 0.5s ease; }
+  @media (min-width: 981px) {
+    .topbar-stamp {
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
 
   .fullscreen-btn {
     background: transparent; border: 1px solid var(--border); color: var(--text-dim);
@@ -465,7 +471,7 @@
       <div class="topbar-title">Aether Odyssey</div>
       <div class="topbar-sub">Wondu // Complete Saga Archive</div>
     </div>
-    <div class="topbar-stamp" id="topbarStamp">⬡ CLASSIFICATION: MISSION CULTURAL LOG ⬡</div>
+    <div class="topbar-stamp" id="topbarStamp">⊙ CLASSIFICATION: MISSION ARCHIVE ⊙</div>
     <button class="fullscreen-btn" id="fullscreenBtn" title="Toggle fullscreen">⛶</button>
   </div>
 
