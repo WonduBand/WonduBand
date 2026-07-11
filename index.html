@@ -48,7 +48,7 @@
     position: relative; z-index: 1;
   }
 
-  /* ── AMBIENT WALLPAPER (Elysium / Album 3 only, for now) ── */
+  /* ── AMBIENT WALLPAPER (per-album background + parallax) ── */
   .ambient-wallpaper {
     position: fixed; inset: 0; z-index: 0;
     opacity: 0; pointer-events: none;
@@ -57,20 +57,18 @@
   .ambient-wallpaper.active { opacity: 1; }
   .ambient-img {
     position: absolute; top: -6%; left: -6%; width: 112%; height: 112%;
-    background-image: url('Album 3/Elysium_Wallpaper.png');
     background-size: cover; background-position: center;
     will-change: transform;
+    transition: background-image 0.3s ease;
   }
   .ambient-mist, .ambient-particles {
     position: absolute; top: -6%; left: -6%; width: 112%; height: 112%;
   }
 
-  body[data-album="3"] .topbar,
-  body[data-album="3"] .sidebar {
-    background: rgba(6,15,8,0.55);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-  }
+  body[data-album="1"] .topbar, body[data-album="1"] .sidebar { background: rgba(7,13,26,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  body[data-album="2"] .topbar, body[data-album="2"] .sidebar { background: rgba(10,7,20,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  body[data-album="3"] .topbar, body[data-album="3"] .sidebar { background: rgba(6,15,8,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  body[data-album="4"] .topbar, body[data-album="4"] .sidebar { background: rgba(20,14,0,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 
   .topbar {
     display: flex; align-items: center; justify-content: space-between;
@@ -100,7 +98,7 @@
 
   .app-main {
     display: grid;
-    grid-template-columns: 300px minmax(0,1.15fr) minmax(0,1fr);
+    grid-template-columns: 300px minmax(0,1.15fr) 2.8rem minmax(0,1fr);
     min-height: 0;
   }
 
@@ -332,7 +330,30 @@
   }
 
   /* ── TEXT PANE ── */
-  .text-pane { display: flex; flex-direction: column; min-height: 0; background: var(--bg); transition: background 0.5s ease; }
+  .text-pane {
+    display: flex; flex-direction: column; min-height: 0;
+    position: relative;
+    grid-column: 4;
+  }
+  .text-pane-inner {
+    display: flex; flex-direction: column; min-height: 0; flex: 1;
+    background: var(--bg); transition: background 0.5s ease, transform 0.45s ease, opacity 0.4s ease;
+  }
+  @media (min-width: 981px) {
+    .text-pane-inner.collapsed { transform: translateX(-100%); opacity: 0; pointer-events: none; }
+  }
+  .text-pane-toggle {
+    position: absolute; left: -2.45rem; top: 1rem; z-index: 5;
+    width: 2.1rem; height: 1.9rem; border-radius: 3px;
+    background: var(--bg-panel); border: 1px solid var(--border); color: var(--text-dim);
+    font-size: 0.8rem; letter-spacing: 0.02em; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .text-pane-toggle:hover { border-color: var(--accent); color: var(--accent); }
+  @media (max-width: 980px) {
+    .text-pane-toggle { display: none; }
+  }
   .text-head {
     padding: 1rem 1.6rem 0.8rem; border-bottom: 1px solid var(--border);
     display: flex; align-items: center; gap: 0.8rem; transition: border-color 0.5s ease;
@@ -566,16 +587,19 @@
       </div>
     </section>
 
-    <section class="text-pane">
-      <div class="text-head">
-        <button class="text-nav-btn" id="prevBtn" title="Previous track"><span class="icon icon-tri-left"></span></button>
-        <div class="th-num" id="thNum">// TRACK_01</div>
-        <div class="th-title" id="thTitle">The Signal</div>
-        <div class="th-badge" id="thBadge" style="display:none;">INSTRUMENTAL</div>
-        <button class="text-nav-btn th-play-btn" id="thPlayBtn" title="Play this track"><span class="icon icon-tri-right"></span></button>
-        <button class="text-nav-btn" id="nextBtn" title="Next track"><span class="icon icon-tri-right"></span></button>
+    <section class="text-pane" id="textPane">
+      <button class="text-pane-toggle" id="textPaneToggle" title="Hide lyrics panel">«</button>
+      <div class="text-pane-inner" id="textPaneInner">
+        <div class="text-head">
+          <button class="text-nav-btn" id="prevBtn" title="Previous track"><span class="icon icon-tri-left"></span></button>
+          <div class="th-num" id="thNum">// TRACK_01</div>
+          <div class="th-title" id="thTitle">The Signal</div>
+          <div class="th-badge" id="thBadge" style="display:none;">INSTRUMENTAL</div>
+          <button class="text-nav-btn th-play-btn" id="thPlayBtn" title="Play this track"><span class="icon icon-tri-right"></span></button>
+          <button class="text-nav-btn" id="nextBtn" title="Next track"><span class="icon icon-tri-right"></span></button>
+        </div>
+        <div class="text-body" id="textBody"></div>
       </div>
-      <div class="text-body" id="textBody"></div>
     </section>
 
   </div>
@@ -1874,6 +1898,15 @@ coverClipBtn.addEventListener('click', () => {
 
 clipVideo.addEventListener('ended', stopCoverClip);
 
+// ── LYRICS PANEL TOGGLE (desktop) ──
+const textPaneInner = document.getElementById('textPaneInner');
+const textPaneToggle = document.getElementById('textPaneToggle');
+textPaneToggle.addEventListener('click', () => {
+  const collapsed = textPaneInner.classList.toggle('collapsed');
+  textPaneToggle.textContent = collapsed ? '»' : '«';
+  textPaneToggle.title = collapsed ? 'Show lyrics panel' : 'Hide lyrics panel';
+});
+
 // ── FULLSCREEN TOGGLE ──
 const fsBtn = document.getElementById('fullscreenBtn');
 fsBtn.addEventListener('click', () => {
@@ -1927,15 +1960,21 @@ let ambientT = 0;
 let ambientMouseX = 0, ambientMouseY = 0;
 let ambientActive = false;
 let ambientRaf = null;
+let ambientCurrentAlbum = null;
+
+const ambientThemes = {
+  1: { image: "Album 1/Ignition_Wallpaper.png", cool: [110,150,255], warm: [255,140,60] },   // Ignition: city-light blue → fire orange
+  2: { image: "Album 2/Drift_Wallpaper.png",     cool: [140,180,255], warm: [190,120,255] },  // The Drift: starlight blue → nebula violet
+  3: { image: "Album 3/Elysium_Wallpaper.png",   cool: [120,255,230], warm: [255,195,110] },  // Genesis: crystal teal → setting-sun gold
+  4: { image: "Album 4/Pantheon_Wallpaper.png",  cool: [190,140,255], warm: [255,200,110] },  // New Pantheon: galaxy violet → city-light gold
+};
 
 function moteColor(xFrac, alpha) {
-  // Left side: cool teal (matches the crystals) → right side: warm gold (matches the setting sun)
-  const cool = [120, 255, 230];
-  const warm = [255, 195, 110];
+  const theme = ambientThemes[ambientCurrentAlbum] || ambientThemes[3];
   const mix = xFrac; // 0 = left/cool, 1 = right/warm
-  const r = Math.round(cool[0] + (warm[0] - cool[0]) * mix);
-  const g = Math.round(cool[1] + (warm[1] - cool[1]) * mix);
-  const b = Math.round(cool[2] + (warm[2] - cool[2]) * mix);
+  const r = Math.round(theme.cool[0] + (theme.warm[0] - theme.cool[0]) * mix);
+  const g = Math.round(theme.cool[1] + (theme.warm[1] - theme.cool[1]) * mix);
+  const b = Math.round(theme.cool[2] + (theme.warm[2] - theme.cool[2]) * mix);
   return `rgba(${r},${g},${b},${alpha})`;
 }
 
@@ -1998,14 +2037,14 @@ function ambientLoop() {
 }
 
 function setAmbientWallpaper(albumNum) {
-  const shouldShow = (albumNum === 3); // Elysium / Genesis, for now
-  if (shouldShow && !ambientActive) {
+  const theme = ambientThemes[albumNum];
+  if (!theme) return;
+  ambientCurrentAlbum = albumNum;
+  ambientImg.style.backgroundImage = `url('${theme.image}')`;
+  if (!ambientActive) {
     ambientActive = true;
     ambientWallpaper.classList.add('active');
     if (!ambientRaf) ambientLoop();
-  } else if (!shouldShow && ambientActive) {
-    ambientActive = false;
-    ambientWallpaper.classList.remove('active');
   }
 }
 
