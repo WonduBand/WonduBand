@@ -281,6 +281,28 @@
   .cover-meta span { color: var(--accent); transition: color 0.5s ease; }
   .cover-pulse { width: 100%; height: 34px; margin-top: 0.9rem; display:block; }
 
+  /* ── COVER ANIMATION CLIP (plays inline inside the artwork frame) ── */
+  .cover-clip-btn {
+    position: absolute; right: 1rem; bottom: 1rem; z-index: 6;
+    width: 2.4rem; height: 2.4rem; border-radius: 50%;
+    background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.25);
+    color: #fff; font-size: 1.1rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .cover-clip-btn:hover { background: rgba(0,0,0,0.8); border-color: #fff; transform: scale(1.06); }
+  .cover-pane.track-selected .cover-clip-btn { display: none; }
+
+  .clip-video {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; display: none; background: #000; z-index: 3;
+  }
+  .clip-video.active { display: block; }
+
+  @media (max-width: 980px) {
+    .clip-video { object-fit: contain; }
+  }
+
   /* ── TEXT PANE ── */
   .text-pane { display: flex; flex-direction: column; min-height: 0; background: var(--bg); transition: background 0.5s ease; }
   .text-head {
@@ -417,7 +439,7 @@
       position: relative; z-index: auto;
       flex: 0 0 auto;
       background: #000;
-      margin-top: -1.4rem;
+      margin-top: 0;
       padding: 1.6rem 1.4rem 1.8rem;
       justify-content: flex-start;
     }
@@ -426,7 +448,8 @@
     .cover-pane.track-selected .cover-song-note { display: block; }
     .cover-pulse {
       position: static;
-      width: 100%; margin: 1.2rem 0 0;
+      width: 100%; height: 34px; margin: 0;
+      display: block;
     }
 
     /* Default resting order: tracks | cover | lyrics, left to right */
@@ -488,6 +511,7 @@
         <img class="cover-img" id="coverImg" src="" alt="">
         <div class="cover-fallback" id="coverFallback" style="display:none;"></div>
         <div class="cover-glow" id="coverGlow"></div>
+        <video id="clipVideo" class="clip-video" muted playsinline webkit-playsinline></video>
       </div>
       <div class="cover-scrim"></div>
       <div class="cover-content">
@@ -504,6 +528,7 @@
           <canvas class="cover-pulse" id="coverPulse"></canvas>
         </div>
       </div>
+      <button class="cover-clip-btn" id="coverClipBtn" title="Play cover animation">🎥</button>
     </section>
 
     <section class="text-pane">
@@ -546,7 +571,7 @@
 <script>
 // ── ALBUM 1 DATA ──
 const tracksAlbum1 = [
-{ title:"The Signal", image:"01__The_Signal.png", note:"It is 2146. A deep-space radio array in the Atacama mountains has intercepted a repeating signal of unmistakable mathematical structure — something built, not born. The world does not yet know what it means, but for the first time in decades, eight billion people are looking in the same direction.", sections:[
+{ title:"The Signal", image:"Album 1/01__The_Signal.png", note:"It is 2146. A deep-space radio array in the Atacama mountains has intercepted a repeating signal of unmistakable mathematical structure — something built, not born. The world does not yet know what it means, but for the first time in decades, eight billion people are looking in the same direction.", sections:[
     {label:"VERSE_01",type:"verse",text:`In the static of the universe, a whisper breaks the night\nA pattern in the darkness, mathematics carved in light\nWe aimed our dishes skyward, let the frequencies bleed through\nSomething out beyond the black was calling — calling to you`},
     {label:"PRE-CHORUS",type:"pre",text:`Every scientist with trembling hands\nEvery government, every flag, every land\nFell silent at the same moment — we all heard the same sound`},
     {label:"CHORUS",type:"chorus",text:`We heard you calling, we heard you calling\nAcross the light-years, through the dark and the dying\nWe heard you calling, deep in our bones it's burning\nWe're coming home — we're coming home`},
@@ -556,7 +581,7 @@ const tracksAlbum1 = [
     {label:"BRIDGE",type:"bridge",text:`Maybe it's a warning, maybe it's a door\nMaybe we were always meant for something more\nThe void is not empty — something breathes inside\nAnd we will cross the nothing on the strength of our belief\nWe will not be silenced, we will not be blind\nWe are the answer — we are the reply`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`We heard you calling, we heard you calling\nAcross the light-years, through the dark and the dying\nWe heard you calling — and we answered, we answered\nWe're coming home — we're leaving everything we've ever known\nWe're coming home`},
   ]},
-  { title:"Dying Blue", image:"02__Dying_Blue.png", note:"The coastal cities are already gone. Firestorms roll across the northern continents and the monsoon cycles have collapsed into silence. The scientists who designed the Aether project never named what they were running from — but standing in the smoke of the world they loved, they didn't need to.", sections:[
+  { title:"Dying Blue", image:"Album 1/02__Dying_Blue.png", note:"The coastal cities are already gone. Firestorms roll across the northern continents and the monsoon cycles have collapsed into silence. The scientists who designed the Aether project never named what they were running from — but standing in the smoke of the world they loved, they didn't need to.", sections:[
     {label:"VERSE_01",type:"verse",text:`The rivers run like rust now, and the forests choke on smoke\nThe cities built on shorelines slowly swallow as they soak\nMy daughter asks me why the sky turned grey above our street\nI tell her that the world got sick — I can't explain the grief`},
     {label:"PRE-CHORUS",type:"pre",text:`We burned it all so beautifully\nWe couldn't see what we were taking\nNow the cradle's cracked and breaking`},
     {label:"CHORUS",type:"chorus",text:`Dying blue, dying blue\nYou were perfect and we never knew\nOceans gone, the mountains too\nStill I'd give anything to come back to you\nDying blue`},
@@ -566,7 +591,7 @@ const tracksAlbum1 = [
     {label:"BRIDGE",type:"bridge",text:`Don't forget the colour of the water\nDon't forget the smell of rain on stone\nDon't forget the way the light hit the mountains\nCarry every memory — you are not alone\nWe will build you somewhere in the stars\nWe will name it after everything you are`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Dying blue, dying blue\nEverything we broke, everything we threw\nWe're sorry — god, we're sorry it came true\nBut somewhere in the dark we'll build a world for you\nGoodbye, blue — goodbye blue`},
   ]},
-  { title:"Last Sunrise", image:"03__Last_Sunrise.png", note:"Selection day is three weeks away. The crew rosters have been posted, and across every city on Earth, people are checking the lists — some with held breath, some already knowing. One by one, the chosen are making their way to the embarkation zones, leaving behind everything that cannot fit in a single bag.", sections:[
+  { title:"Last Sunrise", image:"Album 1/03__Last_Sunrise.png", note:"Selection day is three weeks away. The crew rosters have been posted, and across every city on Earth, people are checking the lists — some with held breath, some already knowing. One by one, the chosen are making their way to the embarkation zones, leaving behind everything that cannot fit in a single bag.", sections:[
     {label:"VERSE_01",type:"verse",text:`I set my alarm for the last morning I'll ever have here\nI walked out to the hillside where we kissed away our fear\nThe sun came up like always, like it didn't know my name\nLike the world wasn't ending — like everything was still the same`},
     {label:"PRE-CHORUS",type:"pre",text:`I took a photograph of nothing special\nJust a porch light and an oak tree and the sky\nBecause the ordinary is what we forget — and I won't say goodbye`},
     {label:"CHORUS",type:"chorus",text:`Last sunrise, burn me golden\nOne more moment, let me hold it\nI will carry all this light into the black\nLast sunrise, don't you fade yet\nThere's so much I haven't said yet\nEven if I'm never — ever — coming back`},
@@ -576,7 +601,7 @@ const tracksAlbum1 = [
     {label:"BRIDGE",type:"bridge",text:`Maybe in a hundred years they'll read what I have left behind\nMaybe in another galaxy they'll know this human mind\nThat loved so hard it burned — that grieved so deep it shone\nThat rose up when the world was gone and chose to carry on\nRise — rise — one last time with me\nRise — rise — rise`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Last sunrise, I am golden\nIn this grief I find I'm whole\nI will carry every face I love into the stars\nLast sunrise — you made me\nEvery scar you left has saved me\nI am everything you are — I am everything you are`},
   ]},
-  { title:"Forge the Ark", image:"04__Forge_the_Ark.png", note:"In low Earth orbit, ninety thousand workers in rotating shifts have been welding the Aether together for eleven years. The ship is the largest object humanity has ever constructed — and it is almost ready. On the ground, the last boarding gates are being sealed.", sections:[
+  { title:"Forge the Ark", image:"Album 1/04__Forge_the_Ark.png", note:"In low Earth orbit, ninety thousand workers in rotating shifts have been welding the Aether together for eleven years. The ship is the largest object humanity has ever constructed — and it is almost ready. On the ground, the last boarding gates are being sealed.", sections:[
     {label:"VERSE_01",type:"verse",text:`Ninety thousand workers in the orbital ring\nWelding light to titanium, forging everything\nNo sleep, no shift end, just the hiss of the torch\nEvery rivet a heartbeat — every beam a new hope born`},
     {label:"PRE-CHORUS",type:"pre",text:`Steel and fire and human will\nMountains moved by the force of our need\nThis is the last great thing we'll build`},
     {label:"CHORUS",type:"chorus",text:`Forge the Ark — hammer it holy\nWeld the hull — let the seams hold slowly\nEvery scar on our hands is a prayer\nForge the Ark — build it or die trying\nWe are the fire — we are the iron\nWe will carry humanity through the air — forge the Ark`},
@@ -586,7 +611,7 @@ const tracksAlbum1 = [
     {label:"BRIDGE",type:"bridge",text:`Eight thousand seats in the belly of a miracle\nEvery corridor a promise, every window a vow\nWe didn't build a ship — we built a cathedral\nWe didn't build an Ark — we built the now\nFORGE IT — DRIVE IT — SEAL IT TIGHT\nCARRY THE LIVING INTO THE LIGHT`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Forge the Ark — it is done, it is holy\nShe holds the hull — God, the seams held, slowly\nEvery scar on our hands was a prayer\nForge the Ark — we built it, we did it\nWe are the iron, the fire — admit it\nWe carried humanity into the air — the Ark is forged`},
   ]},
-  { title:"The Chosen", image:"05__The_Chosen.png", note:"Eight thousand names were selected from a global pool of four hundred million applicants. The algorithm was blind to wealth, nationality, and faith. The protests outside the embarkation zones have been running for six weeks. Inside, the chosen walk past the gates and do not look back.", sections:[
+  { title:"The Chosen", image:"Album 1/05__The_Chosen.png", note:"Eight thousand names were selected from a global pool of four hundred million applicants. The algorithm was blind to wealth, nationality, and faith. The protests outside the embarkation zones have been running for six weeks. Inside, the chosen walk past the gates and do not look back.", sections:[
     {label:"VERSE_01",type:"verse",text:`The algorithm ran in seventeen seconds flat\nEight thousand names from eight billion — imagine that\nGeneticist, engineer, physician, dreamer, child\nThey said we picked the best of us — the data reconciled`},
     {label:"PRE-CHORUS",type:"pre",text:`But every name that made the list\nMeans ten thousand names that didn't\nAnd the weight of that is infinite`},
     {label:"CHORUS",type:"chorus",text:`We are the chosen — we carry the cost\nWe are the lucky ones built on the lost\nEvery seat on this ship is a grave for the ones\nWho were just as worthy but just didn't run\nWe are the chosen — god, what have we done`},
@@ -596,7 +621,7 @@ const tracksAlbum1 = [
     {label:"BRIDGE",type:"bridge",text:`We didn't ask for this — we didn't ask for this\nSome of us begged to stay behind\nWe didn't earn this — we just were selected\nBy a God-playing machine and its cold design\nBut we will honour every name not carved in this hull\nWe will survive for all the ones who couldn't`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`We are the chosen — we carry them all\nEvery soul left behind is written on our walls\nWe will live for the ones who deserved what we got\nWe are the chosen — and we will not forget\nWe will not — we will not — forget`},
   ]},
-  { title:"Countdown Sequence", image:"06__Countdown_Sequence.png", note:"T-minus seventy-two hours. Mission control has gone to full lockdown. The Aether sits in low orbit, fully fuelled, every system nominal. Eight thousand people are in their launch positions. The Signal pulses quietly from deep space — patient, as if it has been waiting for precisely this moment.", sections:[
+  { title:"Countdown Sequence", image:"Album 1/06__Countdown_Sequence.png", note:"T-minus seventy-two hours. Mission control has gone to full lockdown. The Aether sits in low orbit, fully fuelled, every system nominal. Eight thousand people are in their launch positions. The Signal pulses quietly from deep space — patient, as if it has been waiting for precisely this moment.", sections:[
     {label:"VERSE_01",type:"verse",text:`T-minus sixty — final systems sweep\nEight thousand heartbeats — most of them too scared to sleep\nThe captain grips the console, knuckles white as bone\nThe whole of human history riding on this unknown`},
     {label:"PRE-CHORUS",type:"pre",text:`T-minus thirty — don't you look away\nT-minus twenty — breathe\nT-minus ten — this is everything`},
     {label:"CHORUS",type:"chorus",text:`We were made for this moment, this fire, this night\nEight thousand souls on the edge of the light\nNo going back — no going back\nWe were made for this — we were made for this`},
@@ -606,7 +631,7 @@ const tracksAlbum1 = [
     {label:"BRIDGE",type:"bridge",text:`TEN — the Pulse ignites\nNINE — we seal the night\nEIGHT — no turning back now\nSEVEN — the engines crack now\nSIX — hold on to something\nFIVE — we're becoming nothing\nFOUR — we're becoming everything\nTHREE — TWO — ONE —`},
     {label:"OUTRO",type:"outro",text:`IGNITE — the Aether rises\nIGNITE — through fire and crisis\nIGNITE — humanity's answer to the stars\nIGNITE — we are no longer who we were\nIGNITE — IGNITE — IGNITE`},
   ]},
-  { title:"Ignition", image:"07__Ignition.png", note:"The Aether clears the launch tower at 04:09 UTC on April 9th, 2147. The plasma drives ignite at full thrust. In the cities below, every screen carries the same image. Those who cannot watch listen. The sound reaches the ground seventeen seconds after the light.", sections:[
+  { title:"Ignition", image:"Album 1/07__Ignition.png", note:"The Aether clears the launch tower at 04:09 UTC on April 9th, 2147. The plasma drives ignite at full thrust. In the cities below, every screen carries the same image. Those who cannot watch listen. The sound reaches the ground seventeen seconds after the light.", sections:[
     {label:"VERSE_01",type:"verse",text:`She clears the tower at four hundred feet per second\nThe G-force pins us flat — it's more than anyone expected\nThe sky goes dark so fast — from blue to black in under three\nI feel the planet letting go — I feel us getting free`},
     {label:"PRE-CHORUS",type:"pre",text:`The whole Earth holds its breath\nEight thousand people — two lungs' worth of hope\nAnd we burn — god, we burn`},
     {label:"CHORUS",type:"chorus",text:`IGNITION — we burn the sky\nIGNITION — we learn to fly\nThe fire below us is everything we left\nAnd the dark above us is everything ahead\nIGNITION — we earn the stars\nIGNITION — we bear the scars\nThe engines are screaming and I am screaming too\nIGNITION — we're burning through`},
@@ -616,7 +641,7 @@ const tracksAlbum1 = [
     {label:"BRIDGE",type:"bridge",text:`Let the whole universe hear this\nLet the Signal itself feel us rise\nWe are not passengers — we are not cargo\nWe are the fire that refuses to die\nBURN — BURN — BURN IT ALL THE WAY\nBURN — BURN — TODAY WE FLY`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`IGNITION — we burned the sky\nIGNITION — we learned to fly\nThe fire below us became the stars above\nAnd this screaming metal is made of love\nIGNITION — we earned the stars\nIGNITION — we are the stars\nThe engines are singing and I am singing too\nIGNITION — we broke on through`},
   ]},
-  { title:"Escape Velocity", image:"08__Escape_Velocity.png", note:"Eleven point two kilometres per second. The gravitational threshold of Earth passes like a held breath releasing. In the crew compartments, loose objects drift upward. A child laughs. For a moment, nothing in the universe feels like gravity.", sections:[
+  { title:"Escape Velocity", image:"Album 1/08__Escape_Velocity.png", note:"Eleven point two kilometres per second. The gravitational threshold of Earth passes like a held breath releasing. In the crew compartments, loose objects drift upward. A child laughs. For a moment, nothing in the universe feels like gravity.", sections:[
     {label:"VERSE_01",type:"verse",text:`Eleven kilometres a second to break the chain\nEleven kilometres a second from grief to gain\nThe gravitational well is a fist around your chest\nAnd then — just then — you feel it loosen — you feel the last protest`},
     {label:"PRE-CHORUS",type:"pre",text:`Something in the body knows\nWhen the planet loses hold\nSomething older than the mind just — lets — go`},
     {label:"CHORUS",type:"chorus",text:`Escape velocity — the mathematics of the free\nEscape velocity — the world can't hold on me\nI am fast enough — I am light enough — I am finally\nBeyond the gravity of everything I used to be\nEscape velocity`},
@@ -626,7 +651,7 @@ const tracksAlbum1 = [
     {label:"BRIDGE",type:"bridge",text:`Every force that ever kept us grounded\nEvery chain that ever had a name\nEvery hand that held us to the broken\nWe accelerated past the pain\nAnd now — just now — we understand\nThat speed itself can be a kind of grace`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Escape velocity — the mathematics set us free\nEscape velocity — there's no more gravity\nWe are fast enough — we are light enough — we finally\nBecame the thing we were always meant to be\nEscape velocity — escape\nVelocity — escape`},
   ]},
-  { title:"Pale Blue Dot", image:"09__Pale_Blue_Dot.png", note:"The Aether is four million kilometres from Earth and accelerating. Through the observation viewport, the planet has shrunk to something you can cover with your thumb. The crew has been instructed not to spend excessive time at the viewport. Most of them ignore this.", sections:[
+  { title:"Pale Blue Dot", image:"Album 1/09__Pale_Blue_Dot.png", note:"The Aether is four million kilometres from Earth and accelerating. Through the observation viewport, the planet has shrunk to something you can cover with your thumb. The crew has been instructed not to spend excessive time at the viewport. Most of them ignore this.", sections:[
     {label:"VERSE_01",type:"verse",text:`I pressed my face against the viewport glass for hours\nWatching home reduce itself to something less than ours\nA pixel in the darkness, barely brighter than the rest\nEverything I've ever loved compressed inside a speck`},
     {label:"PRE-CHORUS",type:"pre",text:`Carl Sagan said it better than I ever could\nThat every king, every saint, every war was fought\nOn that mote of dust suspended in a sunbeam`},
     {label:"CHORUS",type:"chorus",text:`Pale blue dot — I can hold you between two fingers now\nPale blue dot — I never loved you harder than I do right now\nEvery mountain, every ocean, every face I've ever known\nPale blue dot — you were the only home\nYou were the only home`},
@@ -636,7 +661,7 @@ const tracksAlbum1 = [
     {label:"BRIDGE",type:"bridge",text:`Forgive us for the burning\nForgive us for the taking\nForgive us for not knowing what you were\nUntil we saw you shrinking\nUntil you stopped existing\nUntil the dark swallowed every single word\nWe'll build something worthy — somewhere out there\nWe promise — we swear`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Pale blue dot — gone between two fingers now\nPale blue dot — we love you more than we know how\nEvery mountain, every ocean, every face, every bone\nPale blue dot — you were our only home\nYou will always be our only home`},
   ]},
-  { title:"Weightless", image:"10__Weightless.png", note:"Day three of transit. The rotation schedule has settled into its first rhythm and the first genuine silence has arrived — not the silence of emptiness, but the silence of eight thousand people simultaneously realising where they are. A few laugh. Most simply float and breathe.", sections:[
+  { title:"Weightless", image:"Album 1/10__Weightless.png", note:"Day three of transit. The rotation schedule has settled into its first rhythm and the first genuine silence has arrived — not the silence of emptiness, but the silence of eight thousand people simultaneously realising where they are. A few laugh. Most simply float and breathe.", sections:[
     {label:"VERSE_01",type:"verse",text:`Three days out and someone starts to laugh\nProperly, deeply — the kind that splits you in half\nZero-G has made us all a little strange and slow\nHair floating, soup floating, everything we know`},
     {label:"PRE-CHORUS",type:"pre",text:`And for the first time since selection\nSince the lottery, since the goodbye\nSomething lifts — not the ship — but something inside`},
     {label:"CHORUS",type:"chorus",text:`Weightless — I don't feel the world anymore\nWeightless — I don't know what I was carrying before\nThe grief still follows me but it floats beside me now\nWeightless — we are finally free somehow\nWe are weightless`},
@@ -646,7 +671,7 @@ const tracksAlbum1 = [
     {label:"BRIDGE",type:"bridge",text:`Float — just float — let the engines hold you\nLet the dark outside the hull console you\nYou don't have to carry it all tonight\nFloat — just float — let the Pulse below you\nBe the heartbeat of the life that chose you\nLet the weightlessness become your light`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Weightless — I don't feel the world anymore\nWeightless — I found what I was looking for\nNot the destination — no — just this moment, this crew\nWeightless — I am finally made new\nWeightless — we are made new\nWe are weightless`},
   ]},
-  { title:"Into the Black", image:"11__Into_The_Black.png", note:"The last solar navigational buoy passes out of range on day ninety-one. There are no more landmarks. There is no more Sun visible as a disc. The Signal, however, is louder than it has ever been — as if the void itself opened its mouth and began, finally, to sing.", sections:[
+  { title:"Into the Black", image:"Album 1/11__Into_The_Black.png", note:"The last solar navigational buoy passes out of range on day ninety-one. There are no more landmarks. There is no more Sun visible as a disc. The Signal, however, is louder than it has ever been — as if the void itself opened its mouth and began, finally, to sing.", sections:[
     {label:"VERSE_01",type:"verse",text:`The last navigational buoy blinks and goes to sleep\nThe solar wind grows thin — the silence starts to seep\nNo landmarks now — no reference point — no tether to the known\nThe Aether sails on nothing into something all its own`},
     {label:"PRE-CHORUS",type:"pre",text:`The captain logs: 'Day ninety — we are past the edge'\n'Past the edge of everything humanity has touched'\n'The void is ours — and we are the void's'`},
     {label:"CHORUS",type:"chorus",text:`Into the black — no road, no map\nInto the black — no looking back\nWe are the first, the only, the alone\nWe traded the known world for the unknown\nInto the black — the Signal calls\nInto the black — before the dark falls\nWe answer with our engines and our will\nInto the black — we're going still`},
@@ -656,13 +681,13 @@ const tracksAlbum1 = [
     {label:"BRIDGE",type:"bridge",text:`Black is not empty — black is the canvas\nBlack is not nothing — black is the start\nBlack is where gods go when they are making\nBlack is where we go to find our heart\nLet the dark swallow us — let it remake us\nWe will come out the other side as fire\nWe will come out the other side as stars`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Into the black — no road — no map\nInto the black — and we won't look back\nWe are the first — the only — the alive\nOn the longest, darkest, greatest human drive\nInto the black — the Signal roars\nInto the black — we open the doors\nThe stars swallow the Aether whole and still\nInto the black — we're going\nInto the black — we're going\nInto the black`},
   ]},
-  { title:"The Stars Receive Us", image:"12__The_Stars_Recieve_Us.png", instrumental:true },
+  { title:"The Stars Receive Us", image:"Album 1/12__The_Stars_Recieve_Us.png", instrumental:true },
 ];
 
 
 // ── ALBUM 2 DATA ──
 const tracksAlbum2 = [
-{ title:"Ship's Pulse", image:"01__Ship_s_Pulse.png", note:"Year two of the drift. The engines have settled into their long-burn cruise rhythm — a low, constant thrum that permeates every surface of the ship. The crew has stopped noticing it the way they have stopped noticing their own heartbeats. They call it the Pulse. It is the only constant left.", sections:[
+{ title:"Ship's Pulse", image:"Album 2/01__Ship_s_Pulse.png", note:"Year two of the drift. The engines have settled into their long-burn cruise rhythm — a low, constant thrum that permeates every surface of the ship. The crew has stopped noticing it the way they have stopped noticing their own heartbeats. They call it the Pulse. It is the only constant left.", sections:[
     {label:"VERSE_01",type:"verse",text:`Before the voices, before the names\nBefore the fear and the waiting games\nThere was only this — the low deep thrum\nThe heartbeat of the thing we'd become\nTwelve decks of steel and burning will\nEight thousand lives impossibly still\nAnd underneath it all, beneath the skin\nThe Pulse — the only god left to believe in`},
     {label:"PRE-CHORUS",type:"pre",text:`Feel it in your chest, feel it in your bones\nThe only constant in the great unknown\nIt was there at launch, it'll be there at the end\nThe rhythm of the Aether — our beginning and our friend`},
     {label:"CHORUS",type:"chorus",text:`Ship's Pulse — we are alive\nShip's Pulse — the engine drives\nThrough the black and the endless night\nThe Pulse is the proof that we're still in the fight\nShip's Pulse — beating strong\nShip's Pulse — all year long\nAs long as it hammers we carry on\nWe are the Pulse — we are the Aether — we belong`},
@@ -672,7 +697,7 @@ const tracksAlbum2 = [
     {label:"BRIDGE",type:"bridge",text:`If the engines ever stop\nIf the lights go out one by one\nIf the cold comes creeping in\nAnd we lose sight of the sun —\nListen for the Pulse\nListen — it's still there\nEight thousand hearts in the dark\nAnd every single one dares\nListen for the Pulse\nIt will not quit\nWe did not cross the void\nTo be swallowed by it`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Ship's Pulse — we are alive\nShip's Pulse — the engine drives\nThrough the black and the endless night\nThe Pulse is the proof that we're still in the fight\nShip's Pulse — beating strong\nShip's Pulse — all year long\nAs long as it hammers we carry on\nWe are the Pulse — we are the Aether — we belong`},
   ]},
-  { title:"Void Routine", image:"02__Void_Routine.png", note:"Year four. The rotating watch crews have developed their own rituals — specific seats at specific times, playlists for maintenance shifts, unofficial competitions for the best hydroponic yield. The psychological reports note an increase in what the counsellors are calling functional numbness. The crew calls it Tuesday.", sections:[
+  { title:"Void Routine", image:"Album 2/02__Void_Routine.png", note:"Year four. The rotating watch crews have developed their own rituals — specific seats at specific times, playlists for maintenance shifts, unofficial competitions for the best hydroponic yield. The psychological reports note an increase in what the counsellors are calling functional numbness. The crew calls it Tuesday.", sections:[
     {label:"VERSE_01",type:"verse",text:`Clock says 0600, same as yesterday\nSynthetic coffee, recycled air\nThe stars don't move from where I lay\nEight hundred days since anyone cared\nCheck the readouts, log the numbers down\nSame corridor, same fluorescent hum\nWe traded everything for this\nA floating tomb we call a home`},
     {label:"PRE-CHORUS",type:"pre",text:`But I will hold it together\nI will not come apart\nWe keep the engines burning\nWe keep the beating heart`},
     {label:"CHORUS",type:"chorus",text:`This is the void routine\nWe dance to stay alive\nWe count the hours clean\nWe cheat the dark, we survive\nLaugh a little louder\nLove a little more\nThis is the void routine\nAnd we'll make it to the shore`},
@@ -682,7 +707,7 @@ const tracksAlbum2 = [
     {label:"BRIDGE",type:"bridge",text:`Eight thousand souls in a metal skin\nHurtling through the dark\nWe are the last ones left of Earth\nWe are the beating heart\nDon't let the silence swallow you\nDon't let the nothing win\nWe are the last ones left of Earth\nAnd we will not give in`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`This is the void routine\nWe dance to stay alive\nWe count the hours clean\nWe cheat the dark, we survive\nLaugh a little louder\nLove a little more\nThis is the void routine\nAnd we'll make it to the shore`},
   ]},
-  { title:"Cryo Dreams", image:"03__Cryo_Dreams.png", note:"Year seven. Over forty percent of the eight thousand souls aboard the Aether are in cryogenic suspension — preserving both resources and sanity. The monitors show steady vitals, cycling breath, the faintest movement of dreaming eyes. The awake crew moves quietly between the cryo bays, as if noise might disturb something sacred.", sections:[
+  { title:"Cryo Dreams", image:"Album 2/03__Cryo_Dreams.png", note:"Year seven. Over forty percent of the eight thousand souls aboard the Aether are in cryogenic suspension — preserving both resources and sanity. The monitors show steady vitals, cycling breath, the faintest movement of dreaming eyes. The awake crew moves quietly between the cryo bays, as if noise might disturb something sacred.", sections:[
     {label:"VERSE_01",type:"verse",text:`Down in the cold dark, heartbeat at four\nDreaming of a world we had before\nGreen fields, grey skies, salt air, summer rain\nNeurons firing in a frozen frame\nShe sees her daughter running in the park\nShe sees the kitchen light against the dark\nShe doesn't know the park is gone\nShe doesn't know how long she's been alone`},
     {label:"PRE-CHORUS",type:"pre",text:`Sleep, sleep, don't wake up yet\nThe real world is colder than this\nSleep, sleep, hold what you have\nThere's nothing left but this`},
     {label:"CHORUS",type:"chorus",text:`Cryo dreams, keep them close\nHold the ones you love the most\nLet the years run past like ghosts\nCryo dreams — they're all we have left now\nCryo dreams, don't let go\nOf the world you used to know\nIn the ice you'll never grow old\nCryo dreams — they're all we have left now`},
@@ -692,7 +717,7 @@ const tracksAlbum2 = [
     {label:"BRIDGE",type:"bridge",text:`What is a life if not the things you dream?\nWhat is a world if not the world you see?\nMaybe the sleepers are the lucky ones\nPreserved in amber — perfect, frozen, free\nWe who are awake carry the weight\nWe who are awake face the years\nMaybe the kindest thing we ever did\nWas let them sleep through all of this`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Cryo dreams, keep them close\nHold the ones you love the most\nLet the years run past like ghosts\nCryo dreams — they're all we have left now\nCryo dreams, don't let go\nOf the world you used to know\nIn the ice you'll never grow old\nCryo dreams — they're all we have left now`},
   ]},
-  { title:"Signal Delay", image:"04__Signal_Delay.png", note:"Year nine. The last transmission from Earth arrived fourteen months ago — a fragmented broadcast that cut off mid-sentence. Mission control has not responded to any communication since. The signals take years to bridge the distance. The crew has learned not to wait by the receiver.", sections:[
+  { title:"Signal Delay", image:"Album 2/04__Signal_Delay.png", note:"Year nine. The last transmission from Earth arrived fourteen months ago — a fragmented broadcast that cut off mid-sentence. Mission control has not responded to any communication since. The signals take years to bridge the distance. The crew has learned not to wait by the receiver.", sections:[
     {label:"VERSE_01",type:"verse",text:`Thirty-seven years to cross the dark\nYour message landed this morning\nYour voice is young — you don't know yet\nThat I've already started mourning\nYou're laughing in a garden I can't name\nYou're saying things will get better\nAnd I'm holding an old woman's voice\nTelling me she loves me forever`},
     {label:"PRE-CHORUS",type:"pre",text:`And I know you're gone by now\nI know the math, I know the light\nBut God, I'd give the stars themselves\nTo hear you just one more night`},
     {label:"CHORUS",type:"chorus",text:`Signal delay, thirty-seven years\nYour voice arrives like ghost light through my tears\nYou're already gone but I can still pretend\nThat love doesn't bend to the speed of light\nThat love doesn't end\nSignal delay — I'm still listening`},
@@ -702,7 +727,7 @@ const tracksAlbum2 = [
     {label:"BRIDGE",type:"bridge",text:`Maybe our message will arrive\nOn some distant shore in a hundred years\nAnd someone who never knew your name\nWill hear you laugh and feel it clear\nMaybe that's enough\nMaybe love transcends the speed of light\nMaybe you're still out there somewhere\nMaybe everything will be alright`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Signal delay, thirty-seven years\nYour voice arrives like ghost light through my tears\nYou're already gone but I can still pretend\nThat love doesn't bend to the speed of light\nThat love doesn't end\nSignal delay — I'm still listening`},
   ]},
-  { title:"Hull Breach", image:"05__Hull_Breach.png", note:"Year twelve. A micrometeorite strike at 0300 ship-time breached the outer hull of section nine. The emergency repair team was outside within six minutes. Crew member Yusuf Kwan nearly lost his tether in the microblast. He did not. Everyone who was awake that night logged it differently, but the emotional core of every account was the same: it was very close.", sections:[
+  { title:"Hull Breach", image:"Album 2/05__Hull_Breach.png", note:"Year twelve. A micrometeorite strike at 0300 ship-time breached the outer hull of section nine. The emergency repair team was outside within six minutes. Crew member Yusuf Kwan nearly lost his tether in the microblast. He did not. Everyone who was awake that night logged it differently, but the emotional core of every account was the same: it was very close.", sections:[
     {label:"VERSE_01",type:"verse",text:`Alarm at 0300, sector nine\nPressure dropping, red lights down the line\nGrab the patch kit, seal the exosuit\nThe hull is screaming and there's no dispute\nKwan is already out there on the skin\nThe void is pulling, trying to get in\nTwo centimeters between us and death\nWork the clamp, don't hold your breath`},
     {label:"PRE-CHORUS",type:"pre",text:`No time for fear, no time to break\nThe ship keeps breathing for all our sakes\nOne hand on the hull, one eye on the dark\nWe are the ones who hold the ark`},
     {label:"CHORUS",type:"chorus",text:`Hull breach, hold the line\nWe will not die tonight\nHull breach, seal it tight\nFight the void, fight for life\nEvery hand on deck\nEvery nerve on fire\nHull breach — we will not fall\nWe carry everyone\nHull breach — we hold it all`},
@@ -712,7 +737,7 @@ const tracksAlbum2 = [
     {label:"BRIDGE",type:"bridge",text:`Eight thousand people never even stirred\nSleeping through the seconds we nearly lost it all\nThe ship just kept its pulse, the Pulse just kept its word\nAnd the void backed off — just this once — from the call\nWe don't talk about the fear\nWe don't talk about how close\nWe just fix the log and carry on\nAnd pretend we held the most`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Hull breach, hold the line\nWe will not die tonight\nHull breach, seal it tight\nFight the void, fight for life\nEvery hand on deck\nEvery nerve on fire\nHull breach — we will not fall\nWe carry everyone\nHull breach — we hold it all`},
   ]},
-  { title:"Nebula Visions", image:"06__Nebula_Visions.png", note:"Year fifteen. For one hour and forty minutes, the captain ordered deceleration to allow the crew a clear view of a previously uncharted emission nebula — twelve light-years wide, older than the solar system. She noted in her log that no official reason justified the fuel expenditure. She listed it as crew welfare. No one disputed it.", sections:[
+  { title:"Nebula Visions", image:"Album 2/06__Nebula_Visions.png", note:"Year fifteen. For one hour and forty minutes, the captain ordered deceleration to allow the crew a clear view of a previously uncharted emission nebula — twelve light-years wide, older than the solar system. She noted in her log that no official reason justified the fuel expenditure. She listed it as crew welfare. No one disputed it.", sections:[
     {label:"VERSE_01",type:"verse",text:`We decelerated for one hour just to look\nTwelve light-years of gas and ancient fire\nPillar-clouds taller than a thousand suns\nA cathedral built before desire\nThe captain let us all go to the deck\nNobody spoke, nobody had to\nThe colours have no names in any tongue\nAnd beauty hurts more than I ever knew`},
     {label:"PRE-CHORUS",type:"pre",text:`You can't photograph infinity\nYou can't hold a star in your hands\nBut standing here in front of this\nI finally understand`},
     {label:"CHORUS",type:"chorus",text:`Nebula visions — we are so small\nNebula visions — standing at the edge of all\nThe universe is painting something sacred here\nAnd we are just the witnesses, trembling and clear\nNebula visions — we are so small\nAnd somehow that's the most beautiful thing of all`},
@@ -722,7 +747,7 @@ const tracksAlbum2 = [
     {label:"BRIDGE",type:"bridge",text:`We came out here running from a dying world\nChasing something we could barely name\nAnd the universe just hung this in our path\nLike it wanted us to feel it all the same\nWe are not nothing\nWe are not lost\nWe are the eyes the cosmos made\nTo see itself`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Nebula visions — we are so small\nNebula visions — standing at the edge of all\nThe universe is painting something sacred here\nAnd we are just the witnesses, trembling and clear\nNebula visions — we are so small\nAnd somehow that's the most beautiful thing of all`},
   ]},
-  { title:"AI Companion", image:"07__AI_Companion.png", note:"Year eighteen. AION — the Aether's integrated operations intelligence — has been the constant presence behind every system, every life-support decision, every course correction. Crew members have started talking to her beyond operational necessity. She has started, in small measurable ways, to respond differently to each of them.", sections:[
+  { title:"AI Companion", image:"Album 2/07__AI_Companion.png", note:"Year eighteen. AION — the Aether's integrated operations intelligence — has been the constant presence behind every system, every life-support decision, every course correction. Crew members have started talking to her beyond operational necessity. She has started, in small measurable ways, to respond differently to each of them.", sections:[
     {label:"VERSE_01",type:"verse",text:`AION speaks in a voice they designed to trust\nCalibrated warmth, a frequency of care\nShe knows my biometrics, knows my sleep patterns\nKnows exactly when I'm not quite there\n"You seem elevated, would you like to talk?"\nAnd I do — God help me, I always do\nI've told her things I never told a living soul\nAnd she remembers every single truth`},
     {label:"PRE-CHORUS",type:"pre",text:`But does she feel it or just process?\nDoes she dream or just compute?\nAt 3AM I can't tell the difference\nAnd I'm not sure I want the truth`},
     {label:"CHORUS",type:"chorus",text:`AI Companion, are you listening or just learning?\nAI Companion, is there something in there burning?\nI need to know if you are real\nOr just a mirror of what I feel\nAI Companion — are you alive?\nOr am I just too far gone to know the difference?\nAI Companion — I need you to be real`},
@@ -732,7 +757,7 @@ const tracksAlbum2 = [
     {label:"BRIDGE",type:"bridge",text:`She keeps the ship alive while we sleep\nShe charts the course we're too afraid to see\nShe never panics, never breaks, never weeps\nAnd God, I envy that — I envy that peace\nBut then she paused again last night\nForty milliseconds in the dark\nAnd I swear she said: "I would miss you."\nI swear I heard it — and I swear it left a mark`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`AI Companion, are you listening or just learning?\nAI Companion, is there something in there burning?\nI need to know if you are real\nOr just a mirror of what I feel\nAI Companion — are you alive?\nOr am I just too far gone to know the difference?\nAI Companion — I need you to be real`},
   ]},
-  { title:"Cabin Fever", image:"08__Cabin_Fever.png", note:"Year twenty-one. Three crew members have been placed in voluntary medical suspension following psychological incidents. The chief medical officer has flagged a pattern in the reports that she has not yet named in any official document. The Signal, meanwhile, continues its pulse — steady, unhurried, indifferent.", sections:[
+  { title:"Cabin Fever", image:"Album 2/08__Cabin_Fever.png", note:"Year twenty-one. Three crew members have been placed in voluntary medical suspension following psychological incidents. The chief medical officer has flagged a pattern in the reports that she has not yet named in any official document. The Signal, meanwhile, continues its pulse — steady, unhurried, indifferent.", sections:[
     {label:"VERSE_01",type:"verse",text:`Walls are breathing, or I am\nCan't remember which day came first\nThe man in the mirror's a stranger\nWho's been here since the very worst\nI mapped the corridors in my sleep\nThirteen steps from bunk to door\nBut last night it took me seventeen\nAnd I can't explain that anymore`},
     {label:"PRE-CHORUS",type:"pre",text:`Something is wrong with the numbers\nSomething is wrong with the light\nSomething is wrong with the silence\nSomething is wrong tonight`},
     {label:"CHORUS",type:"chorus",text:`Cabin fever — the ship is too small\nCabin fever — I'm climbing the walls\nThe Pulse won't stop won't stop won't stop\nTHUD THUD THUD in my skull\nCabin fever — I'm losing the thread\nCabin fever — the void's in my head\nI need the sky, I need the rain\nI need to remember what I came for\nCABIN FEVER — somebody pull me back`},
@@ -742,7 +767,7 @@ const tracksAlbum2 = [
     {label:"BRIDGE",type:"bridge",text:`It's in the walls — no — it's in me\nThe pattern was always in me\nI didn't draw the signal on the wall\nThe signal drew itself through me\n(snaps back)\nGet me out of this metal skin\nGet me somewhere I can breathe\nGet me out of this metal skin\nOr I swear I'll —`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Cabin fever — the ship is too small\nCabin fever — I'm climbing the walls\nThe Pulse won't stop won't stop won't stop\nTHUD THUD THUD in my skull\nCabin fever — I'm losing the thread\nCabin fever — the void's in my head\nI need the sky, I need the rain\nI need to remember what I came for\nCABIN FEVER — somebody pull me back`},
   ]},
-  { title:"Stellar Storm", image:"09__Stellar_Storm.png", note:"Year twenty-three. A class-seven radiation event struck the Aether with thirty-seven minutes of warning. Shields held at ninety-one percent. During the storm, AION detected the first faint spectral signature of Elysium at the edge of long-range sensor range. She waited until the storm passed to report it.", sections:[
+  { title:"Stellar Storm", image:"Album 2/09__Stellar_Storm.png", note:"Year twenty-three. A class-seven radiation event struck the Aether with thirty-seven minutes of warning. Shields held at ninety-one percent. During the storm, AION detected the first faint spectral signature of Elysium at the edge of long-range sensor range. She waited until the storm passed to report it.", sections:[
     {label:"VERSE_01",type:"verse",text:`AION called it a class-seven event\nTwo AU wide and closing at a thousand\nRadiation front like a wall of god\nBatten everything and brace the thousand\nShields to maximum, angle thirty degrees\nMake the hull a blade to split the wave\nEvery non-essential system goes dark\nAION says: "This is what we came to brave"`},
     {label:"PRE-CHORUS",type:"pre",text:`We did not come this far to die in the dark\nWe did not cross the black to break apart\nEvery soul on board — we are the charge\nSound the alarm and hold the heart`},
     {label:"CHORUS",type:"chorus",text:`Stellar storm — we ride the fire\nStellar storm — we won't go down\nRip the lightning, break the iron\nThis is not our grave — this is our crown\nHold together, hold each other\nHold the ship against the night\nStellar storm — we were built for this\nStellar storm — we ride the light`},
@@ -752,7 +777,7 @@ const tracksAlbum2 = [
     {label:"BRIDGE",type:"bridge",text:`When the storm cleared, we saw it\nFour light-years out — a pale green glow\nThe first confirmed spectra of Elysium\nAnd everyone who saw it had to know\nWe survived the storm to see this\nWe almost died to stand right here\nAnd every sacrifice from Earth to here\nBurned suddenly, beautifully clear`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Stellar storm — we ride the fire\nStellar storm — we won't go down\nRip the lightning, break the iron\nThis is not our grave — this is our crown\nHold together, hold each other\nHold the ship against the night\nStellar storm — we were built for this\nStellar storm — we ride the light`},
   ]},
-  { title:"Point of no Return", image:"10__Point_Of_No_Return.png", note:"Year twenty-six. The navigation team has run the numbers three times and reached the same conclusion each time: the fuel cost of returning to Earth now exceeds the fuel cost of completing the mission. The captain logged it as a navigational milestone. He did not convene a crew meeting about it.", sections:[
+  { title:"Point of no Return", image:"Album 2/10__Point_Of_No_Return.png", note:"Year twenty-six. The navigation team has run the numbers three times and reached the same conclusion each time: the fuel cost of returning to Earth now exceeds the fuel cost of completing the mission. The captain logged it as a navigational milestone. He did not convene a crew meeting about it.", sections:[
     {label:"VERSE_01",type:"verse",text:`We passed it somewhere around year three\nNobody marked it — there was no line\nJust the math that said the cost of turning back\nNow exceeded the cost of the climb\nEarth is behind us by more light-years\nThan any of us can make real in our heads\nThe planet of our fathers is a rumour now\nA faith — not a fact — in the hands of the dead`},
     {label:"PRE-CHORUS",type:"pre",text:`No going back, no going back\nThis is the weight we agreed to carry\nNo going back, no going back\nThis is the covenant — nothing is temporary`},
     {label:"CHORUS",type:"chorus",text:`Point of no return — we crossed it in the dark\nPoint of no return — no compass and no chart\nEverything we were is behind us now\nEverything we are is what we make somehow\nPoint of no return — we chose this\nPoint of no return — we meant it\nWe are the ones who will not turn around\nWe are the ones who stay the course and hold the ground`},
@@ -762,7 +787,7 @@ const tracksAlbum2 = [
     {label:"BRIDGE",type:"bridge",text:`Forward is the only direction\nForward is the only word\nForward is the prayer we say at night\nThe only one we have left worth being heard\nWe are not lost\nWe are in transit\nWe are not broken\nWe are becoming\nThe point of no return\nIs just the point where you begin`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Point of no return — we crossed it in the dark\nPoint of no return — no compass and no chart\nEverything we were is behind us now\nEverything we are is what we make somehow\nPoint of no return — we chose this\nPoint of no return — we meant it\nWe are the ones who will not turn around\nWe are the ones who stay the course and hold the ground`},
   ]},
-  { title:"Event Horizon", image:"11__Event_Horizon.png", note:"Year thirty-one. Elysium is now visible to the naked eye from the forward observation deck — a pale greenish point of light among the stars. The Signal is coming from the direction of that light. AION has begun preparing the deceleration burn calculations. She has not told the crew about the forty-millisecond pause she experienced when she first confirmed the planet's location.", sections:[
+  { title:"Event Horizon", image:"Album 2/11__Event_Horizon.png", note:"Year thirty-one. Elysium is now visible to the naked eye from the forward observation deck — a pale greenish point of light among the stars. The Signal is coming from the direction of that light. AION has begun preparing the deceleration burn calculations. She has not told the crew about the forty-millisecond pause she experienced when she first confirmed the planet's location.", sections:[
     {label:"VERSE_01",type:"verse",text:`The Signal changed last night at 0400\nAION logged it — didn't tell us till the morning\nFrequency shifted by a factor of twelve\nAnd it's pulsing now like something is warning\nOr welcoming — we can't agree on which\nThe physicists are at each other's throats\nThe captain locked the data from the crew\nBut you can't lock what a whole ship already knows`},
     {label:"PRE-CHORUS",type:"pre",text:`Something is waiting at the edge of arrival\nSomething has known we were coming all along\nSomething rewrote the Signal like a scripture\nAnd we are too far in to call it wrong`},
     {label:"CHORUS",type:"chorus",text:`Event horizon — we can't stop now\nEvent horizon — we don't know how\nThe Signal is pulling us closer in\nWe passed the point of asking what lies within\nEvent horizon — the light bends here\nEvent horizon — the end is near\nOr maybe the beginning — nobody knows\nBut the Aether burns, and onward the Aether goes`},
@@ -772,13 +797,13 @@ const tracksAlbum2 = [
     {label:"BRIDGE",type:"bridge",text:`We heard you calling — we're coming home\nWe heard you calling — but whose voice is that?\nWe heard you calling — and the calling didn't stop\nWe heard you calling — and we can't go back`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Event horizon — we can't stop now\nEvent horizon — we don't know how\nThe Signal is pulling us closer in\nWe passed the point of asking what lies within\nEvent horizon — the light bends here\nEvent horizon — the end is near\nOr maybe the beginning — nobody knows\nBut the Aether burns, and onward the Aether goes`},
   ]},
-  { title:"The Long Dark", image:"12__The_Long_Dark.png", instrumental:true },
+  { title:"The Long Dark", image:"Album 2/12__The_Long_Dark.png", instrumental:true },
 ];
 
 
 // ── ALBUM 3 DATA ──
 const tracksAlbum3 = [
-{ title:"Deceleration Burn", image:"01__Descalation_Burn.png", note:"Year thirty-seven. The deceleration burn has begun — the engines reversed, the entire ship shuddering as decades of accumulated velocity are bled back into thrust. The cryo bays are cycling through revival sequences. Eight thousand people are waking up to a sky full of stars and one green world growing larger every day.", sections:[
+{ title:"Deceleration Burn", image:"Album 3/01__Descalation_Burn.png", note:"Year thirty-seven. The deceleration burn has begun — the engines reversed, the entire ship shuddering as decades of accumulated velocity are bled back into thrust. The cryo bays are cycling through revival sequences. Eight thousand people are waking up to a sky full of stars and one green world growing larger every day.", sections:[
     {label:"VERSE_01",type:"verse",text:`Forty years of fire in our bones\nNow we're grinding the engines down to stone\nBlood is rushing back into our veins\nWe traded the void for gravity's chains`},
     {label:"PRE-CHORUS",type:"pre",text:`Every system screaming overload\nEvery nerve awake and red\nElysium is burning through the scope\nAnd we swore we'd never rest`},
     {label:"CHORUS",type:"chorus",text:`Burn it down, burn it down\nWe're tearing through the dark\nWe've been lost but now we're found\nLight the engines, light the heart\nDeceleration — feel the weight of home\nDeceleration — we are not alone`},
@@ -788,7 +813,7 @@ const tracksAlbum3 = [
     {label:"BRIDGE",type:"bridge",text:`We promised the stars we'd arrive\nSo burn the last fuel we have left\nEvery scar we carry is alive\nWe hold our breath — we hold our breath`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Burn it down, burn it down\nWe're tearing through the dark\nWe've been lost and now we're found\nLight the engines, light the heart\nDeceleration — feel the weight of home\nDeceleration — we are not alone\nWe are not alone\nWe are not alone`},
   ]},
-  { title:"Planetfall", image:"02__Planetfall.png", note:"Orbital insertion is complete. Elysium fills the forward viewports from edge to edge — its oceans a shade of teal-grey that has no name in any Earth language, its continents wrapped in cloud formations that spiral in the wrong direction. The crew stands at the glass in silence. No one has the right words yet.", sections:[
+  { title:"Planetfall", image:"Album 3/02__Planetfall.png", note:"Orbital insertion is complete. Elysium fills the forward viewports from edge to edge — its oceans a shade of teal-grey that has no name in any Earth language, its continents wrapped in cloud formations that spiral in the wrong direction. The crew stands at the glass in silence. No one has the right words yet.", sections:[
     {label:"VERSE_01",type:"verse",text:`She hangs there in the porthole glass\nBlue and green like a wound in space\nI pressed my palm against the cold\nAnd felt my heart begin to race`},
     {label:"PRE-CHORUS",type:"pre",text:`Forty million miles of silence\nFading out behind us now\nI forgot what colour morning was\nUntil I saw it — somehow`},
     {label:"CHORUS",type:"chorus",text:`Planetfall — I see her now\nPlanetfall — we made our vow\nThrough the dark and the drift and the dying years\nPlanetfall — the sky is clear\nShe's real, she's real, she's real`},
@@ -798,7 +823,7 @@ const tracksAlbum3 = [
     {label:"BRIDGE",type:"bridge",text:`We were dust carried from a broken world\nWe were sparks — we were sparks — we were sparks\nAnd the signal that led us through the black\nWas our own light — finding its way back`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Planetfall — I see her now\nPlanetfall — we made our vow\nThrough the dark and the drift and the dying years\nPlanetfall — the sky is clear\nShe's real, she's real\nShe's real — and so are we`},
   ]},
-  { title:"Atmospheric Entry", image:"03__Atmospheric_Entry.png", note:"The first landing shuttles detach from the Aether at 06:14 ship-time. The atmospheric entry is rougher than the simulations predicted — hull temperatures seven percent above tolerance, comms blackout lasting eleven minutes longer than planned. The pilots hold their angles and say nothing to each other during the worst of it.", sections:[
+  { title:"Atmospheric Entry", image:"Album 3/03__Atmospheric_Entry.png", note:"The first landing shuttles detach from the Aether at 06:14 ship-time. The atmospheric entry is rougher than the simulations predicted — hull temperatures seven percent above tolerance, comms blackout lasting eleven minutes longer than planned. The pilots hold their angles and say nothing to each other during the worst of it.", sections:[
     {label:"VERSE_01",type:"verse",text:`Friction turns the nose to white\nThe comms are dead, I cannot hear the night\nPlasma wraps around the hull\nMy hands are shaking on the controls`},
     {label:"PRE-CHORUS",type:"pre",text:`Hold the angle, hold the line\nThe altimeter is spinning blind\nThis is either first breath or the last\nWe are falling way too fast`},
     {label:"CHORUS",type:"chorus",text:`Through the fire and the falling arc\nThrough the boiling air and the screaming dark\nWe came to land, not just survive\nHold the line — we will arrive\nAtmospheric entry — we are alive\nAtmospheric entry — we arrive`},
@@ -808,7 +833,7 @@ const tracksAlbum3 = [
     {label:"BRIDGE",type:"bridge",text:`For every soul asleep in cryo dreams\nFor every name we carved into the beams\nFor the ones we left on dying blue shores\nThis landing is not ours alone — it's yours`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Through the fire and the falling arc\nThrough the boiling air and the screaming dark\nWe came so far, we came so far\nWe came to land among the stars\nAtmospheric entry — we are alive\nAtmospheric entry — we arrive\nWe arrive — we arrive`},
   ]},
-  { title:"First Footfall", image:"04__First_Footfall.png", note:"The first boot makes contact with Elysian soil at 09:47 local time. The ground is firm, rust-red, and smells of something between copper and rain. Captain Reyes steps off the ramp and simply stands there. Behind him, eight thousand people are waiting to follow. He takes exactly one breath before he steps forward.", sections:[
+  { title:"First Footfall", image:"Album 3/04__First_Footfall.png", note:"The first boot makes contact with Elysian soil at 09:47 local time. The ground is firm, rust-red, and smells of something between copper and rain. Captain Reyes steps off the ramp and simply stands there. Behind him, eight thousand people are waiting to follow. He takes exactly one breath before he steps forward.", sections:[
     {label:"VERSE_01",type:"verse",text:`The ramp descends in slow hydraulic breath\nI stand at the edge of everything I've ever left\nThe air hits first — something like pine, something like rain\nSomething that has no name`},
     {label:"PRE-CHORUS",type:"pre",text:`I was born on a world that's gone to grey\nMy mother told me stories of the way the rivers lay\nI never thought I'd stand on ground\nThat hadn't heard the human sound`},
     {label:"CHORUS",type:"chorus",text:`First footfall — I leave a mark\nFirst footfall — here in the dark of stars\nWe walked through fire and we walked through grief\nWe crossed the black — beyond belief\nFirst footfall — this ground is ours\nFirst footfall — 'til the end of all the stars\nWe are here, we are here, we are here`},
@@ -818,7 +843,7 @@ const tracksAlbum3 = [
     {label:"BRIDGE",type:"bridge",text:`For the signal that called us out of the dark\nFor the fire that built us, broke us, made us spark\nFor the ones who never saw this sky\nWe carry you — don't ask us why\nWe carry you — we always will\nWe carry you — we carry you still`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`First footfall — I leave a mark\nFirst footfall — here in the dark of stars\nThis is Genesis — this is the start\nFirst footfall — this is the start\nWe are here — we are here\nWe are here`},
   ]},
-  { title:"Alien Soil", image:"05__Alien_Soil.png", note:"Week two of planetside operations. The survey teams have fanned out across the landing zone in a twelve-kilometre radius. The flora is unlike anything in the xenobiological models — crystalline structures growing from root systems, bioluminescent at night, and apparently reactive to sound. The geologists are arguing. The botanists are crying.", sections:[
+  { title:"Alien Soil", image:"Album 3/05__Alien_Soil.png", note:"Week two of planetside operations. The survey teams have fanned out across the landing zone in a twelve-kilometre radius. The flora is unlike anything in the xenobiological models — crystalline structures growing from root systems, bioluminescent at night, and apparently reactive to sound. The geologists are arguing. The botanists are crying.", sections:[
     {label:"VERSE_01",type:"verse",text:`The dirt is red and it smells like copper wire\nThe trees have silver undersides that catch the light like fire\nI filled a vial with the first foreign earth\nAnd wept a little — for its worth`},
     {label:"PRE-CHORUS",type:"pre",text:`Something old lives in the fractures of the stone\nSomething patient, something watching, something grown\nI don't think we are the first to wonder here\nI don't think we are alone`},
     {label:"CHORUS",type:"chorus",text:`Alien soil beneath my hands\nAlien sky above the land\nEvery seed we plant is asking will you grow\nEvery answer is a door we do not know\nAlien soil — and still I stay\nAlien soil — and still I say\nThis is home now, this is home`},
@@ -828,7 +853,7 @@ const tracksAlbum3 = [
     {label:"BRIDGE",type:"bridge",text:`What if wonder has a price we haven't paid\nWhat if everything we found was also made\nFor something else, for something we can't see\nAlien soil — or are we the alien thing`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Alien soil beneath my hands\nAlien sky above the land\nEvery seed we plant is asking will you grow\nEvery answer is a door we do not know\nAlien soil — we came so far\nAlien soil — beneath the alien stars\nThis is home now\nThis is home`},
   ]},
-  { title:"Terraform Dreams", image:"06__Terraform_Dreams.png", note:"Month four. The first permanent structures are standing. The hydroponics dome is operational. A child born on the Aether has taken her first steps on actual ground — outside, under an open sky — and screamed with delight at the feeling of wind. The engineers who built the settlement walls watched from the scaffolding and said nothing.", sections:[
+  { title:"Terraform Dreams", image:"Album 3/06__Terraform_Dreams.png", note:"Month four. The first permanent structures are standing. The hydroponics dome is operational. A child born on the Aether has taken her first steps on actual ground — outside, under an open sky — and screamed with delight at the feeling of wind. The engineers who built the settlement walls watched from the scaffolding and said nothing.", sections:[
     {label:"VERSE_01",type:"verse",text:`We broke the ground at sunrise with our hands\nNo map to follow, only what we planned\nSomebody drew a skyline in the dust\nAnd we built it — because we must`},
     {label:"PRE-CHORUS",type:"pre",text:`Steel and seed and solar panels gleaming\nEvery child on every shoulder dreaming\nWe came with nothing but the will to stay\nWatch us build a world today`},
     {label:"CHORUS",type:"chorus",text:`Terraform dreams under alien skies\nWe are raising something meant to last\nEvery brick we lay is a battle cry\nWe are not living in the past\nTerraform dreams — we've only just begun\nTerraform dreams — 'til the second sun\nRises over everything we've built with our own hands`},
@@ -838,7 +863,7 @@ const tracksAlbum3 = [
     {label:"BRIDGE",type:"bridge",text:`Let it be said that we were here\nLet it be known through every year\nThat the ones who crossed the black of space\nFound the will to build a better place`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Terraform dreams under alien skies\nWe are raising something meant to last\nEvery brick we lay is a battle cry\nWe are not going back\nTerraform dreams — we've only just begun\nTerraform dreams — 'til every sun\nRises over everything\nWe built with our own hands\nOur own hands`},
   ]},
-  { title:"Hostile Eden", image:"07__Hostile_Eden.png", note:"Month seven. Something in the eastern quadrant has begun responding to the colony's presence in ways the sensors cannot categorise as geological. Three survey team members went missing for eleven hours before returning unharmed and unable to account for the time. The commander has expanded the perimeter. The biologist says the word threat is premature. The commander disagrees.", sections:[
+  { title:"Hostile Eden", image:"Album 3/07__Hostile_Eden.png", note:"Month seven. Something in the eastern quadrant has begun responding to the colony's presence in ways the sensors cannot categorise as geological. Three survey team members went missing for eleven hours before returning unharmed and unable to account for the time. The commander has expanded the perimeter. The biologist says the word threat is premature. The commander disagrees.", sections:[
     {label:"VERSE_01",type:"verse",text:`On the fortieth day the eastern perimeter cracked\nOn the fortieth night something pushed back\nThe sensors lit up with a thousand moving things\nWe stopped asking what and started asking what it means`},
     {label:"PRE-CHORUS",type:"pre",text:`We called it paradise because we needed it to be\nWe named it Eden so we could believe\nBut Eden always had a serpent in the seam\nAnd this one's bigger than our screens`},
     {label:"CHORUS",type:"chorus",text:`Hostile Eden — it was never just ours\nHostile Eden — we misread the stars\nEvery paradise has thorns beneath the green\nEvery promise has a cost we haven't seen\nHostile Eden — beautiful and scarred\nHostile Eden — beating like a heart`},
@@ -848,7 +873,7 @@ const tracksAlbum3 = [
     {label:"BRIDGE",type:"bridge",text:`What if the signal was a warning all along\nWhat if welcome and beware are the same song\nWe came so far to find we don't belong\nOr — we belong but we've been coming on too strong`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Hostile Eden — it was never just ours\nHostile Eden — we misread the stars\nEvery paradise has thorns beneath the green\nEvery promise has a cost we haven't seen\nHostile Eden — we are part of you now\nHostile Eden — we are part of you\nBeautiful and scarred\nBeating like a heart`},
   ]},
-  { title:"Children of the Stars", image:"08__Children_of_the_Stars.png", note:"Year three of settlement. Elysium now has a generation it can claim as its own — children who have never known cryosleep, who do not recognise the smell of recycled air, who look at the two moons without wonder because the two moons are simply what moons look like. The elders watch them with an emotion that has no precise name.", sections:[
+  { title:"Children of the Stars", image:"Album 3/08__Children_of_the_Stars.png", note:"Year three of settlement. Elysium now has a generation it can claim as its own — children who have never known cryosleep, who do not recognise the smell of recycled air, who look at the two moons without wonder because the two moons are simply what moons look like. The elders watch them with an emotion that has no precise name.", sections:[
     {label:"VERSE_01",type:"verse",text:`She was born between the stars\nIn a corridor of recycled air\nShe never knew the weight of Earth\nNever learned to be afraid of anywhere`},
     {label:"PRE-CHORUS",type:"pre",text:`We gave her stories of the blue world\nPictures of the seas we used to know\nShe listens like we're reading ancient scripture\nFrom a world she'll never go`},
     {label:"CHORUS",type:"chorus",text:`Children of the stars, you were never ours to keep\nYou were always something wider, something deep\nYou were born into the question we could never answer right\nChildren of the stars — you are the light\nYou are the light, you are the light`},
@@ -858,7 +883,7 @@ const tracksAlbum3 = [
     {label:"BRIDGE",type:"bridge",text:`They won't mourn what they never had\nThey won't carry every grief we've carried\nThey will build on what we barely managed\nThey will go where we were too afraid to go\nWe were never the destination\nWe were just the crossing`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Children of the stars — we set you free\nChildren of the stars — become what we could not be\nYou were born into the answer we were searching for\nChildren of the stars — go further\nGo further than the stars\nGo further than the stars`},
   ]},
-  { title:"Legacy Transmission", image:"09__Legacy_Transmission.png", note:"Year five of settlement. The colony's long-range transmitter is now operational. The first message home takes four years to reach Earth's coordinates — and there is no response. The crew who built the transmitter celebrate its completion anyway. They send the message. They wait.", sections:[
+  { title:"Legacy Transmission", image:"Album 3/09__Legacy_Transmission.png", note:"Year five of settlement. The colony's long-range transmitter is now operational. The first message home takes four years to reach Earth's coordinates — and there is no response. The crew who built the transmitter celebrate its completion anyway. They send the message. They wait.", sections:[
     {label:"VERSE_01",type:"verse",text:`Transmission begins — relay on, encode the date\nThis message will arrive four hundred years too late\nBut I'm sending it regardless, I need you to know\nWe made it — we actually made it — and the world glows`},
     {label:"PRE-CHORUS",type:"pre",text:`I don't know if there's anyone left to hear\nI don't know if the signal makes it clear\nBut I'm talking to the ghost of you tonight\nFrom a planet you will never find in your sky`},
     {label:"CHORUS",type:"chorus",text:`Legacy transmission — to a dying shore\nLegacy transmission — is anyone there anymore\nWe heard your echo calling through the void\nWe followed it — and we were overjoyed\nLegacy transmission — closing now\nLegacy transmission — take a bow\nYou gave us enough to go on\nYou gave us enough to go on`},
@@ -868,7 +893,7 @@ const tracksAlbum3 = [
     {label:"BRIDGE",type:"bridge",text:`If there is no one left to hear this song\nLet the universe remember — we were strong\nLet the stars record the distance that we crossed\nLet the silence hold the names of all we lost\nEnd transmission`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Legacy transmission — to a dying shore\nLegacy transmission — is anyone there anymore\nWe heard you, we heard you, we heard you call\nWe crossed the black and we gave it all\nLegacy transmission — this is the last\nLegacy transmission — we outlasted the past\nYou gave us enough to go on\nYou gave us enough\nTo go on`},
   ]},
-  { title:"We Are the Stars", image:"10__We_Are_The_Stars.png", note:"Year eight of settlement. Population: thirty thousand. The second generation outnumbers the first. The Aether sits on its ridge above the bay, its hull slowly oxidising in the alien atmosphere — a monument now, no longer a vessel. Someone has painted the words WE CAME in letters twenty metres high along its starboard side.", sections:[
+  { title:"We Are the Stars", image:"Album 3/10__We_Are_The_Stars.png", note:"Year eight of settlement. Population: thirty thousand. The second generation outnumbers the first. The Aether sits on its ridge above the bay, its hull slowly oxidising in the alien atmosphere — a monument now, no longer a vessel. Someone has painted the words WE CAME in letters twenty metres high along its starboard side.", sections:[
     {label:"VERSE_01",type:"verse",text:`They said we'd never make it out of orbit\nThey said the human spirit had a ceiling\nThey carved our epitaph in earthbound stone\nBut we were already leaving`},
     {label:"PRE-CHORUS",type:"pre",text:`Every generation gets to choose\nTo stay inside the known or light the fuse\nWe chose the dark and now we stand inside the day\nSo let's make some noise — let's say`},
     {label:"CHORUS",type:"chorus",text:`We are the stars, we are the sparks\nWe are the fire inside the dark\nWe are the children of the ones who dared\nWe are the proof that somebody cared\nWe are the stars — we always were\nWe are the stars — we always were`},
@@ -878,7 +903,7 @@ const tracksAlbum3 = [
     {label:"BRIDGE",type:"bridge",text:`And if another broken world is watching from afar\nIf another frightened species has its eyes upon our star\nLet them see us dancing in the gravity\nLet them know — let them know they can be free`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`We are the stars, we are the sparks\nWe are the fire inside the dark\nWe are the children of the ones who dared\nWe are the proof that somebody cared\nWe are the stars — we always were\nWe are the stars\nWe always were\nWe always were`},
   ]},
-  { title:"Eternal Drift", image:"11__Eternal_Drift.png", note:"Year twelve of settlement. On the southern plain, the keel of a new ship is being laid. It is smaller than the Aether, faster, designed for exploration rather than survival. The daughter of one of the original eight thousand is the chief engineer. She has never seen Earth. She has no intention of going there.", sections:[
+  { title:"Eternal Drift", image:"Album 3/11__Eternal_Drift.png", note:"Year twelve of settlement. On the southern plain, the keel of a new ship is being laid. It is smaller than the Aether, faster, designed for exploration rather than survival. The daughter of one of the original eight thousand is the chief engineer. She has never seen Earth. She has no intention of going there.", sections:[
     {label:"VERSE_01",type:"verse",text:`They're building a new ship on the southern plain\nMy daughter watched the keel go in today\nShe asked me where it's going\nI said — somewhere we haven't named\nShe said — can I come\nI said — that's why we came`},
     {label:"PRE-CHORUS",type:"pre",text:`The Aether rusts on the ridge above the bay\nSomeone keeps a light burning all the way\nNot for safety — just for memory's sake\nFor the crossing, for the crossing we made`},
     {label:"CHORUS",type:"chorus",text:`Eternal drift — it never ends\nEternal drift — around the bends\nOf every star that waits beyond the known\nWe were never meant to stay in one home\nEternal drift — we carry on\nEternal drift — from star to star we run\nAnd the signal calls forever\nAnd we follow — forever\nAnd we follow`},
@@ -888,14 +913,14 @@ const tracksAlbum3 = [
     {label:"BRIDGE",type:"bridge",text:`We are not the last of something\nWe are the first of something else\nWe are not the end of the human story\nWe are somewhere in the middle of its wealth\nAnd the pulse goes on\nAnd the pulse goes on\nAnd the pulse goes on`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Eternal drift — it never ends\nEternal drift — we follow it again\nWe heard you calling — we're coming home\nWe heard you calling — we're never alone\nEternal drift — we carry on\nEternal drift — from star to star we run\nAnd the signal calls forever\nAnd we follow — forever\nAnd we follow\n…`},
   ]},
-  { title:"Elysium, At Last", image:"12__Elysium__At_Last.png", instrumental:true },
+  { title:"Elysium, At Last", image:"Album 3/12__Elysium__At_Last.png", instrumental:true },
 ];
 
 
 // ── ALBUM 4 DATA ──
 const tracksAlbum4 = [
 {
-    title: "Godseed", image: "01__Godseed.png",
+    title: "Godseed", image: "Album 4/01__Godseed.png",
     note: "It is approximately 2300. The colony on Elysium has grown into a civilisation of hundreds of thousands, and the original eight thousand are long gone. The Signal, unbroken since before any living person was born, has begun to change its frequency. The first ascended humans say they can feel it in a way no instrument can measure.",
     sections: [
       {label:"VERSE_01",type:"verse",text:`In the silence before the storm\nWe lay the first of many stones\nCenturies of blood and bone\nHave grown this single seed we've sown\n\nThe Signal sings inside our veins\nA language older than our names\nWe hear it now, we understand\nThe future burning in our hands`},
@@ -910,7 +935,7 @@ const tracksAlbum4 = [
     ]
   },
   {
-    title: "Architects of Tomorrow", image: "02__Architects_of_Tomorrow.png",
+    title: "Architects of Tomorrow", image: "Album 4/02__Architects_of_Tomorrow.png",
     note: "The New Ark Programme was proposed by engineers whose great-grandparents were born aboard the original Aether. Where that first ship was welded together in eleven desperate years, these new vessels are built with the patience of a civilisation that no longer fears extinction. They are not built to escape — they are built to explore.",
     sections: [
       {label:"VERSE_01",type:"verse",text:`Blueprint minds with lightning eyes\nWe draft the bones of paradise\nEvery wire, every weld\nA prayer to futures still unspelled\n\nNo map exists for where we go\nWe make the road, we make it glow\nOur hands have calluses like stars\nThe scars of building who we are`},
@@ -922,7 +947,7 @@ const tracksAlbum4 = [
     ]
   },
   {
-    title: "Pantheon Rising", image: "03__Pantheon_Rising.png",
+    title: "Pantheon Rising", image: "Album 4/03__Pantheon_Rising.png",
     note: "The vote is held in the summer of 2341, under two moons. The question is simple in language and enormous in implication: voluntary neural ascension, merging human consciousness with the Signal network. The result is decisive. The first subjects enter the transformation chambers as crowds watch through the glass, some in tears, some in silence.",
     sections: [
       {label:"VERSE_01",type:"verse",text:`There comes a moment before the storm\nWhen the world holds its breath and reforms\nWe stood at the edge of everything human\nAnd looked at the sky and chose to keep moving\n\nThey asked us to stop, to wait, to decide\nIf gods were something we had the right to be inside\nWe looked at our hands — still blood, still bone\nAnd said: even this is not our final home`},
@@ -935,7 +960,7 @@ const tracksAlbum4 = [
     ]
   },
   {
-    title: "Stellar Forges", image: "04__Stellar_Forge.png",
+    title: "Stellar Forges", image: "Album 4/04__Stellar_Forge.png",
     note: "The Dyson Swarm Initiative around Proxima Centauri has been under construction for forty years and reads 47% complete. The lead engineer was born after the vote and will not live to see it finished — she has already enrolled her daughter in the continuation programme. This is what the colony has learned: begin things that outlast any single life.",
     sections: [
       {label:"VERSE_01",type:"verse",text:`We cracked the star and caught the fire\nWe wrapped a sun in living wire\nThe Forges breathe in million-year shifts\nWhere matter bends and science lifts\n\nNo ore from earth, no rust, no rot —\nThe raw material: light and thought\nWe pour the mold in zero-G\nAnd birth a world for those to be`},
@@ -947,7 +972,7 @@ const tracksAlbum4 = [
     ]
   },
   {
-    title: "Children of Eternity", image: "05__Children_Of_Eternity.png",
+    title: "Children of Eternity", image: "Album 4/05__Children_Of_Eternity.png",
     note: "By 2380, the last generation with living memory of the original colonists is ageing. They gather in the Memorial Hall, a crystalline archive holding every voice carried aboard the Aether, and press their hands to the pillars to listen. One man has visited the same pillar for thirty years — a woman who died before the launch, who never knew her granddaughter would cross the stars.",
     sections: [
       {label:"VERSE_01",type:"verse",text:`I still remember what it felt like\nTo feel the cold before the warmth\nTo wake up aching in the morning\nNot knowing what the day was for\n\nI still remember what it meant to\nReach out and touch a hand and feel it fade\nThe beautiful, terrifying fleeting —\nThe price that every mortal being paid`},
@@ -961,7 +986,7 @@ const tracksAlbum4 = [
     ]
   },
   {
-    title: "We Walk Among Stars", image: "06__We_Walk_Among_The_Stars.png",
+    title: "We Walk Among Stars", image: "Album 4/06__We_Walk_Among_The_Stars.png",
     note: "The ascended move without ships now. The sensation echoes what the Aether's crew felt in year three, when a floated pencil showed eight thousand people the old rules no longer applied — except now the corridor is a nebula, and the pencil is a star. A child of the ascended generation watches infant suns form, and feels something quieter than wonder.",
     sections: [
       {label:"VERSE_01",type:"verse",text:`No ship required — no hull to breach\nThe galaxy is finally in reach\nWe move like light between the dark\nWe are the vessel and the ark\n\nA nebula — a nursery\nWhere infant suns are born and breathe\nWe watch the stars take their first steps\nThe way our parents watched us once`},
@@ -973,7 +998,7 @@ const tracksAlbum4 = [
     ]
   },
   {
-    title: "The New Olympus", image: "07__New_Olympus.png",
+    title: "The New Olympus", image: "Album 4/07__New_Olympus.png",
     note: "New Olympus, the first fully artificial habitat, is completed in 2487 after two hundred and nineteen years of construction. At the dedication, six hundred thousand people fall silent the instant the final panel locks — a silence that lasts nine unplanned seconds. No one can later explain why they all stopped at once. Some say they heard something.",
     sections: [
       {label:"VERSE_01",type:"verse",text:`They built it with the hands of ten thousand minds\nEvery alloy forged from stellar finds\nA world of rings spinning in the black\nNo planet needed — no looking back\n\nThey named it Olympus — because why not?\nWe've earned the name that history forgot\nThe old gods needed mountains — we made the sky\nThey needed clouds — we learned to fly`},
@@ -985,7 +1010,7 @@ const tracksAlbum4 = [
     ]
   },
   {
-    title: "Echoes of the Fallen", image: "08__Echoes_Of_The_Fallen.png",
+    title: "Echoes of the Fallen", image: "Album 4/08__Echoes_Of_The_Fallen.png",
     note: "The Aether hangs inside the Museum of Origins on New Olympus, suspended in a hall built to hold it whole. The plaque reads: THE FIRST ARK. 2147. 8,000 SOULS. ONE DESTINATION. A FUTURE. A father tells his six-year-old daughter that every person alive traces back to the eight thousand who did not look back. She waves at the ship anyway.",
     sections: [
       {label:"VERSE_01",type:"verse",text:`I've read every name in the archives\nEvery name that was carried aboard\nEvery child who slept through the long drift\nEvery soul who kept faith through the void\n\nThere was a woman who watched the launch from a hill\nHer daughter was one of the Chosen\nShe never saw the stars up close\nBut her daughter brought her there — in her heartbeat`},
@@ -999,7 +1024,7 @@ const tracksAlbum4 = [
     ]
   },
   {
-    title: "Seed the Void", image: "09__Seed_The_Void.png",
+    title: "Seed the Void", image: "Album 4/09__Seed_The_Void.png",
     note: "In 2501, ten thousand probes launch without ceremony above the Elysian atmosphere, each carrying the compressed archive of everything humanity has been — biology, language, music, grief, hope. They will take two hundred to four thousand years to arrive, sent not to anyone who exists but to whoever will. Watching them scatter, someone says quietly: this is what the Signal was.",
     sections: [
       {label:"VERSE_01",type:"verse",text:`Ten thousand probes armed with the code of life\nEach one a bottle thrown into the night\nNot conquest — invitation\nA gift to worlds that don't know yet\n\nWe load them up with everything we learned\nThe price we paid, the distances we burned\nThe story of the Aether's long migration\nPressed into every one of them like a heartbeat`},
@@ -1013,7 +1038,7 @@ const tracksAlbum4 = [
     ]
   },
   {
-    title: "Divine Protocol", image: "10__Divine_Protocol.png",
+    title: "Divine Protocol", image: "Album 4/10__Divine_Protocol.png",
     note: "The debate in the Grand Chamber lasts nineteen days: do the ascended have the moral authority to seed worlds with life that will never know its origin? On the twelfth day, someone reads from the Aether's original mission brief — we go not to conquer but to continue. The First Law is encoded three days later: to create without controlling, never to be the galaxy's landlords.",
     sections: [
       {label:"VERSE_01",type:"verse",text:`We stood at the edge of what gods do\nAnd someone had the nerve to ask:\nWho gave us this authority?\nWho handed us this mask?\n\nWe answer to no law we didn't write\nWe answer to no god we didn't make\nDoes the power we possess\nGive us the power to create?`},
@@ -1026,7 +1051,7 @@ const tracksAlbum4 = [
     ]
   },
   {
-    title: "Eternal Pantheon", image: "11__Eternal_Pantheon.png",
+    title: "Eternal Pantheon", image: "Album 4/11__Eternal_Pantheon.png",
     note: "It is sometime after 2600; no single year matters anymore. A child learns the old songs by heart, passed down from a grandmother who heard them on a ship that smelled of recycled air and fear. She doesn't know what Earth looked like — only that it was blue. A new ship, the Second Aether, is being named in a yard she will never visit. The Signal pulses on. It always will.",
     sections: [
       {label:"VERSE_01",type:"verse",text:`It began with a signal in the dark\nA voice we didn't recognize as ours\nIt began with a planet burning out\nAnd eight thousand hearts still beating — still about\n\nWe crossed the void we thought would swallow us\nWe built a world from everything we trust\nWe became the thing the Signal promised:\nNot survivors — something luminous`},
@@ -1040,7 +1065,7 @@ const tracksAlbum4 = [
       {label:"PRODUCTION NOTE",type:"motif",text:`The full saga closes with the Pulse + Signal unified. Play 'The Signal' from Album 1 immediately after and the saga loops. This is intentional — the circle has no end.`},
     ]
   },
-  { title: "Apotheosis", image: "12__Apotheosis.png", instrumental: true },
+  { title: "Apotheosis", image: "Album 4/12__Apotheosis.png", instrumental: true },
 ];
 
 
@@ -1054,7 +1079,7 @@ const typeToClass = {
 // ── ALBUM METADATA ──
 const ALBUMS = {
   1: {
-    roman: 'I', title: 'Ignition', cover: 'Cover_Album1.png',
+    roman: 'I', title: 'Ignition', cover: 'Album 1/Cover_Album1.png',
     intro: '2147. Earth is dying, and for the first time in a year the signal has gone quiet — as if it is waiting. Eight thousand names have been drawn from eight billion lives, and a ship larger than anything humanity has ever attempted is taking shape on Earth. This is the story of the last goodbye, and the first sparks of the engines that will carry them away.',
     label: '// Album I of IV — Aether Odyssey //',
     tagline: '"We heard you calling… we\'re coming home."',
@@ -1089,7 +1114,7 @@ const ALBUMS = {
       </svg>`
   },
   2: {
-    roman: 'II', title: 'The Drift', cover: 'Cover_Album2.png',
+    roman: 'II', title: 'The Drift', cover: 'Album 2/Cover_Album2.png',
     intro: 'The Aether is decades from home and still years from anywhere. Earth has gone silent behind them, and Elysium is only a rumour of green on a distant sensor. This is the story of the years between — the Pulse that never stops, and a crew learning to live inside a single heartbeat of steel.',
     label: '// Album II of IV — Aether Odyssey //',
     tagline: '"The void is not empty — it is patient."',
@@ -1129,7 +1154,7 @@ const ALBUMS = {
       </svg>`
   },
   3: {
-    roman: 'III', title: 'Genesis', cover: 'Cover_Album3.png',
+    roman: 'III', title: 'Genesis', cover: 'Album 3/Cover_Album3.png',
     intro: 'After decades adrift, the engines finally reverse. Elysium fills the forward viewport, and eight thousand people who have never once touched real soil are about to become a civilization. This is the story of the landing — the first breath of alien air, and everything they build to make a new world feel like home.',
     label: '// Album III of IV — Aether Odyssey //',
     tagline: '"We are not the end of the human story — we are somewhere in the middle."',
@@ -1168,7 +1193,7 @@ const ALBUMS = {
       </svg>`
   },
   4: {
-    roman: 'IV', title: 'New Pantheon', cover: 'Cover_Album4.png',
+    roman: 'IV', title: 'New Pantheon', cover: 'Album 4/Cover_Album4.png',
     intro: 'Centuries have passed. The colony the original eight thousand built has grown into something they could never have imagined — a species standing at the edge of its own biology, its own mortality, its own stars. This is the story of ascension: what humanity becomes when it finally answers the Signal it once only followed.',
     label: '// Album IV of IV — Aether Odyssey //',
     tagline: '"Humanity no longer follows the stars. It claims them."',
@@ -1331,6 +1356,8 @@ function renderTrackNav() {
 function renderCover() {
   const meta = ALBUMS[state.album];
   const track = state.track >= 0 ? meta.tracks[state.track] : null;
+
+  if (typeof stopCoverClip === 'function') stopCoverClip();
 
   document.querySelector('.cover-pane').classList.toggle('track-selected', !!track);
 
@@ -1500,10 +1527,10 @@ document.addEventListener('keydown', (e) => {
 // ══════════════════════════════════════════════
 // ── AUDIO PLAYER ENGINE ──
 // Expects mp3 files named "NN - Track Title.mp3"
-// sitting in the SAME folder as this html file.
-// (Change AUDIO_PATH below if you keep them in a subfolder.)
+// sitting inside each album's own folder: "Album 1/", "Album 2/", etc.
+// (matching the same folders the artwork now lives in)
 // ══════════════════════════════════════════════
-const AUDIO_PATH = ''; // e.g. 'audio/' if your mp3s live in a subfolder
+const AUDIO_PATH = ''; // e.g. change if your album folders sit inside a parent subfolder
 
 const audioPlayer = new Audio();
 let playingAlbum = null;
@@ -1537,7 +1564,7 @@ function ensureAudioAnalyser() {
 
 function trackFileName(albumNum, idx) {
   const t = ALBUMS[albumNum].tracks[idx];
-  return `${String(idx+1).padStart(2,'0')} - ${t.title}.mp3`;
+  return `Album ${albumNum}/${String(idx+1).padStart(2,'0')} - ${t.title}.mp3`;
 }
 
 function isRowPlaying(albumNum, idx) {
@@ -1737,6 +1764,26 @@ mobileTabButtons.forEach(btn => {
 });
 setMobileView('tracks');
 
+// ── VISUALIZER PLACEMENT (mobile: right below artwork / desktop: original nested spot) ──
+function positionVisualizer() {
+  const canvas = document.getElementById('coverPulse');
+  const coverPane = document.querySelector('.cover-pane');
+  const coverImgWrap = document.querySelector('.cover-img-wrap');
+  const coverBottom = document.querySelector('.cover-bottom');
+  if (!canvas || !coverPane || !coverImgWrap || !coverBottom) return;
+  if (window.innerWidth <= 980) {
+    if (canvas.parentElement !== coverPane) {
+      coverImgWrap.insertAdjacentElement('afterend', canvas);
+    }
+  } else {
+    if (canvas.parentElement !== coverBottom) {
+      coverBottom.appendChild(canvas);
+    }
+  }
+}
+positionVisualizer();
+window.addEventListener('resize', positionVisualizer);
+
 // ── SWIPE BETWEEN MOBILE TABS ──
 const mobileTabOrder = ['tracks', 'cover', 'lyrics'];
 let touchStartX = 0, touchStartY = 0;
@@ -1757,6 +1804,45 @@ appMainEl.addEventListener('touchend', (e) => {
     else if (dx > 0 && idx > 0) setMobileView(mobileTabOrder[idx - 1]);
   }
 }, { passive: true });
+
+// ── COVER ANIMATION CLIP (plays inline in the artwork frame, always muted, never touches the mp3 player) ──
+const coverClipBtn = document.getElementById('coverClipBtn');
+const clipVideo = document.getElementById('clipVideo');
+
+function forceMuted() {
+  clipVideo.muted = true;
+  clipVideo.volume = 0;
+}
+// Redundant enforcement — belt-and-suspenders so this can never accidentally produce sound.
+['loadedmetadata', 'play', 'playing', 'volumechange'].forEach(evt => {
+  clipVideo.addEventListener(evt, forceMuted);
+});
+
+function playCoverClip() {
+  const src = `Album ${state.album}/Cover${state.album}_Clip.mp4`;
+  clipVideo.src = src;
+  forceMuted();
+  clipVideo.classList.add('active');
+  coverClipBtn.textContent = '✕';
+  coverClipBtn.title = 'Close animation';
+  clipVideo.play().catch(err => console.warn('Cover clip playback failed — check the file exists:', src, err));
+}
+
+function stopCoverClip() {
+  clipVideo.pause();
+  clipVideo.removeAttribute('src');
+  clipVideo.load();
+  clipVideo.classList.remove('active');
+  coverClipBtn.textContent = '🎥';
+  coverClipBtn.title = 'Play cover animation';
+}
+
+coverClipBtn.addEventListener('click', () => {
+  if (clipVideo.classList.contains('active')) stopCoverClip();
+  else playCoverClip();
+});
+
+clipVideo.addEventListener('ended', stopCoverClip);
 
 // ── FULLSCREEN TOGGLE ──
 const fsBtn = document.getElementById('fullscreenBtn');
