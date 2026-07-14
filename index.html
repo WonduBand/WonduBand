@@ -2062,8 +2062,31 @@ const ambientMotes = Array.from({ length: 55 }, () => ({
   r: Math.random() * 2 + 0.8,
   riseSpeed: 0.1 + Math.random() * 0.2,
   driftPhase: Math.random() * Math.PI * 2,
+  driftPhase2: Math.random() * Math.PI * 2,
   twinklePhase: Math.random() * Math.PI * 2,
+  flickerPhase: Math.random() * Math.PI * 2,
 }));
+
+// ── Per-album special effects state ──
+const ambientAsteroids = Array.from({ length: 5 }, () => ({
+  x: Math.random(), y: Math.random() * 0.55, size: 7 + Math.random() * 12,
+  speed: 0.015 + Math.random() * 0.02, rot: Math.random() * Math.PI * 2, rotSpeed: (Math.random() - 0.5) * 0.012,
+  sides: 5 + Math.floor(Math.random() * 3),
+}));
+let ambientShootingStar = null;
+let ambientShootingTimer = 220;
+
+const ambientGlints = [0.08, 0.16, 0.35, 0.62, 0.7, 0.91].map(x => ({
+  x, y: 0.48 + Math.random() * 0.4, phase: Math.random() * Math.PI * 2, speed: 0.6 + Math.random() * 0.6,
+}));
+
+const ambientShipTrails = Array.from({ length: 4 }, () => ({ active: false, x: 0, y: 0, speed: 0, len: 0 }));
+let ambientShipTimer = 90;
+
+let ambientLightningTimer = 260;
+let ambientLightningFlash = 0;
+
+let ambientEnergy = 0.35; // eases toward 1 while a track is playing, settles low when paused
 
 let ambientT = 0;
 let ambientMouseX = 0, ambientMouseY = 0;
@@ -2087,42 +2110,175 @@ function moteColor(xFrac, alpha) {
   return `rgba(${r},${g},${b},${alpha})`;
 }
 
+function updateAmbientEnergy() {
+  const target = (typeof audioPlayer !== 'undefined' && !audioPlayer.paused) ? 1 : 0.35;
+  ambientEnergy += (target - ambientEnergy) * 0.015;
+}
+
 function drawAmbientMist() {
   const { ctx, w, h } = ambientMist;
   ctx.clearRect(0, 0, w, h);
-  ambientMistBlobs.forEach(b => {
+
+  // Album 2: nebula gas slowly shifts hue, like it's breathing color rather than sitting static.
+  const hueShift = ambientCurrentAlbum === 2 ? Math.sin(ambientT * 0.015) * 30 : 0;
+
+  ambientMistBlobs.forEach((b, i) => {
     const x = b.x * w + Math.sin(ambientT * b.speed + b.phase) * w * 0.06;
     const y = b.y * h + Math.cos(ambientT * b.speed * 0.7 + b.phase) * h * 0.03;
     const r = b.r * Math.max(w, h);
     const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-    g.addColorStop(0, 'rgba(190,230,210,0.08)');
-    g.addColorStop(1, 'rgba(190,230,210,0)');
+    if (ambientCurrentAlbum === 2) {
+      g.addColorStop(0, `hsla(${265 + hueShift + i * 6}, 70%, 72%, 0.09)`);
+      g.addColorStop(1, `hsla(${265 + hueShift + i * 6}, 70%, 72%, 0)`);
+    } else {
+      g.addColorStop(0, 'rgba(190,230,210,0.08)');
+      g.addColorStop(1, 'rgba(190,230,210,0)');
+    }
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, w, h);
   });
+
+  // Album 1: slow drifting ash/smoke, plus rare lightning flash lighting up the whole scene.
+  if (ambientCurrentAlbum === 1) {
+    for (let i = 0; i < 3; i++) {
+      const sx = ((ambientT * 0.008 + i * 0.4) % 1.4 - 0.2) * w;
+      const sy = h * (0.15 + i * 0.18);
+      const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, w * 0.22);
+      g.addColorStop(0, 'rgba(60,50,45,0.10)');
+      g.addColorStop(1, 'rgba(60,50,45,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, w, h);
+    }
+    ambientLightningTimer -= 1;
+    if (ambientLightningTimer <= 0) {
+      ambientLightningFlash = 0.9;
+      ambientLightningTimer = 260 + Math.random() * 500;
+    }
+    ambientLightningFlash *= 0.86;
+    if (ambientLightningFlash > 0.015) {
+      ctx.fillStyle = `rgba(255,240,220,${ambientLightningFlash * 0.22})`;
+      ctx.fillRect(0, 0, w, h);
+    }
+  }
 }
 
 function drawAmbientParticles() {
   const { ctx, w, h } = ambientParticles;
   ctx.clearRect(0, 0, w, h);
+  const speedMul = 0.6 + ambientEnergy * 0.9;
+
+  // ── Base motes: curved/wavy path everywhere (fixes "particles should move more") ──
   ambientMotes.forEach(m => {
-    m.y -= (m.riseSpeed * 0.15) / h;
+    m.y -= (m.riseSpeed * 0.15 * speedMul) / h;
     if (m.y < -0.02) m.y = 1.02;
-    const x = m.x * w + Math.sin(ambientT * 0.4 + m.driftPhase) * 6;
+    const sidewaysBias = ambientCurrentAlbum === 3 ? 22 : 0; // Genesis: pollen drifts with implied wind
+    const x = m.x * w
+      + Math.sin(ambientT * 0.4 + m.driftPhase) * 14
+      + Math.sin(ambientT * 0.13 + m.driftPhase2) * 9
+      + sidewaysBias * Math.sin(ambientT * 0.05 + m.driftPhase);
     const y = m.y * h;
-    const tw = 0.4 + 0.6 * (Math.sin(ambientT * 1.1 + m.twinklePhase) * 0.5 + 0.5);
+    let tw = 0.4 + 0.6 * (Math.sin(ambientT * 1.1 + m.twinklePhase) * 0.5 + 0.5);
+    if (ambientCurrentAlbum === 1) tw *= 0.6 + 0.4 * (Math.sin(ambientT * 3.2 + m.flickerPhase) * 0.5 + 0.5); // ember flicker
     ctx.beginPath();
-    ctx.fillStyle = moteColor(m.x, tw * 0.8);
+    ctx.fillStyle = moteColor(m.x, tw * 0.8 * (0.7 + ambientEnergy * 0.3));
     ctx.shadowColor = moteColor(m.x, 0.9);
     ctx.shadowBlur = 6;
     ctx.arc(x, y, m.r, 0, Math.PI * 2);
     ctx.fill();
   });
+
+  // ── Album 2: drifting asteroid silhouettes + occasional shooting star ──
+  if (ambientCurrentAlbum === 2) {
+    ambientAsteroids.forEach(a => {
+      a.x += a.speed * 0.0006 * speedMul;
+      if (a.x > 1.1) a.x = -0.1;
+      a.rot += a.rotSpeed;
+      const cx = a.x * w, cy = a.y * h;
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(a.rot);
+      ctx.beginPath();
+      for (let i = 0; i < a.sides; i++) {
+        const ang = (i / a.sides) * Math.PI * 2;
+        const rad = a.size * (0.75 + 0.25 * Math.sin(i * 2.1));
+        const px = Math.cos(ang) * rad, py = Math.sin(ang) * rad;
+        i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(10,8,16,0.55)';
+      ctx.fill();
+      ctx.restore();
+    });
+
+    ambientShootingTimer -= 1;
+    if (ambientShootingTimer <= 0 && !ambientShootingStar) {
+      ambientShootingStar = { x: Math.random() * 0.25, y: Math.random() * 0.3, vx: 0.006 + Math.random() * 0.004, vy: 0.0032, life: 1 };
+      ambientShootingTimer = 500 + Math.random() * 900;
+    }
+    if (ambientShootingStar) {
+      const s = ambientShootingStar;
+      s.x += s.vx; s.y += s.vy; s.life -= 0.018;
+      const sx = s.x * w, sy = s.y * h;
+      ctx.beginPath();
+      ctx.strokeStyle = `rgba(255,255,255,${Math.max(0, s.life)})`;
+      ctx.lineWidth = 1.6;
+      ctx.moveTo(sx, sy);
+      ctx.lineTo(sx - 46, sy - 22);
+      ctx.stroke();
+      if (s.life <= 0 || s.x > 1.1) ambientShootingStar = null;
+    }
+  }
+
+  // ── Album 3: bright glints sparkling near the waterfalls ──
+  if (ambientCurrentAlbum === 3) {
+    ambientGlints.forEach(gl => {
+      const flicker = Math.pow(Math.max(0, Math.sin(ambientT * gl.speed + gl.phase)), 6);
+      if (flicker < 0.05) return;
+      const gx = gl.x * w + Math.sin(ambientT * 0.3 + gl.phase) * 4;
+      const gy = gl.y * h + Math.sin(ambientT * 0.2 + gl.phase) * (h * 0.06);
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(255,255,255,${flicker * 0.9})`;
+      ctx.shadowColor = 'rgba(255,255,255,0.9)';
+      ctx.shadowBlur = 8;
+      ctx.arc(gx, gy, 1.6, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
+
+  // ── Album 4: distant ship light-trails + slow cosmic drift ──
+  if (ambientCurrentAlbum === 4) {
+    ambientShipTimer -= 1;
+    if (ambientShipTimer <= 0) {
+      const idle = ambientShipTrails.find(s => !s.active);
+      if (idle) {
+        idle.active = true; idle.x = -0.05; idle.y = Math.random() * 0.45;
+        idle.speed = 0.006 + Math.random() * 0.006; idle.len = 30 + Math.random() * 30;
+      }
+      ambientShipTimer = 70 + Math.random() * 140;
+    }
+    ambientShipTrails.forEach(s => {
+      if (!s.active) return;
+      s.x += s.speed * speedMul;
+      const sx = s.x * w, sy = s.y * h;
+      const grad = ctx.createLinearGradient(sx - s.len, sy, sx, sy);
+      grad.addColorStop(0, 'rgba(220,200,255,0)');
+      grad.addColorStop(1, 'rgba(220,200,255,0.75)');
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.moveTo(sx - s.len, sy);
+      ctx.lineTo(sx, sy);
+      ctx.stroke();
+      if (s.x > 1.1) s.active = false;
+    });
+  }
 }
 
 function applyAmbientParallax() {
   const kenBurnsScale = 1.06 - (Math.sin(ambientT * 0.08) * 0.5 + 0.5) * 0.06; // faster 1.06 → 1.0 pull-back (zoom out)
-  ambientImg.style.transform = `translate(${ambientMouseX * 8}px, ${ambientMouseY * 6}px) scale(${(1.02 + kenBurnsScale - 1).toFixed(4)})`;
+  // Album 4: the galaxy overhead gets an almost imperceptible rotational drift — cosmic timescale.
+  const cosmicDrift = ambientCurrentAlbum === 4 ? Math.sin(ambientT * 0.004) * 3 : 0;
+  ambientImg.style.transform = `translate(${ambientMouseX * 8 + cosmicDrift}px, ${ambientMouseY * 6}px) scale(${(1.02 + kenBurnsScale - 1).toFixed(4)})`;
   ambientMistCanvas.style.transform = `translate(${ambientMouseX * 16}px, ${ambientMouseY * 12}px)`;
   ambientParticlesCanvas.style.transform = `translate(${ambientMouseX * 28}px, ${ambientMouseY * 20}px)`;
 }
@@ -2140,6 +2296,7 @@ window.addEventListener('resize', () => {
 
 function ambientLoop() {
   ambientT += 0.02;
+  updateAmbientEnergy();
   drawAmbientMist();
   drawAmbientParticles();
   applyAmbientParallax();
