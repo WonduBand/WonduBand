@@ -61,6 +61,15 @@
     will-change: transform;
     transition: background-image 0.3s ease;
   }
+  .ambient-img-dof {
+    position: absolute; top: -6%; left: -6%; width: 112%; height: 112%;
+    background-size: cover; background-position: center;
+    filter: blur(16px);
+    transform: scale(1.06);
+    -webkit-mask-image: radial-gradient(ellipse 62% 58% at center, transparent 45%, black 100%);
+    mask-image: radial-gradient(ellipse 62% 58% at center, transparent 45%, black 100%);
+    transition: background-image 0.3s ease;
+  }
   .ambient-bloom {
     position: absolute; inset: 0; pointer-events: none;
     mix-blend-mode: screen;
@@ -589,6 +598,7 @@
 
 <div class="ambient-wallpaper" id="ambientWallpaper">
   <div class="ambient-img" id="ambientImg"></div>
+  <div class="ambient-img-dof" id="ambientImgDof"></div>
   <div class="ambient-bloom" id="ambientBloom"></div>
   <div class="ambient-glow" id="ambientGlow"></div>
   <canvas class="ambient-mist" id="ambientMist"></canvas>
@@ -1977,6 +1987,7 @@ document.addEventListener('fullscreenchange', () => {
 // ── AMBIENT WALLPAPER (Elysium / Album 3 for now) ──
 const ambientWallpaper = document.getElementById('ambientWallpaper');
 const ambientImg = document.getElementById('ambientImg');
+const ambientImgDof = document.getElementById('ambientImgDof');
 const ambientBloom = document.getElementById('ambientBloom');
 const ambientGlow = document.getElementById('ambientGlow');
 const ambientMistCanvas = document.getElementById('ambientMist');
@@ -2019,9 +2030,9 @@ let ambientCurrentAlbum = null;
 
 const ambientThemes = {
   1: { image: "Album 1/Ignition_Wallpaper.png", cool: [110,150,255], warm: [255,140,60],  bloomPos: "85% 25%", bloomColor: "255,210,140", glowColor: "255,150,80"  },
-  2: { image: "Album 2/Drift_Wallpaper.png",     cool: [140,180,255], warm: [190,120,255], bloomPos: "62% 55%", bloomColor: "210,190,255", glowColor: "180,140,255" },
+  2: { image: "Album 2/Drift_Wallpaper.png",     cool: [140,180,255], warm: [190,120,255], bloomPos: "64% 47%", bloomColor: "210,190,255", glowColor: "180,140,255" },
   3: { image: "Album 3/Elysium_Wallpaper.png",   cool: [120,255,230], warm: [255,195,110], bloomPos: "88% 45%", bloomColor: "255,235,180", glowColor: "140,255,220" },
-  4: { image: "Album 4/Pantheon_Wallpaper.png",  cool: [190,140,255], warm: [255,200,110], bloomPos: "90% 60%", bloomColor: "255,215,150", glowColor: "200,150,255" },
+  4: { image: "Album 4/Pantheon_Wallpaper.png",  cool: [190,140,255], warm: [255,200,110], bloomPos: "93% 78%", bloomColor: "255,215,150", glowColor: "200,150,255" },
 };
 
 function moteColor(xFrac, alpha) {
@@ -2067,7 +2078,7 @@ function drawAmbientParticles() {
 }
 
 function applyAmbientParallax() {
-  const kenBurnsScale = 1.0 + (Math.sin(ambientT * 0.045) * 0.5 + 0.5) * 0.06; // slow 1.0 → 1.06 breathing zoom
+  const kenBurnsScale = 1.06 - (Math.sin(ambientT * 0.045) * 0.5 + 0.5) * 0.06; // slow 1.06 → 1.0 pull-back (zoom out)
   ambientImg.style.transform = `translate(${ambientMouseX * 8}px, ${ambientMouseY * 6}px) scale(${(1.02 + kenBurnsScale - 1).toFixed(4)})`;
   ambientMistCanvas.style.transform = `translate(${ambientMouseX * 16}px, ${ambientMouseY * 12}px)`;
   ambientParticlesCanvas.style.transform = `translate(${ambientMouseX * 28}px, ${ambientMouseY * 20}px)`;
@@ -2097,6 +2108,7 @@ function setAmbientWallpaper(albumNum) {
   if (!theme) return;
   ambientCurrentAlbum = albumNum;
   ambientImg.style.backgroundImage = `url('${theme.image}')`;
+  ambientImgDof.style.backgroundImage = `url('${theme.image}')`;
   ambientBloom.style.background = `radial-gradient(circle at ${theme.bloomPos}, rgba(${theme.bloomColor},0.5), transparent 40%)`;
   ambientGlow.style.background = `radial-gradient(circle at ${theme.bloomPos}, rgba(${theme.glowColor},0.4), transparent 45%)`;
   if (!ambientActive) {
