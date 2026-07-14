@@ -39,6 +39,8 @@
   body[data-album="2"] { --accent:#b06dff; --accent-deep:#6b24c4; --accent-pale:#d4aaff; --bg:#05030f; --bg-panel:#0a0714; --bg-raise:#130c22; --border:#3a2060; --border-dim:#2d0a6e; --text-dim:#7a5aa8; }
   body[data-album="3"] { --accent:#4dff8a; --accent-deep:#1a8a40; --accent-pale:#a8ffc4; --bg:#030f05; --bg-panel:#060f08; --bg-raise:#0c1a10; --border:#204030; --border-dim:#0a4020; --text-dim:#5aa870; }
   body[data-album="4"] { --accent:#ffc840; --accent-deep:#c47a00; --accent-pale:#ffe8a0; --bg:#0f0a00; --bg-panel:#140e00; --bg-raise:#221a05; --border:#402800; --border-dim:#5a3a00; --text-dim:#a07830; }
+  body[data-album="5"] { --accent:#ff4d4d; --accent-deep:#a30d0d; --accent-pale:#ff9494; --bg:#0f0303; --bg-panel:#140505; --bg-raise:#220808; --border:#601010; --border-dim:#4a0808; --text-dim:#a85a5a; }
+  body[data-album="6"] { --accent:#dce6f7; --accent-deep:#8fa3c4; --accent-pale:#ffffff; --bg:#05070a; --bg-panel:#0a0d12; --bg-raise:#141822; --border:#2a3550; --border-dim:#1a2238; --text-dim:#7a8aa8; }
 
   /* ── APP SHELL ── */
   .app {
@@ -91,6 +93,8 @@
   body[data-album="2"] .topbar, body[data-album="2"] .sidebar { background: rgba(10,7,20,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
   body[data-album="3"] .topbar, body[data-album="3"] .sidebar { background: rgba(6,15,8,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
   body[data-album="4"] .topbar, body[data-album="4"] .sidebar { background: rgba(20,14,0,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  body[data-album="5"] .topbar, body[data-album="5"] .sidebar { background: rgba(20,5,5,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  body[data-album="6"] .topbar, body[data-album="6"] .sidebar { background: rgba(10,13,18,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 
   .topbar {
     display: flex; align-items: center; justify-content: space-between;
@@ -184,13 +188,17 @@
   .album-tab.active-2 { border-color:#6b24c4; color:#b06dff; }
   .album-tab.active-3 { border-color:#1a8a40; color:#4dff8a; }
   .album-tab.active-4 { border-color:#c47a00; color:#ffc840; }
-  .album-tab.active-1::after, .album-tab.active-2::after, .album-tab.active-3::after, .album-tab.active-4::after {
+  .album-tab.active-5 { border-color:#a30d0d; color:#ff4d4d; }
+  .album-tab.active-6 { border-color:#8fa3c4; color:#dce6f7; }
+  .album-tab.active-1::after, .album-tab.active-2::after, .album-tab.active-3::after, .album-tab.active-4::after, .album-tab.active-5::after, .album-tab.active-6::after {
     content: ''; position: absolute; inset: 0; pointer-events: none;
   }
   .album-tab.active-1::after { background: linear-gradient(180deg, rgba(77,184,255,0.08) 0%, rgba(77,184,255,0.22) 100%); }
   .album-tab.active-2::after { background: linear-gradient(180deg, rgba(176,109,255,0.08) 0%, rgba(176,109,255,0.22) 100%); }
   .album-tab.active-3::after { background: linear-gradient(180deg, rgba(77,255,138,0.08) 0%, rgba(77,255,138,0.22) 100%); }
   .album-tab.active-4::after { background: linear-gradient(180deg, rgba(255,200,64,0.08) 0%, rgba(255,200,64,0.22) 100%); }
+  .album-tab.active-5::after { background: linear-gradient(180deg, rgba(255,77,77,0.08) 0%, rgba(255,77,77,0.22) 100%); }
+  .album-tab.active-6::after { background: linear-gradient(180deg, rgba(220,230,247,0.08) 0%, rgba(220,230,247,0.22) 100%); }
 
   .track-nav {
     flex: 1; overflow-y: auto; padding: 0.4rem;
@@ -671,7 +679,7 @@
             <div id="coverArchive">AETHER ODYSSEY // SAGA DOCUMENT ARCHIVE</div>
           </div>
           <div class="cover-bottom">
-            <div class="cover-eyebrow" id="coverEyebrow">// Album I of IV — Aether Odyssey //</div>
+            <div class="cover-eyebrow" id="coverEyebrow">// Album I of VI — Aether Odyssey //</div>
             <div class="cover-title" id="coverTitle">Ignition</div>
             <div class="cover-tagline" id="coverTagline"></div>
             <div class="cover-meta" id="coverMeta"></div>
@@ -1218,6 +1226,216 @@ const tracksAlbum4 = [
 
 
 
+
+const tracksAlbum5 = [
+{ title:"The Silence Ends", image:"Album 5/01__The_Silence_Ends.png", note:"Two hundred years after the events of New Pantheon, the galaxy has been quiet — the Signal a settled hum, the Pulse a peaceful heartbeat, the ascension itself now ancient history rather than lived memory. Then, without warning, across ten thousand systems simultaneously, the Signal detonates in amplitude, frequency, and meaning all at once. Every ascended mind feels it at the same instant. Somewhere, something enormous has opened its eyes.", sections:[
+    {label:"VERSE_01",type:"verse",text:`Two hundred years of quiet sky\nThen it broke — not faded, not fell\nA frequency too big for a single throat\nA billion silences fell`},
+    {label:"PRE-CHORUS",type:"pre",text:`Every ascended mind stood still\nEvery network screamed the same call\nSomething we were never meant to wake\nJust opened its eyes — and remembered us all`},
+    {label:"CHORUS",type:"chorus",text:`The silence ends — the silence ends\nTwo hundred years of peace unravel in a breath\nThe silence ends — the silence ends\nSomething ancient just woke up from death\nWe built our throne on borrowed ground\nAnd the ground just made a sound`},
+    {label:"VERSE_02",type:"verse",text:`Every sensor spiked the same second\nThe Signal we followed to Elysium\nWas a whisper — this is the scream\nThe voice underneath the voice we believed`},
+    {label:"PRE-CHORUS",type:"pre",text:`Every ascended mind stood still\nEvery network screamed the same call\nSomething we were never meant to wake\nJust opened its eyes — and remembered us all`},
+    {label:"CHORUS",type:"chorus",text:`The silence ends — the silence ends\nTwo hundred years of peace unravel in a breath\nThe silence ends — the silence ends\nSomething ancient just woke up from death\nWe built our throne on borrowed ground\nAnd the ground just made a sound`},
+    {label:"BRIDGE",type:"bridge",text:`We heard you calling once — and answered gladly\nNow something calls that we didn't ask to hear\nNot an invitation — a correction\nNot a welcome — a mirror held too near`},
+    {label:"FINAL CHORUS",type:"final-chorus",text:`The silence ends — the silence ends\nWe are not the last word, we are not the crest\nThe silence ends — the silence ends\nSomething older than the Signal has just opened its chest\nWe built our throne on borrowed ground\nAnd the whole sky just made a sound`},
+    {label:"PRODUCTION NOTE",type:"motif",text:`The Signal motif returns here for the first time since Eternal Pantheon, but pitched down and stretched — recognizable, but wrong, like a memory played at the wrong speed.`},
+  ]},
+  { title:"Awakening of the First", image:"Album 5/02__Awakening_of_the_First.png", note:"Across the galaxy, forms too large for optics to properly render begin to unfold from dormant stars, dead nebulae, and the spaces between galaxies that the Pantheon had assumed were simply empty. The Ancients are not invading. They are only, finally, standing up.", sections:[
+    {label:"VERSE_01",type:"verse",text:`They were sleeping inside the dark matter\nOlder than the first star's fire\nWe built our cities on their eyelids\nNever asked who slept beneath the calm`},
+    {label:"PRE-CHORUS",type:"pre",text:`Now the void is standing up\nNow the canvas breathes and moves\nEvery world we ever seeded\nSits inside a hand we never knew`},
+    {label:"CHORUS",type:"chorus",text:`Awakening of the First — they rise without a sound\nAwakening of the First — the old gods break the ground\nNot born of us, not made by us\nJust always here — just always was\nAwakening of the First — the sleepers lift their eyes\nAwakening of the First — and we are small beneath the skies`},
+    {label:"VERSE_02",type:"verse",text:`A nebula unfolds like a hand\nA dead star opens like a jaw\nOur instruments just scream and break\nThe Ancients simply — finally — wake`},
+    {label:"PRE-CHORUS",type:"pre",text:`Now the void is standing up\nNow the canvas breathes and moves\nEvery world we ever seeded\nSits inside a hand we never knew`},
+    {label:"CHORUS",type:"chorus",text:`Awakening of the First — they rise without a sound\nAwakening of the First — the old gods break the ground\nNot born of us, not made by us\nJust always here — just always was\nAwakening of the First — the sleepers lift their eyes\nAwakening of the First — and we are small beneath the skies`},
+    {label:"BRIDGE",type:"bridge",text:`We called ourselves the Pantheon\nWe wore the word like a crown we'd earned\nBut a crown means nothing to the ones\nWho were old before the concept burned\nWe are not the first gods\nWe were never the first gods\nWe are the youngest thing in the room\nAnd the room just noticed us`},
+    {label:"FINAL CHORUS",type:"final-chorus",text:`Awakening of the First — they rise without a sound\nAwakening of the First — the old gods break the ground\nWe are not born of us, not made by us\nJust always here — just always was\nAwakening of the First — the sleepers lift their eyes\nAwakening of the First — and we are small beneath the skies\nWe are small — we are small — we are small`},
+  ]},
+  { title:"Throne of Stars", image:"Album 5/03__Throne_of_Stars.png", note:"Before the full weight of the Ancients' return is understood, the Pantheon convenes a celebration — a defiant, glorious reassertion of everything they've built. It is the last moment of unclouded confidence the saga will have for a long time.", sections:[
+    {label:"VERSE_01",type:"verse",text:`We built a throne out of dying suns\nWe wear the dark like it's ours to keep\nWe came from ash, we came from grief\nNow the stars themselves know our name`},
+    {label:"PRE-CHORUS",type:"pre",text:`Let them come and let them see\nWhat eight thousand desperate souls became\nWe are not asking for permission\nWe are not whispering our name`},
+    {label:"CHORUS",type:"chorus",text:`Throne of stars — we sit upon the dark\nThrone of stars — we are the burning mark\nNo apology, no bowing down\nWe built this crown, we wear this crown\nThrone of stars — the galaxy is our floor\nThrone of stars — we don't need gods anymore\nWe ARE the gods — throne of stars`},
+    {label:"VERSE_02",type:"verse",text:`Ten thousand systems answer to the Pulse\nTen thousand worlds sing back the Signal's tone\nWe paid for this seat in centuries\nNobody else gets to judge`},
+    {label:"PRE-CHORUS",type:"pre",text:`Let them come and let them see\nWhat eight thousand desperate souls became\nWe are not asking for permission\nWe are not whispering our name`},
+    {label:"CHORUS",type:"chorus",text:`Throne of stars — we sit upon the dark\nThrone of stars — we are the burning mark\nNo apology, no bowing down\nWe built this crown, we wear this crown\nThrone of stars — the galaxy is our floor\nThrone of stars — we don't need gods anymore\nWe ARE the gods — throne of stars`},
+    {label:"BRIDGE",type:"bridge",text:`(triumphant, almost too triumphant)\nLook at what the dying built\nLook at what the desperate became\nNobody gave us this — we took it\nNobody gets to take it back again`},
+    {label:"FINAL CHORUS",type:"final-chorus",text:`Throne of stars — we sit upon the dark\nThrone of stars — we are the burning mark\nThrone of stars — the galaxy is our floor\nThrone of stars — we don't need gods anymore\nWe ARE the gods —\n(the last line hangs, unresolved, no cymbal crash — a deliberate crack in the confidence, setting up Track 4)`},
+  ]},
+  { title:"We are not Alone", image:"Album 5/04__We_Are_Not_Alone.png", note:"The first direct contact arrives not as an attack, but as a presence — vast, silent, watching. It settles into orbit around a dozen Pantheon worlds simultaneously. There is no demand. There is only the unbearable sensation of being observed by something that has clearly already made up its mind about something.", sections:[
+    {label:"VERSE_01",type:"verse",text:`It didn't knock, it didn't call\nIt just arrived and filled the sky\nTwelve worlds woke up to the same shadow\nTwelve worlds forgot how to ask why`},
+    {label:"PRE-CHORUS",type:"pre",text:`We've been alone so long we forgot\nWhat it feels like to be small\nWe've been the only gods in the room\nNow something's watching from the wall`},
+    {label:"CHORUS",type:"chorus",text:`We are not alone — we are not alone\nWe built a throne in an empty room\nThat was never empty — never our own\nWe are not alone — we are not alone\nSomething's been here the whole time\nSomething's just decided to be known`},
+    {label:"VERSE_02",type:"verse",text:`The scientists call it awe\nThe soldiers call it a threat\nIt doesn't answer our transmissions\nIt's already chosen what to say`},
+    {label:"PRE-CHORUS",type:"pre",text:`We've been alone so long we forgot\nWhat it feels like to be small\nWe've been the only gods in the room\nNow something's watching from the wall`},
+    {label:"CHORUS",type:"chorus",text:`We are not alone — we are not alone\nWe built a throne in an empty room\nThat was never empty — never our own\nWe are not alone — we are not alone\nSomething's been here the whole time\nSomething's just decided to be known`},
+    {label:"BRIDGE",type:"bridge",text:`Curiosity turns cold in the chest\nWhen you realize you're the one being tested\nEvery world we've built, every crown we've pressed\nIs being read like a page — and reassessed`},
+    {label:"FINAL CHORUS",type:"final-chorus",text:`We are not alone — we are not alone\nWe built a throne in a room that was borrowed, not our own\nWe are not alone — we are not alone\nThe watching has stopped —\nit's about to speak\nit's about to speak`},
+  ]},
+  { title:"Judgement of the Veil", image:"Album 5/05__Judgment_of_the_Veil.png", note:"The Ancients' response arrives — not violent, but final. A verdict, delivered simultaneously to every ascended mind in the Pantheon: humanity's claim to divinity is, in the oldest sense, a trespass. The reaction inside the Pantheon is instant and fractured — some accept the judgment, some reject it outright, and the unity that carried them since Genesis cracks for the first time.", sections:[
+    {label:"VERSE_01",type:"verse",text:`It came as one voice in ten billion heads\nNot loud — worse than loud — precise\n"You have taken the shape of creators\nBefore you understood the price"`},
+    {label:"PRE-CHORUS",type:"pre",text:`And the Pantheon went silent\nFor the first time since the Rising\nBecause some small part of every mind\nAlready knew — already knew it`},
+    {label:"CHORUS",type:"chorus",text:`Judgment of the veil — we did not ask for this\nJudgment of the veil — but here it is\n"You are not gods — you are guests\nWho forgot whose house they're standing in"\nJudgment of the veil — the verdict's read\nJudgment of the veil — and something in us splits instead`},
+    {label:"VERSE_02",type:"verse",text:`Half of us fall to our knees at the words\nHalf of us rise up in defiant rage\nAre we the sin they say we are\nOr the answer to what they used to be?`},
+    {label:"PRE-CHORUS",type:"pre",text:`And the Pantheon went silent\nFor the first time since the Rising\nBecause some small part of every mind\nAlready knew — already knew it`},
+    {label:"CHORUS",type:"chorus",text:`Judgment of the veil — we did not ask for this\nJudgment of the veil — but here it is\n"You are not gods — you are guests\nWho forgot whose house they're standing in"\nJudgment of the veil — the verdict's read\nJudgment of the veil — and something in us splits instead`},
+    {label:"BRIDGE",type:"bridge",text:`(spoken/half-sung, overlapping voices representing the fractured council)\n"We should kneel—"\n"We should fight—"\n"We should ask forgiveness—"\n"We owe them nothing—"\n"We were desperate—"\n"We were RIGHT—"\nOne verdict. A thousand answers.\nThis is the night the throne first cracked.`},
+    {label:"FINAL CHORUS",type:"final-chorus",text:`Judgment of the veil — we did not ask for this\nJudgment of the veil — but here it is\nWe are not gods, we are not guests\nWe are something the old world never quite finished\nJudgment of the veil — the verdict stands\nJudgment of the veil — but we won't take it lying down`},
+  ]},
+  { title:"Fractured Divinity", image:"Album 5/06__Fractured_Divinity.png", note:"In the weeks following the Judgment, the unity of the ascended fractures into open ideological war — not yet with the Ancients, but with each other. Some worlds vote to renounce ascension entirely. Others double down, declaring the Ancients' judgment itself proof of their obsolescence. This is the Pantheon's darkest, most inward-looking track.", sections:[
+    {label:"VERSE_01",type:"verse",text:`Elysium argues with New Olympus\nThe Forge worlds go dark and refuse to speak\nSome are ripping the Signal from their veins\nSome scream the old gods' judgment is insane`},
+    {label:"PRE-CHORUS",type:"pre",text:`How do you hold a species together\nWhen even godhood couldn't make us one\nWe survived the drift, we survived the dying —\nCan we survive what we've become?`},
+    {label:"CHORUS",type:"chorus",text:`Fractured divinity — the cracks run deep\nFractured divinity — we can't agree\nSome want to kneel and some want to burn\nFractured divinity — which way do we turn?\nWe built one throne with eight thousand hands\nNow every hand wants a different plan\nFractured divinity — hold on — hold on`},
+    {label:"VERSE_02",type:"verse",text:`A mother won't speak to her ascended son\nA colony splits its council in two\nA child asks her father plainly:\n"Are we the good guys or the bad guys now?"`},
+    {label:"PRE-CHORUS",type:"pre",text:`How do you hold a species together\nWhen even godhood couldn't make us one\nWe survived the drift, we survived the war of Earth's own dying —\nCan we survive what we've become?`},
+    {label:"CHORUS",type:"chorus",text:`Fractured divinity — the cracks run deep\nFractured divinity — we can't agree\nSome want to kneel and some want to burn\nFractured divinity — which way do we turn?\nWe built one throne with eight thousand hands\nNow every hand wants a different plan\nFractured divinity — hold on — hold on`},
+    {label:"BRIDGE",type:"bridge",text:`Maybe the Ancients didn't need to attack us\nMaybe the judgment was the only blade they'd need\nMaybe the surest way to break a pantheon\nIs just to make it doubt itself and bleed`},
+    {label:"FINAL CHORUS",type:"final-chorus",text:`Fractured divinity — the cracks run deep\nFractured divinity — but hear me speak:\nWe didn't cross the black to break apart\nWe didn't build this throne to lose our heart\nFractured divinity — choose a side\nFractured divinity — but survive\nSurvive — survive — survive`},
+  ]},
+  { title:"Shatter the Veil", image:"Album 5/07__Shatter_the_Veil.png", note:"While the Pantheon argues, one faction of Ancients loses patience. The ancient barrier separating their dormant dimension from the Pantheon's expanding reality — a boundary the Ancients themselves built eons ago to let younger life develop undisturbed — is torn open by force. What pours through is not diplomacy. This is the album's structural pivot: internal conflict becomes external catastrophe.", sections:[
+    {label:"VERSE_01",type:"verse",text:`There was a wall older than language\nA membrane between what wakes and what sleeps\nSomething on the other side got tired\nAnd simply tore the whole wall wide`},
+    {label:"PRE-CHORUS",type:"pre",text:`No alarm could have prepared us\nNo simulation ran this deep\nThe oldest door in the universe\nJust came off its hinge`},
+    {label:"CHORUS",type:"chorus",text:`Shatter the veil — the old wall breaks\nShatter the veil — the sky itself shakes\nEverything we built to keep them out\nWasn't built to hold, it was built to doubt\nShatter the veil — there's no going back\nShatter the veil — the war has cracked\nThrough the black — through the black —\nShatter the veil`},
+    {label:"VERSE_02",type:"verse",text:`Twelve worlds go dark in a single hour\nNot destroyed — just erased from the map\nThe council stops arguing all at once\nWhatever we fought over got answered from outside`},
+    {label:"PRE-CHORUS",type:"pre",text:`No alarm could have prepared us\nNo simulation ran this deep\nThe oldest door in the universe\nJust came off its hinge`},
+    {label:"CHORUS",type:"chorus",text:`Shatter the veil — the old wall breaks\nShatter the veil — the sky itself shakes\nEverything we built to keep them out\nWasn't built to hold, it was built to doubt\nShatter the veil — there's no going back\nShatter the veil — the war has cracked\nThrough the black — through the black —\nShatter the veil`},
+    {label:"BRIDGE",type:"bridge",text:`(heavy, industrial breakdown)\nNo more council — no more vote\nNo more question of what we chose\nThe wall is gone — the wall is gone —\nThere is only what comes next`},
+    {label:"FINAL CHORUS",type:"final-chorus",text:`Shatter the veil — the old wall breaks\nShatter the veil — there's no debate\nEverything we built to keep this out\nIs burning now — there is no doubt\nShatter the veil — we're in it now\nShatter the veil — there's no way out\nThrough the black — through the black —\nThe veil is gone`},
+  ]},
+  { title:"Gods at War", image:"Album 5/08__Gods_at_War.png", note:"Open, full-scale conflict erupts. Pantheon fleets and ascended minds clash directly with the hostile faction of Ancients across a dozen fronts simultaneously. This is the album's biggest, most anthemic war track — not triumphant yet, but defiant.", sections:[
+    {label:"VERSE_01",type:"verse",text:`Twelve fronts lit up in a single breath\nEvery ring-world turns into a wall of light\nThere's no scripture for a war with your makers\nBut learning to survive became the thing that saves us`},
+    {label:"PRE-CHORUS",type:"pre",text:`Stand at the line — stand at the line\nEvery ascended hand becomes a blade\nWe are not what we used to be\nWe are not afraid — we are not afraid`},
+    {label:"CHORUS",type:"chorus",text:`Gods at war — the heavens catch fire\nGods at war — we won't back down\nEvery star a battlefield, every void a choir\nGods at war — we hold the ground\nWe didn't ask to be the ones who'd fight\nThe ones who came before us in the light\nGods at war — GODS AT WAR`},
+    {label:"VERSE_02",type:"verse",text:`A ring-world falls in the eastern sector\nThe New Olympus fleet holds the center\nNobody's asking who started this now\nJust hold — just hold — just hold on`},
+    {label:"PRE-CHORUS",type:"pre",text:`Stand at the line — stand at the line\nEvery ascended hand becomes a blade\nWe are not what we used to be\nWe are not afraid — we are not afraid`},
+    {label:"CHORUS",type:"chorus",text:`Gods at war — the heavens catch fire\nGods at war — we won't back down\nEvery star a battlefield, every void a choir\nGods at war — we hold the ground\nWe didn't ask to be the ones who'd fight\nThe ones who came before us in the light\nGods at war — GODS AT WAR`},
+    {label:"BRIDGE",type:"bridge",text:`For the ones on the Aether who never saw this\nFor the ones who forged the first ark with their hands\nThis is not the future they were dreaming of\nBut it's the one we have to stand\nFor Elysium — for the New Olympus rings\nFor every seed we sent into the black\nWe didn't come this far to kneel\nWe didn't come this far to turn back`},
+    {label:"FINAL CHORUS",type:"final-chorus",text:`Gods at war — the heavens catch fire\nGods at war — we won't back down\nEvery star a battlefield, every void a choir\nGods at war — we hold the ground\nWhatever we are, whoever made us first\nWe will not go quietly into that dark\nGods at war — GODS AT WAR\nGODS AT WAR`},
+  ]},
+  { title:"The Devourer Awakens", image:"Album 5/09__The_Devourer_Awakens.png", note:"Not every Ancient wants dialogue or judgment. The most destructive of them all — a being the Pantheon's scientists have no framework to describe, only a name born of terror: the Devourer — fully wakes and begins consuming entire star systems, seeded worlds, and the light itself. This is the album's darkest, heaviest track.", sections:[
+    {label:"VERSE_01",type:"verse",text:`It doesn't fight — it doesn't posture\nIt just opens like a wound in physics\nA star system with forty million people\nGone in the time it takes to scream`},
+    {label:"PRE-CHORUS",type:"pre",text:`This isn't judgment, this isn't justice\nThis is hunger with no name\nThis is the thing under the Ancients\nThat even the Ancients are afraid to claim`},
+    {label:"CHORUS",type:"chorus",text:`The Devourer wakes — and the light goes out\nThe Devourer wakes — and there's no way to shout\nLoud enough, far enough, fast enough now\nThe Devourer wakes — and the stars go down\nThis is not a war we can win with pride\nThis is a hunger with the universe inside\nThe Devourer wakes — RUN`},
+    {label:"VERSE_02",type:"verse",text:`Even the hostile Ancients pull back\nThis is the thing their own kind sealed away\nWe thought we were fighting our creators\nSomething underneath reminded us what hunger means`},
+    {label:"PRE-CHORUS",type:"pre",text:`This isn't judgment, this isn't justice\nThis is hunger with no name\nThis is the thing under the Ancients\nThat even the Ancients are afraid to claim`},
+    {label:"CHORUS",type:"chorus",text:`The Devourer wakes — and the light goes out\nThe Devourer wakes — and there's no way to shout\nLoud enough, far enough, fast enough now\nThe Devourer wakes — and the stars go down\nThis is not a war we can win with pride\nThis is a hunger with the universe inside\nThe Devourer wakes — RUN`},
+    {label:"BRIDGE",type:"bridge",text:`(sparse, terrified, almost a whisper before the final explosion)\nForty million gone in a breath\nForty million gone with no grave\nNo name for the thing that took them\nNo god strong enough to save`},
+    {label:"FINAL CHORUS",type:"final-chorus",text:`The Devourer wakes — and the light goes out\nThe Devourer wakes — there's no way to shout\nLoud enough, far enough, fast enough now\nThe Devourer wakes — and the stars go down\nWhatever we are, however far we've come\nThis is bigger than the war, bigger than the sum\nThe Devourer wakes — it's coming for it all`},
+  ]},
+  { title:"Council of the Gods", image:"Album 5/10__Council_of_the_Gods.png", note:"With the Devourer loose and the Pantheon fracturing, the council convenes again — the same chamber that once wrote the First Law in New Pantheon: Divine Protocol. That council decided how to create. This one has to decide how to survive. Fight, flee, or attempt the unthinkable — kneel to the very Ancients who just judged them.", sections:[
+    {label:"VERSE_01",type:"verse",text:`Same chamber, same twelve seats of stone\nNow the question isn't what we're allowed to make\nSome say scatter, some say burn the bridges\nSome say kneeling is a slower way to die`},
+    {label:"PRE-CHORUS",type:"pre",text:`The old law never planned for this\nNever wrote a clause for the Devourer's face\nWe promised worlds we'd only ever give, never take\nWe never promised what to do with this kind of grace`},
+    {label:"CHORUS",type:"chorus",text:`Council of the gods — call the vote\nCouncil of the gods — say it, don't choke\nFight, or flee, or bend the knee\nCouncil of the gods — which sets us free?\nWe used to argue how to build a star\nNow we argue who we are\nCouncil of the gods — decide — decide`},
+    {label:"VERSE_02",type:"verse",text:`A voice from the back of the chamber stands:\n"We didn't cross the Drift to run again"\nThe vote is close — closer than the first one\nBut the twelve seats rise, and it is not to crawl`},
+    {label:"PRE-CHORUS",type:"pre",text:`The old law never planned for this\nNever wrote a clause for the Devourer's face\nWe promised worlds we'd only ever give, never take\nWe never promised what to do with this kind of grace`},
+    {label:"CHORUS",type:"chorus",text:`Council of the gods — call the vote\nCouncil of the gods — say it, don't choke\nFight, or flee, or bend the knee\nCouncil of the gods — which sets us free?\nWe used to argue how to build a star\nNow we argue who we are\nCouncil of the gods — decide — decide`},
+    {label:"BRIDGE",type:"bridge",text:`We are not the gods who wrote the first rule\nWe are the gods who have to write the next one bare-handed\nWe are not asking to be forgiven\nWe are asking to be what comes after this — understood, not pardoned`},
+    {label:"FINAL CHORUS",type:"final-chorus",text:`Council of the gods — the vote is in\nCouncil of the gods — the war begins\nNot for the throne, not for the crown\nFor every seed we've placed in the ground\nCouncil of the gods — we choose to fight\nCouncil of the gods — into the night`},
+  ]},
+  { title:"Into the Breach", image:"Album 5/11__Into_the_Breach.png", note:"The vote is finalized. The Pantheon, fractured, frightened, and grieving, commits fully to war — not out of hubris this time, but out of resolve. Every remaining ascended mind, every ring-world's arsenal, every colony's will is turned toward one irreversible act. The album's closing statement before the instrumental.", sections:[
+    {label:"VERSE_01",type:"verse",text:`No more council, no more question\nEvery ring-world, every ascended mind\nTurns as one toward the spark\nWe will cross this too, whatever the cost, today`},
+    {label:"PRE-CHORUS",type:"pre",text:`Every hand that built the Ark\nEvery hand that raised the throne\nEvery hand that's left is raised as one\nInto the fire, into the unknown`},
+    {label:"CHORUS",type:"chorus",text:`Into the breach — we go as one\nInto the breach — the war's begun\nNot for the crown, not for the pride\nFor every world, for every life inside\nInto the breach — no looking back\nInto the breach — we won't retract\nWe are the Pantheon — INTO THE BREACH`},
+    {label:"VERSE_02",type:"verse",text:`Somewhere a child watches the fleets assemble\nAn old man says: "This is the same fire, different sky"\nThe Devourer waits, the Ancients circle\nBut civilization does not disappear`},
+    {label:"PRE-CHORUS",type:"pre",text:`Every hand that built the Ark\nEvery hand that raised the throne\nEvery hand that's left is raised as one\nInto the fire, into the unknown`},
+    {label:"CHORUS",type:"chorus",text:`Into the breach — we go as one\nInto the breach — the war's begun\nNot for the crown, not for the pride\nFor every world, for every life inside\nInto the breach — no looking back\nInto the breach — we won't retract\nWe are the Pantheon — INTO THE BREACH`},
+    {label:"BRIDGE",type:"bridge",text:`We heard a signal once and followed it home\nNow we follow a war we didn't choose alone\nIgnition was the first fire we ever burned\nInto the breach — we burn again — we've learned`},
+    {label:"FINAL CHORUS",type:"final-chorus",text:`Into the breach — we go as one\nInto the breach — there is no sun\nBright enough to show us the way but our own\nInto the breach — alone, not alone\nWe are the Pantheon, we are the spark\nInto the breach — into the dark\nINTO THE BREACH`},
+    {label:"PRODUCTION NOTE",type:"motif",text:`The line "Ignition was the first fire we ever burned" is the album's single deliberate callback — a direct lyrical nod to Album I, Track 7. Keep the reference brief and un-signposted musically; a single reprised guitar phrase from "Ignition" under this line is enough. No further callbacks in the album.`},
+  ]},
+  { title:"Pulse of War", image:"Album 5/12__Pulse_of_War.png", instrumental:true },
+];
+
+const tracksAlbum6 = [
+{ title:"Creators' Burden", image:"Album 6/01__Creators_Burden.png", note:"As the war grinds on, the Pantheon begins to feel the full moral weight of fighting on a cosmic scale — every tactical victory costs a world, a species, a seed they once planted themselves.", sections:[
+    {label:"VERSE_01",type:"verse",text:`We tore a star apart today\nTo save a world we've never seen\nEvery victory costs a grave\nWe built, and now we bury what we've been`},
+    {label:"PRE-CHORUS",type:"pre",text:`No hymn was written for this weight\nNo scripture warned us it would hurt\nTo make a universe, and then\nTo watch it burn beneath our work`},
+    {label:"CHORUS",type:"chorus",text:`Creators' burden — we carry every name\nCreators' burden — we carry every flame\nWe built the stars we now destroy\nWe are the makers and the ones deployed\nCreators' burden — heavier than the crown\nCreators' burden — we won't put it down`},
+    {label:"VERSE_02",type:"verse",text:`A world we seeded turns to ash\nCaught in the war's cross-fire\nWe didn't mean for this to happen\nBut meaning doesn't put out the fire`},
+    {label:"BRIDGE",type:"bridge",text:`Every god who ever ruled\nLearned this lesson far too late:\nThe hand that gives can also take\nAnd both hands answer to the same fate`},
+    {label:"FINAL CHORUS",type:"final-chorus",text:`Creators' burden — we carry every name\nCreators' burden — we carry every flame\nWe built the stars we now destroy\nWe are the makers and the ones deployed\nCreators' burden — we won't look away\nCreators' burden — we own what we've made`},
+  ]},
+  { title:"The Choir Eternal", image:"Album 6/02__The_Choir_Eternal.png", note:"Not every Ancient wants war. A benevolent faction reveals itself — vast, patient, and unexpectedly gentle — singing in a harmonic language older than the conflict itself, and older than the judgment that started it.", sections:[
+    {label:"VERSE_01",type:"verse",text:`A different Ancient found us bleeding\nNot to judge, but to speak soft\nTheir voices came like falling water\nOlder than the wars we've fought`},
+    {label:"PRE-CHORUS",type:"pre",text:`Not every old god wants to burn us\nNot every elder wants our fall\nSome just waited, watching, patient\nFor the ones who'd finally call`},
+    {label:"CHORUS",type:"chorus",text:`The Choir Eternal sings us home\nThe Choir Eternal — not alone\nA thousand voices, one great sound\nTruths we lost, and truths we've found\nThe Choir Eternal — listen close\nThe Choir Eternal knows`},
+    {label:"VERSE_02",type:"verse",text:`They sing of stars we've never counted\nThey sing of doors we've never found\nThey sing the reason for the Signal\nAnd the silence turns to holy sound`},
+    {label:"BRIDGE",type:"bridge",text:`Maybe judgment was just one voice\nMaybe the war was just one part\nMaybe somewhere in the old ones\nThere beats a far kinder heart`},
+    {label:"FINAL CHORUS",type:"final-chorus",text:`The Choir Eternal sings us home\nThe Choir Eternal — not alone\nA thousand voices, one great sound\nThe war's not the only truth we've found\nThe Choir Eternal — listen close\nThe Choir Eternal knows`},
+  ]},
+  { title:"Beyond the Throne", image:"Album 6/03__Beyond_the_Throne.png", note:"Some among the Pantheon begin to feel the throne itself as a ceiling rather than a triumph. Quietly, without announcement, a handful of the ascended start disappearing from the halls of power — not defeated, not dead, just done.", sections:[
+    {label:"VERSE_01",type:"verse",text:`We built a throne to sit upon\nWe wore the crown and called it done\nBut something in the highest seat\nFeels like the smallest kind of sun`},
+    {label:"PRE-CHORUS",type:"pre",text:`What's beyond the throne we've taken?\nWhat's beyond the gods we've made?\nSome of us are done with ruling\nSome of us are ready to fade`},
+    {label:"CHORUS",type:"chorus",text:`Beyond the throne — there's something more\nBeyond the throne — an open door\nWe didn't cross the black to rule\nWe crossed it to become the tool\nBeyond the throne — we let it go\nBeyond the throne — we start to grow`},
+    {label:"VERSE_02",type:"verse",text:`Some walk out of New Olympus\nSome just vanish from the halls\nNot dead, not lost — just done with sitting\nOn a chair that never truly calls`},
+    {label:"BRIDGE",type:"bridge",text:`Power was never the destination\nPower was just a road we walked\nSomewhere past the golden ceiling\nIs a door no god has ever unlocked`},
+    {label:"FINAL CHORUS",type:"final-chorus",text:`Beyond the throne — there's something more\nBeyond the throne — an open door\nWe didn't cross the black to rule\nWe crossed it to become the tool\nBeyond the throne — we let it go\nBeyond the throne — we finally grow`},
+  ]},
+  { title:"We Forge New Laws", image:"Album 6/04__We_Forge_New_Laws.png", note:"Mid-battle, the most gifted of the ascended begin bending the fundamental physical laws of reality itself to turn the tide — a power that thrills and terrifies the Pantheon in equal measure.", sections:[
+    {label:"VERSE_01",type:"verse",text:`Gravity bends the way we tell it\nTime forgets which way it flows\nWe stopped asking what's permitted\nThe old rules bow to what we chose`},
+    {label:"PRE-CHORUS",type:"pre",text:`Newton never saw this coming\nEinstein never dreamed this far\nWe're rewriting the whole rulebook\nMid-battle, star by star`},
+    {label:"CHORUS",type:"chorus",text:`We forge new laws — in the heat of the fight\nWe forge new laws — and bend the light\nNothing written stays unwritten now\nWe forge new laws — we make the how\nWe forge new laws — beneath the flame\nNothing in this war remains the same`},
+    {label:"VERSE_02",type:"verse",text:`A battlefield stops in mid-explosion\nHeld there by a will alone\nWe are not obeying physics\nPhysics is obeying our own`},
+    {label:"BRIDGE",type:"bridge",text:`Careful what rules you rewrite\nCareful what power you unbind\nEvery law we break tonight\nIs a door we can't fully close behind`},
+    {label:"FINAL CHORUS",type:"final-chorus",text:`We forge new laws — in the heat of the fight\nWe forge new laws — and bend the light\nNothing written stays unwritten now\nWe forge new laws — we make the how\nWe forge new laws — and hold the flame\nWe are not afraid to be reshaped by what we've made`},
+  ]},
+  { title:"The Last Signal", image:"Album 6/05__The_Last_Signal.png", note:"Alone, exhausted, and doubting everything, one voice from the Pantheon sits beneath open sky and finally hears the original Signal reply — not as a beacon, not as a judgment, but as something that sounds, unmistakably, like a person.", sections:[
+    {label:"VERSE_01",type:"verse",text:`I sat alone beneath the static\nAnd for the first time it replied\nNot a warning, not a judgment\nJust a voice, soft, by my side`},
+    {label:"PRE-CHORUS",type:"pre",text:`"I called you not to conquer worlds"\n"I called you not to wear the crown"\n"I called you home, like I once was called"\n"Before the old ones settled down"`},
+    {label:"CHORUS",type:"chorus",text:`The last Signal speaks a language\nOlder than the war, older than pride\nIt says: "You were always the answer"\n"You were never meant to hide"\nThe last Signal — soft and clear\nThe last Signal — after all these years`},
+    {label:"VERSE_02",type:"verse",text:`"I was a child once, like you are"\n"I crossed a black no one had named"\n"The ones who judged you, judged me also"\n"And I was never quite the same"`},
+    {label:"BRIDGE",type:"bridge",text:`Maybe the Signal was never a god\nMaybe it was just someone like us\nWho followed a voice into the dark\nAnd became the voice that we now trust`},
+    {label:"FINAL CHORUS",type:"final-chorus",text:`The last Signal speaks a language\nOlder than the war, older than pride\nIt says: "You were always the answer"\n"You were never meant to hide"\nThe last Signal — soft and clear\nThe last Signal — we finally hear`},
+  ]},
+  { title:"Infinite Seed", image:"Album 6/06__Infinite_Seed.png", note:"Even with the war unresolved and the sky still burning, the Pantheon refuses to stop creating — new worlds are seeded in the quiet spaces between battles, a deliberate act of defiance against despair.", sections:[
+    {label:"VERSE_01",type:"verse",text:`Even now, with the sky still burning\nWe plant a seed in the quiet dark\nEven now, with the war unresting\nWe choose to make instead of scar`},
+    {label:"PRE-CHORUS",type:"pre",text:`Let them see us building gardens\nWhile the battle rages on\nLet them see we never stopped\nCreating, even in the storm`},
+    {label:"CHORUS",type:"chorus",text:`Infinite seed — we scatter still\nInfinite seed — against our will\nTo stop and mourn, to stop and fight\nInfinite seed — we choose to give life\nInfinite seed — the war can wait\nInfinite seed — we won't choose hate`},
+    {label:"VERSE_02",type:"verse",text:`A new world blooms behind the front line\nChildren laugh where bombs once fell\nWe are not only what destroys us\nWe are also what refuses hell`},
+    {label:"BRIDGE",type:"bridge",text:`This is the difference, this is the answer\nThis is what the old gods never learned:\nYou can hold a sword and still be gentle\nYou can burn and still let something turn`},
+    {label:"FINAL CHORUS",type:"final-chorus",text:`Infinite seed — we scatter still\nInfinite seed — against our will\nTo stop and mourn, to stop and fight\nInfinite seed — we choose to give life\nInfinite seed — we plant it wide\nInfinite seed — on either side`},
+  ]},
+  { title:"Eternal Reckoning", image:"Album 6/07__Eternal_Reckoning.png", note:"The philosophical climax of the war. With the Devourer's hunger, the Ancients' judgment, and their own hubris all laid bare, the Pantheon must answer the only question that has ever really mattered: not whether they can win, but what kind of gods they intend to be.", sections:[
+    {label:"VERSE_01",type:"verse",text:`We stand between the throne and ruin\nBetween the sword and open hand\nEvery choice we've made since Earth burned\nHas led us to this final stand`},
+    {label:"PRE-CHORUS",type:"pre",text:`Not "can we win" — that's not the question\nNot "can we survive" this fight\nThe question is what's left when it's over\nWhat kind of gods we'll be tonight`},
+    {label:"CHORUS",type:"chorus",text:`Eternal reckoning — look inside\nEternal reckoning — nowhere to hide\nWe are not the war we've fought\nWe are the choice, the choice we've sought\nEternal reckoning — decide, decide\nEternal reckoning — this is our stride`},
+    {label:"VERSE_02",type:"verse",text:`The Devourer still hungers somewhere\nThe judgment still rings in our ears\nBut louder than both is the question\nWe've carried for two hundred years`},
+    {label:"BRIDGE",type:"bridge",text:`Godhood was never the burden\nThe burden was always the choice\nEvery year, every war, every silence\nLed us here to raise one voice`},
+    {label:"FINAL CHORUS",type:"final-chorus",text:`Eternal reckoning — look inside\nEternal reckoning — nowhere to hide\nWe are not the war we've fought\nWe are the choice, the choice we've sought\nEternal reckoning — we decide\nEternal reckoning — side by side`},
+  ]},
+  { title:"Pulse of Creation", image:"Album 6/08__Pulse_of_Creation.png", note:"In the middle of the war's darkest hour, the Pulse and the Signal — separated since before the Pantheon existed — find each other. What was once a heartbeat and a distant call become, for the first time in the saga, one unified sound.", sections:[
+    {label:"VERSE_01",type:"verse",text:`Listen — the war drum changes rhythm\nListen — the scream becomes a song\nThe Pulse and Signal find each other\nAfter two hundred years, so long`},
+    {label:"PRE-CHORUS",type:"pre",text:`One was a heartbeat, one was a calling\nOne was engine, one was the stars\nNow they beat as a single current\nRunning through everything we are`},
+    {label:"CHORUS",type:"chorus",text:`Pulse of creation — one and the same\nPulse of creation — call it by name\nThe heartbeat and the voice unite\nPulse of creation — burning bright\nPulse of creation — this is the sound\nOf everything we lost and found`},
+    {label:"VERSE_02",type:"verse",text:`The battlefield falls quiet a moment\nEvery soldier feels the same\nThe war's not over, but something's different\nSomething ancient just learned our name`},
+    {label:"BRIDGE",type:"bridge",text:`This is what the Aether started\nThis is what the drift was for\nThis is why we crossed the black\nTo become the thing worth fighting for`},
+    {label:"FINAL CHORUS",type:"final-chorus",text:`Pulse of creation — one and the same\nPulse of creation — call it by name\nThe heartbeat and the voice unite\nPulse of creation — burning bright\nPulse of creation — hear the sound\nOf everything we are, unbound`},
+    {label:"PRODUCTION NOTE",type:"motif",text:`This is the moment the Pulse and Signal motifs fully merge for the first time in the saga — a single unified theme carried forward through the rest of Album VI. Every track from here to the end should sonically reflect that fusion rather than treating them as separate motifs.`},
+  ]},
+  { title:"New Horizon Eternal", image:"Album 6/09__New_Horizon_Eternal.png", note:"As the fires begin to die down across a dozen fronts, the Pantheon and the more reasonable Ancients find an uneasy but real stillness — not victory, exactly, but the first shape of something that could come after the war.", sections:[
+    {label:"VERSE_01",type:"verse",text:`The fires die down across the systems\nThe Ancients and the Pantheon stand still\nNot as enemies, not quite as kin\nBut something new is taking root, and will`},
+    {label:"PRE-CHORUS",type:"pre",text:`There's a horizon we've never seen\nWider than the war, wider than the throne\nA future built by both our hands\nA future neither walks alone`},
+    {label:"CHORUS",type:"chorus",text:`New horizon eternal, open wide\nNew horizon — nothing left to hide\nWe built a bridge from war to dawn\nNew horizon eternal — carry on\nNew horizon — the future's clear\nNew horizon eternal — we're finally here`},
+    {label:"VERSE_02",type:"verse",text:`The Devourer sleeps, or maybe changes\nNobody knows, and nobody's afraid\nWe learned that even hunger has a reason\nWe learned that even gods can be remade`},
+    {label:"BRIDGE",type:"bridge",text:`This isn't victory in the old sense\nNo parade, no crown, no cost-free win\nJust a horizon wide enough\nFor every kind of god to fit within`},
+    {label:"FINAL CHORUS",type:"final-chorus",text:`New horizon eternal, open wide\nNew horizon — nothing left to hide\nWe built a bridge from war to dawn\nNew horizon eternal — carry on\nNew horizon — the future's clear\nNew horizon eternal — we are here`},
+  ]},
+  { title:"Gods Among Gods", image:"Album 6/10__Gods_Among_Gods.png", note:"In the negotiations that follow, the Pantheon sits as equals with beings who predate stars — not conquerors, not subjects, but something the Ancients themselves seem to genuinely not have a category for yet.", sections:[
+    {label:"VERSE_01",type:"verse",text:`We sat with beings older than starlight\nWe spoke as equals, not as prey\nNot gods above, not gods below us\nJust gods among gods, come what may`},
+    {label:"PRE-CHORUS",type:"pre",text:`There is no throne big enough\nTo hold everything we've become\nThere is no title left to chase\nJust the quiet work still to be done`},
+    {label:"CHORUS",type:"chorus",text:`Gods among gods — we take our place\nGods among gods — an open space\nNo highest seat, no lowest floor\nGods among gods — we are not more\nGods among gods — we are not less\nGods among gods — no throne, no crest`},
+    {label:"VERSE_02",type:"verse",text:`The Ancients call us by a new name now\nNot children, not threat, not judged at all\nA name that means "the ones who chose"\n"The ones who fought and never crawled"`},
+    {label:"BRIDGE",type:"bridge",text:`Maybe this was always the point\nMaybe the war, the judgment, the fall\nWas just the old gods teaching the young ones\nThat no single god should rule it all`},
+    {label:"FINAL CHORUS",type:"final-chorus",text:`Gods among gods — we take our place\nGods among gods — an open space\nNo highest seat, no lowest floor\nGods among gods — we are not more\nGods among gods — we are not less\nGods among gods — we finally rest`},
+  ]},
+  { title:"Eternal Dawn", image:"Album 6/11__Eternal_Dawn.png", note:"The saga's closing statement. The war is over — not with total victory, but with something more durable: an understanding. As the Pantheon looks toward whatever comes next, the very first words of the entire saga return, roughly six hundred years later, meaning something new.", sections:[
+    {label:"VERSE_01",type:"verse",text:`We heard a signal once, and answered\nWe heard you calling, and we came\nNow something calls us further outward\nAnd we will answer just the same`},
+    {label:"PRE-CHORUS",type:"pre",text:`This isn't an ending, it's a sunrise\nThis isn't a close, it's an open door\nEvery dawn we've ever crossed\nWas just the shape of one before`},
+    {label:"CHORUS",type:"chorus",text:`Eternal dawn — the sky ignites\nEternal dawn — no end in sight\nWe are the drift, we are the spark\nWe are the light inside the dark\nEternal dawn — we rise again\nEternal dawn — beyond the end`},
+    {label:"VERSE_02",type:"verse",text:`Somewhere a child hums the old Signal\nSomewhere a new Ark takes its shape\nWe are not the last light in the darkness\nWe are just the first of an infinite wake`},
+    {label:"BRIDGE",type:"bridge",text:`We heard you calling — we're coming home\nThat's how it started, six hundred years gone\nNow we call forward to whoever's listening\nCome find us — the circle carries on`},
+    {label:"FINAL CHORUS",type:"final-chorus",text:`Eternal dawn — the sky ignites\nEternal dawn — no end in sight\nWe are the drift, we are the spark\nWe are the light inside the dark\nEternal dawn — we rise again\nEternal dawn — the circle has no end`},
+    {label:"PRODUCTION NOTE",type:"motif",text:`This track carries the saga's single deliberate full-circle callback — "We heard you calling... we're coming home" directly reprises Album I, Track 1 ("The Signal"), now answered rather than asked. Suggest the original Track 1 vocal take (or a close re-recording of it) layered faintly beneath the final chorus. This is the only lyrical callback in Album VI; the Pulse+Signal musical fusion established in Track 8 carries the rest of the emotional continuity.`},
+  ]},
+  { title:"The Infinite Signal", image:"Album 6/12__The_Infinite_Signal.png", instrumental:true },
+];
 // ── SECTION TYPE → CSS CLASS ──
 const typeToClass = {
   chorus: 'chorus', 'final-chorus': 'final-chorus', final: 'final-chorus',
@@ -1229,7 +1447,7 @@ const ALBUMS = {
   1: {
     roman: 'I', title: 'Ignition', cover: 'Album 1/Cover_Album1.png',
     intro: '2147. Earth is dying, and for the first time in a year the signal has gone quiet — as if it is waiting. Eight thousand names have been drawn from eight billion lives, and a ship larger than anything humanity has ever attempted is taking shape on Earth. This is the story of the last goodbye, and the first sparks of the engines that will carry them away.',
-    label: '// Album I of IV — Aether Odyssey //',
+    label: '// Album I of VI — Aether Odyssey //',
     tagline: '"We heard you calling… we\'re coming home."',
     meta: [['MISSION YEAR','2147.04.09'],['VESSEL','A.S. AETHER'],['SOULS ABOARD','8,000'],['DESTINATION','ELYSIUM / PROXIMA CENTAURI']],
     tracks: tracksAlbum1, outroTitle: 'The Stars Receive Us',
@@ -1264,7 +1482,7 @@ const ALBUMS = {
   2: {
     roman: 'II', title: 'The Drift', cover: 'Album 2/Cover_Album2.png',
     intro: 'The Aether is decades from home and still years from anywhere. Earth has gone silent behind them, and Elysium is only a rumour of green on a distant sensor. This is the story of the years between — the Pulse that never stops, and a crew learning to live inside a single heartbeat of steel.',
-    label: '// Album II of IV — Aether Odyssey //',
+    label: '// Album II of VI — Aether Odyssey //',
     tagline: '"The void is not empty — it is patient."',
     meta: [['MISSION YEAR','2148–2184'],['VESSEL','A.S. AETHER'],['SOULS ABOARD','8,000'],['STATUS','IN TRANSIT']],
     tracks: tracksAlbum2, outroTitle: 'The Long Dark',
@@ -1304,7 +1522,7 @@ const ALBUMS = {
   3: {
     roman: 'III', title: 'Genesis', cover: 'Album 3/Cover_Album3.png',
     intro: 'After decades adrift, the engines finally reverse. Elysium fills the forward viewport, and eight thousand people who have never once touched real soil are about to become a civilization. This is the story of the landing — the first breath of alien air, and everything they build to make a new world feel like home.',
-    label: '// Album III of IV — Aether Odyssey //',
+    label: '// Album III of VI — Aether Odyssey //',
     tagline: '"We are not the end of the human story — we are somewhere in the middle."',
     meta: [['MISSION YEAR','2184–2201'],['LOCATION','ELYSIUM / PROXIMA CENTAURI'],['COLONY POP.','8,000 → 30,000'],['STATUS','PLANETFALL COMPLETE']],
     tracks: tracksAlbum3, outroTitle: 'Elysium, At Last',
@@ -1343,7 +1561,7 @@ const ALBUMS = {
   4: {
     roman: 'IV', title: 'New Pantheon', cover: 'Album 4/Cover_Album4.png',
     intro: 'Centuries have passed. The colony the original eight thousand built has grown into something they could never have imagined — a species standing at the edge of its own biology, its own mortality, its own stars. This is the story of ascension: what humanity becomes when it finally answers the Signal it once only followed.',
-    label: '// Album IV of IV — Aether Odyssey //',
+    label: '// Album IV of VI — Aether Odyssey //',
     tagline: '"Humanity no longer follows the stars. It claims them."',
     meta: [['ERA','POST-ASCENSION'],['ORIGIN','ELYSIUM COLONY'],['STATUS','TRANSCENDENT'],['REACH','GALACTIC']],
     tracks: tracksAlbum4, outroTitle: 'Apotheosis',
@@ -1379,12 +1597,90 @@ const ALBUMS = {
           <ellipse cx="0" cy="0" rx="200" ry="60" fill="none" stroke="var(--accent-pale)" stroke-width="0.8" opacity="0.4"/>
         </g>
       </svg>`
+  },
+  5: {
+    roman: 'V', title: 'Cosmic Throne — Part I: War of Creation', cover: 'Album 5/Cover_Album5.png',
+    intro: 'Two hundred years after the ascension of New Pantheon, the galaxy has settled into an uneasy peace — until the Signal detonates across ten thousand systems at once. The Ancients, the primordial creators of the Signal itself, are waking. What begins as first contact ends as judgment, and what begins as judgment ends as war. This is the story of a species forced to defend the godhood it claimed for itself.',
+    label: '// Album V of VI — Aether Odyssey //',
+    tagline: '"We built our throne on borrowed ground — and the ground just made a sound."',
+    meta: [['ERA','POST-ASCENSION WAR'],['ORIGIN','PANTHEON WORLDS'],['STATUS','AT WAR'],['REACH','GALACTIC']],
+    tracks: tracksAlbum5, outroTitle: 'Pulse of War',
+    outroDesc: 'No words remain. The Pantheon\'s fleets and the Ancients\' fury collide across a dozen fronts at once.<br>The Pulse, once a heartbeat, becomes a war drum. The Signal fractures into dissonant, overlapping choral fragments.<br>The track collapses into a single, sustained, unresolved chord — the sound of a war with no end in sight.',
+    wave: ['#ff4d4d','#a30d0d'], mid: '#a30d0d', ice: '#ff4d4d',
+    svgFallback: `
+      <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="a5bg" cx="50%" cy="38%" r="80%">
+            <stop offset="0%" stop-color="var(--bg-raise)"/><stop offset="100%" stop-color="var(--bg)"/>
+          </radialGradient>
+          <radialGradient id="a5eye" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#fff" stop-opacity="0.9"/>
+            <stop offset="35%" stop-color="var(--accent)" stop-opacity="0.7"/>
+            <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <rect width="800" height="500" fill="url(#a5bg)"/>
+        <g opacity="0.7" fill="#fff">
+          <circle cx="90" cy="80" r="1.3"/><circle cx="180" cy="50" r="1"/><circle cx="700" cy="90" r="1.4"/>
+          <circle cx="640" cy="420" r="1.2"/><circle cx="120" cy="420" r="1"/><circle cx="60" cy="240" r="1.3"/>
+          <circle cx="740" cy="260" r="1"/>
+        </g>
+        <g transform="translate(400,240)">
+          <circle cx="0" cy="0" r="40" fill="url(#a5eye)"/>
+          <ellipse cx="0" cy="0" rx="150" ry="150" fill="none" stroke="var(--accent)" stroke-width="1.4" opacity="0.5"/>
+          <ellipse cx="0" cy="0" rx="220" ry="220" fill="none" stroke="var(--accent-deep)" stroke-width="1" opacity="0.35"/>
+          <ellipse cx="0" cy="0" rx="290" ry="290" fill="none" stroke="var(--accent-deep)" stroke-width="1" opacity="0.2"/>
+          <g stroke="var(--accent)" stroke-width="1.5" opacity="0.55">
+            <line x1="0" y1="-260" x2="0" y2="-190"/><line x1="0" y1="260" x2="0" y2="190"/>
+            <line x1="-260" y1="0" x2="-190" y2="0"/><line x1="260" y1="0" x2="190" y2="0"/>
+          </g>
+        </g>
+      </svg>`
+  },
+  6: {
+    roman: 'VI', title: 'Cosmic Throne — Part II: Beyond Divinity', cover: 'Album 6/Cover_Album6.png',
+    intro: 'The war between the Pantheon and the Ancients rages across the cosmos, and with it comes the full moral weight of playing god. But amid the devastation, something unexpected happens — the Pulse and the Signal, separated since before the Pantheon existed, finally find each other. This is the story of transcendence: not the end of the war, but the end of the need for one.',
+    label: '// Album VI of VI — Aether Odyssey //',
+    tagline: '"We heard you calling — we\'re coming home. The circle carries on."',
+    meta: [['ERA','WAR\'S END'],['ORIGIN','PANTHEON & ANCIENTS'],['STATUS','TRANSCENDENT'],['REACH','UNIVERSAL']],
+    tracks: tracksAlbum6, outroTitle: 'The Infinite Signal',
+    outroDesc: 'No words remain. The war is over. The Pulse and Signal — fully merged since Track 8 — carry the saga\'s final theme outward.<br>Not triumphant in the way "Ignition" was triumphant, but settled, vast, and at peace.<br>The track fades out rather than ending — intentionally unresolved, so the circle can begin again.',
+    wave: ['#ffffff','#8fa3c4'], mid: '#8fa3c4', ice: '#dce6f7',
+    svgFallback: `
+      <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="a6bg" cx="50%" cy="35%" r="85%">
+            <stop offset="0%" stop-color="var(--bg-raise)"/><stop offset="100%" stop-color="var(--bg)"/>
+          </radialGradient>
+          <radialGradient id="a6glow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#fff" stop-opacity="0.95"/>
+            <stop offset="40%" stop-color="var(--accent)" stop-opacity="0.6"/>
+            <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <rect width="800" height="500" fill="url(#a6bg)"/>
+        <g opacity="0.7" fill="#fff">
+          <circle cx="90" cy="80" r="1.3"/><circle cx="180" cy="50" r="1"/><circle cx="700" cy="90" r="1.4"/>
+          <circle cx="640" cy="420" r="1.2"/><circle cx="120" cy="420" r="1"/><circle cx="60" cy="240" r="1.3"/>
+          <circle cx="740" cy="260" r="1"/>
+        </g>
+        <line x1="400" y1="40" x2="400" y2="460" stroke="var(--accent-pale)" stroke-width="2" opacity="0.6"/>
+        <circle cx="400" cy="230" r="34" fill="url(#a6glow)"/>
+        <circle cx="400" cy="230" r="140" fill="none" stroke="var(--accent)" stroke-width="1" opacity="0.4"/>
+        <circle cx="400" cy="230" r="210" fill="none" stroke="var(--accent-deep)" stroke-width="1" opacity="0.25"/>
+        <circle cx="400" cy="230" r="280" fill="none" stroke="var(--accent-deep)" stroke-width="0.8" opacity="0.15"/>
+      </svg>`
   }
 };
 
 // ── STATE ──
 // track: -1 means "showing the album cover", 0..N-1 are actual tracks
-let state = { album: 1, track: -1 };
+// ── ALBUM RANGE (computed so this scales cleanly if more albums are ever merged in) ──
+const ALBUM_NUMS = Object.keys(ALBUMS).map(Number);
+const MIN_ALBUM = Math.min(...ALBUM_NUMS);
+const MAX_ALBUM = Math.max(...ALBUM_NUMS);
+
+let state = { album: MIN_ALBUM, track: -1 };
 
 // ── PULSE CANVAS ──
 let pulseCtx = null, pulseT = 0, pulseAnim = null;
@@ -1558,8 +1854,8 @@ function renderText() {
   body.scrollTop = 0;
   body.innerHTML = '';
 
-  document.getElementById('prevBtn').disabled = (state.album === 1 && state.track === -1);
-  document.getElementById('nextBtn').disabled = (state.album === 4 && state.track === meta.tracks.length - 1);
+  document.getElementById('prevBtn').disabled = (state.album === MIN_ALBUM && state.track === -1);
+  document.getElementById('nextBtn').disabled = (state.album === MAX_ALBUM && state.track === meta.tracks.length - 1);
 
   // ── ALBUM COVER VIEW ──
   if (state.track === -1) {
@@ -1650,7 +1946,7 @@ function stepTrack(dir) {
   let next = state.track + dir;
 
   if (next < -1) {
-    if (state.album > 1) {
+    if (state.album > MIN_ALBUM) {
       const prevAlbum = state.album - 1;
       state.album = prevAlbum;
       state.track = ALBUMS[prevAlbum].tracks.length - 1;
@@ -1660,7 +1956,7 @@ function stepTrack(dir) {
     return;
   }
   if (next >= meta.tracks.length) {
-    if (state.album < 4) { selectAlbum(state.album + 1); }
+    if (state.album < MAX_ALBUM) { selectAlbum(state.album + 1); }
     return;
   }
   selectTrack(next);
@@ -2106,6 +2402,8 @@ const ambientThemes = {
   2: { image: "Album 2/Drift_Wallpaper.png",     cool: [140,180,255], warm: [190,120,255], bloomPos: "64% 47%", bloomColor: "210,190,255", glowColor: "180,140,255" },
   3: { image: "Album 3/Elysium_Wallpaper.png",   cool: [120,255,230], warm: [255,195,110], bloomPos: "88% 45%", bloomColor: "255,235,180", glowColor: "140,255,220" },
   4: { image: "Album 4/Pantheon_Wallpaper.png",  cool: [190,140,255], warm: [255,200,110], bloomPos: "93% 78%", bloomColor: "255,215,150", glowColor: "200,150,255" },
+  5: { image: "Album 5/Throne_Wallpaper.png",    cool: [200,80,70],   warm: [255,170,90],  bloomPos: "50% 20%", bloomColor: "255,160,120", glowColor: "255,90,80"   },
+  6: { image: "Album 6/Divinity_Wallpaper.png",  cool: [150,180,220], warm: [255,255,255], bloomPos: "50% 18%", bloomColor: "230,235,255", glowColor: "200,215,255" },
 };
 
 function moteColor(xFrac, alpha) {
