@@ -610,6 +610,13 @@
 
     .text-body { max-height: none; }
 
+    .album-tabs {
+      max-height: 9.2rem;
+      overflow-y: auto;
+      overflow-x: hidden;
+      flex-shrink: 0;
+    }
+
     .mobile-tabbar { display: flex; }
   }
 
@@ -1238,7 +1245,6 @@ const tracksAlbum5 = [
     {label:"CHORUS",type:"chorus",text:`The silence ends — the silence ends\nTwo hundred years of peace unravel in a breath\nThe silence ends — the silence ends\nSomething ancient just woke up from death\nWe built our throne on borrowed ground\nAnd the ground just made a sound`},
     {label:"BRIDGE",type:"bridge",text:`We heard you calling once — and answered gladly\nNow something calls that we didn't ask to hear\nNot an invitation — a correction\nNot a welcome — a mirror held too near`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`The silence ends — the silence ends\nWe are not the last word, we are not the crest\nThe silence ends — the silence ends\nSomething older than the Signal has just opened its chest\nWe built our throne on borrowed ground\nAnd the whole sky just made a sound`},
-    {label:"PRODUCTION NOTE",type:"motif",text:`The Signal motif returns here for the first time since Eternal Pantheon, but pitched down and stretched — recognizable, but wrong, like a memory played at the wrong speed.`},
   ]},
   { title:"Awakening of the First", image:"Album 5/02__Awakening_of_the_First.png", note:"Across the galaxy, forms too large for optics to properly render begin to unfold from dormant stars, dead nebulae, and the spaces between galaxies that the Pantheon had assumed were simply empty. The Ancients are not invading. They are only, finally, standing up.", sections:[
     {label:"VERSE_01",type:"verse",text:`They were sleeping inside the dark matter\nOlder than the first star's fire\nWe built our cities on their eyelids\nNever asked who slept beneath the calm`},
@@ -1339,7 +1345,6 @@ const tracksAlbum5 = [
     {label:"CHORUS",type:"chorus",text:`Into the breach — we go as one\nInto the breach — the war's begun\nNot for the crown, not for the pride\nFor every world, for every life inside\nInto the breach — no looking back\nInto the breach — we won't retract\nWe are the Pantheon — INTO THE BREACH`},
     {label:"BRIDGE",type:"bridge",text:`We heard a signal once and followed it home\nNow we follow a war we didn't choose alone\nIgnition was the first fire we ever burned\nInto the breach — we burn again — we've learned`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Into the breach — we go as one\nInto the breach — there is no sun\nBright enough to show us the way but our own\nInto the breach — alone, not alone\nWe are the Pantheon, we are the spark\nInto the breach — into the dark\nINTO THE BREACH`},
-    {label:"PRODUCTION NOTE",type:"motif",text:`The line "Ignition was the first fire we ever burned" is the album's single deliberate callback — a direct lyrical nod to Album I, Track 7. Keep the reference brief and un-signposted musically; a single reprised guitar phrase from "Ignition" under this line is enough. No further callbacks in the album.`},
   ]},
   { title:"Pulse of War", image:"Album 5/12__Pulse_of_War.png", instrumental:true },
 ];
@@ -1377,7 +1382,7 @@ const tracksAlbum6 = [
     {label:"BRIDGE",type:"bridge",text:`Careful what rules you rewrite\nCareful what power you unbind\nEvery law we break tonight\nIs a door we can't fully close behind`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`We forge new laws — in the heat of the fight\nWe forge new laws — and bend the light\nNothing written stays unwritten now\nWe forge new laws — we make the how\nWe forge new laws — and hold the flame\nWe are not afraid to be reshaped by what we've made`},
   ]},
-  { title:"The Last Signal", image:"Album 6/05__The_Last_Signal.png", note:"Alone, exhausted, and doubting everything, one voice from the Pantheon sits beneath open sky and finally hears the original Signal reply — not as a beacon, not as a judgment, but as something that sounds, unmistakably, like a person.", sections:[
+  { title:"The Last Signal", image:"Album 6/05__The_Last_Signal.png", note:"Alone, exhausted, and doubting everything, one voice from the Pantheon sits beneath open sky and finally hears the Signal reply — not as a beacon, not as a judgment, but as another civilization's answered Pulse: a voice that once followed a call into the dark the same way humanity did, and in time became a call of its own.", sections:[
     {label:"VERSE_01",type:"verse",text:`I sat alone beneath the static\nAnd for the first time it replied\nNot a warning, not a judgment\nJust a voice, soft, by my side`},
     {label:"PRE-CHORUS",type:"pre",text:`"I called you not to conquer worlds"\n"I called you not to wear the crown"\n"I called you home, like I once was called"\n"Before the old ones settled down"`},
     {label:"CHORUS",type:"chorus",text:`The last Signal speaks a language\nOlder than the war, older than pride\nIt says: "You were always the answer"\n"You were never meant to hide"\nThe last Signal — soft and clear\nThe last Signal — after all these years`},
@@ -1401,14 +1406,13 @@ const tracksAlbum6 = [
     {label:"BRIDGE",type:"bridge",text:`Godhood was never the burden\nThe burden was always the choice\nEvery year, every war, every silence\nLed us here to raise one voice`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Eternal reckoning — look inside\nEternal reckoning — nowhere to hide\nWe are not the war we've fought\nWe are the choice, the choice we've sought\nEternal reckoning — we decide\nEternal reckoning — side by side`},
   ]},
-  { title:"Pulse of Creation", image:"Album 6/08__Pulse_of_Creation.png", note:"In the middle of the war's darkest hour, the Pulse and the Signal — separated since before the Pantheon existed — find each other. What was once a heartbeat and a distant call become, for the first time in the saga, one unified sound.", sections:[
+  { title:"Pulse of Creation", image:"Album 6/08__Pulse_of_Creation.png", note:"In the middle of the war's darkest hour, the Pulse and the Signal — distinct but intertwined since humanity first answered the call — finally understand themselves as one process. What was once a heartbeat and a distant call become, for the first time in the saga, one unified sound.", sections:[
     {label:"VERSE_01",type:"verse",text:`Listen — the war drum changes rhythm\nListen — the scream becomes a song\nThe Pulse and Signal find each other\nAfter two hundred years, so long`},
     {label:"PRE-CHORUS",type:"pre",text:`One was a heartbeat, one was a calling\nOne was engine, one was the stars\nNow they beat as a single current\nRunning through everything we are`},
     {label:"CHORUS",type:"chorus",text:`Pulse of creation — one and the same\nPulse of creation — call it by name\nThe heartbeat and the voice unite\nPulse of creation — burning bright\nPulse of creation — this is the sound\nOf everything we lost and found`},
     {label:"VERSE_02",type:"verse",text:`The battlefield falls quiet a moment\nEvery soldier feels the same\nThe war's not over, but something's different\nSomething ancient just learned our name`},
     {label:"BRIDGE",type:"bridge",text:`This is what the Aether started\nThis is what the drift was for\nThis is why we crossed the black\nTo become the thing worth fighting for`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Pulse of creation — one and the same\nPulse of creation — call it by name\nThe heartbeat and the voice unite\nPulse of creation — burning bright\nPulse of creation — hear the sound\nOf everything we are, unbound`},
-    {label:"PRODUCTION NOTE",type:"motif",text:`This is the moment the Pulse and Signal motifs fully merge for the first time in the saga — a single unified theme carried forward through the rest of Album VI. Every track from here to the end should sonically reflect that fusion rather than treating them as separate motifs.`},
   ]},
   { title:"New Horizon Eternal", image:"Album 6/09__New_Horizon_Eternal.png", note:"As the fires begin to die down across a dozen fronts, the Pantheon and the more reasonable Ancients find an uneasy but real stillness — not victory, exactly, but the first shape of something that could come after the war.", sections:[
     {label:"VERSE_01",type:"verse",text:`The fires die down across the systems\nThe Ancients and the Pantheon stand still\nNot as enemies, not quite as kin\nBut something new is taking root, and will`},
@@ -1433,9 +1437,8 @@ const tracksAlbum6 = [
     {label:"VERSE_02",type:"verse",text:`Somewhere a child hums the old Signal\nSomewhere a new Ark takes its shape\nWe are not the last light in the darkness\nWe are just the first of an infinite wake`},
     {label:"BRIDGE",type:"bridge",text:`We heard you calling — we're coming home\nThat's how it started, six hundred years gone\nNow we call forward to whoever's listening\nCome find us — the circle carries on`},
     {label:"FINAL CHORUS",type:"final-chorus",text:`Eternal dawn — the sky ignites\nEternal dawn — no end in sight\nWe are the drift, we are the spark\nWe are the light inside the dark\nEternal dawn — we rise again\nEternal dawn — the circle has no end`},
-    {label:"PRODUCTION NOTE",type:"motif",text:`This track carries the saga's single deliberate full-circle callback — "We heard you calling... we're coming home" directly reprises Album I, Track 1 ("The Signal"), now answered rather than asked. Suggest the original Track 1 vocal take (or a close re-recording of it) layered faintly beneath the final chorus. This is the only lyrical callback in Album VI; the Pulse+Signal musical fusion established in Track 8 carries the rest of the emotional continuity.`},
   ]},
-  { title:"The Infinite Signal", image:"Album 6/12__The_Infinite_Signal.png", instrumental:true },
+  { title:"Forever Calling", image:"Album 6/12__The_Infinite_Signal.png", instrumental:true },
 ];
 // ── SECTION TYPE → CSS CLASS ──
 const typeToClass = {
@@ -1640,11 +1643,11 @@ const ALBUMS = {
   },
   6: {
     roman: 'VI', title: 'Cosmic Throne — Part II: Beyond Divinity', cover: 'Album 6/Cover_Album6.png',
-    intro: 'The war between the Pantheon and the Ancients rages across the cosmos, and with it comes the full moral weight of playing god. But amid the devastation, something unexpected happens — the Pulse and the Signal, separated since before the Pantheon existed, finally find each other. This is the story of transcendence: not the end of the war, but the end of the need for one.',
+    intro: 'The war between the Pantheon and the Ancients rages across the cosmos, and with it comes the full moral weight of playing god. But amid the devastation, something unexpected happens — the Pulse and the Signal, always answering one another but never fully understood as one process, finally converge. This is the story of transcendence: not the end of the war, but the end of the need for one.',
     label: '// Album VI of VI — Aether Odyssey //',
     tagline: '"We heard you calling — we\'re coming home. The circle carries on."',
     meta: [['ERA','WAR\'S END'],['ORIGIN','PANTHEON & ANCIENTS'],['STATUS','TRANSCENDENT'],['REACH','UNIVERSAL']],
-    tracks: tracksAlbum6, outroTitle: 'The Infinite Signal',
+    tracks: tracksAlbum6, outroTitle: 'Forever Calling',
     outroDesc: 'No words remain. The war is over. The Pulse and Signal — fully merged since Track 8 — carry the saga\'s final theme outward.<br>Not triumphant in the way "Ignition" was triumphant, but settled, vast, and at peace.<br>The track fades out rather than ending — intentionally unresolved, so the circle can begin again.',
     wave: ['#ffffff','#8fa3c4'], mid: '#8fa3c4', ice: '#dce6f7',
     svgFallback: `
