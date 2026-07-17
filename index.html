@@ -2050,6 +2050,7 @@ function playTrackDirect(albumNum, idx) {
     state.album = albumNum;
     document.body.setAttribute('data-album', String(albumNum));
     renderAlbumTabs();
+    setAmbientWallpaper(albumNum);
   }
   state.track = idx;
   renderTrackNav();
