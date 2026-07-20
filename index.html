@@ -41,6 +41,7 @@
   body[data-album="4"] { --accent:#ffc840; --accent-deep:#c47a00; --accent-pale:#ffe8a0; --bg:#0f0a00; --bg-panel:#140e00; --bg-raise:#221a05; --border:#402800; --border-dim:#5a3a00; --text-dim:#a07830; }
   body[data-album="5"] { --accent:#ff4d4d; --accent-deep:#a30d0d; --accent-pale:#ff9494; --bg:#0f0303; --bg-panel:#140505; --bg-raise:#220808; --border:#601010; --border-dim:#4a0808; --text-dim:#a85a5a; }
   body[data-album="6"] { --accent:#dce6f7; --accent-deep:#8fa3c4; --accent-pale:#ffffff; --bg:#05070a; --bg-panel:#0a0d12; --bg-raise:#141822; --border:#2a3550; --border-dim:#1a2238; --text-dim:#7a8aa8; }
+  body[data-album="7"] { --accent:#ff9640; --accent-deep:#a34d0a; --accent-pale:#ffd9a8; --bg:#0f0803; --bg-panel:#150c04; --bg-raise:#221507; --border:#402a10; --border-dim:#2a1a08; --text-dim:#a87830; }
 
   /* ── APP SHELL ── */
   .app {
@@ -95,6 +96,7 @@
   body[data-album="4"] .topbar, body[data-album="4"] .sidebar { background: rgba(20,14,0,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
   body[data-album="5"] .topbar, body[data-album="5"] .sidebar { background: rgba(20,5,5,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
   body[data-album="6"] .topbar, body[data-album="6"] .sidebar { background: rgba(10,13,18,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  body[data-album="7"] .topbar, body[data-album="7"] .sidebar { background: rgba(15,8,3,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 
   .topbar {
     display: flex; align-items: center; justify-content: space-between;
@@ -1462,6 +1464,120 @@ const tracksAlbum6 = [
   ]},
   { title:"Forever Calling", image:"Album 6/12__The_Infinite_Signal.png", instrumental:true },
 ];
+
+const tracksAlbum7 = [
+{ title:"The Distant Signal", image:"Album 7/01__The_Distant_Signal.png", note:"On a world twelve thousand light-years from anything the Pantheon ever named, a lone operator on a rooftop antenna array catches a signal that shouldn't mean anything to him. It means everything to them. The Pantheon recognizes it instantly — the same pattern, the same pulse, the same call that once pulled humanity off a dying Earth. They were this pattern, once. The cycle begins exactly the way it always begins — quietly, and without permission.", sections:[
+  {label:"VERSE_01",type:"verse",text:`A young world tilts its dishes to the dark\nAnd catches a rhythm older than its own first spark\nNo one alive recalls who lit the first flame\nBut the pattern in the static somehow knows its name`},
+  {label:"PRE-CHORUS",type:"pre",text:`Every scholar swears it's new\nEvery elder swears it's old\nSomething out past every chart\nIs calling like it's done before`},
+  {label:"CHORUS",type:"chorus",text:`We hear you calling, we hear you calling\nA voice from nowhere, patient, unfalling\nWe don't know the shape of who first spoke it\nBut the shape of the calling — we already know it\nWe hear you calling, we hear you calling\nIs this a beginning, or an ending recalling`},
+  {label:"VERSE_02",type:"verse",text:`The old texts call it prophecy or myth\nA bedtime story handed down as gift\nBut the numbers in the noise don't care what we believe\nThey just keep arriving — the way tides don't ask leave`},
+  {label:"PRE-CHORUS",type:"pre",text:`Every scholar swears it's new\nEvery elder swears it's old\nSomething out past every chart\nIs calling like it's done before`},
+  {label:"CHORUS",type:"chorus",text:`We hear you calling, we hear you calling\nA voice from nowhere, patient, unfalling\nWe don't know the shape of who first spoke it\nBut the shape of the calling — we already know it\nWe hear you calling, we hear you calling\nIs this a beginning, or an ending recalling`},
+  {label:"BRIDGE",type:"bridge",text:`Maybe every voice was once a listener\nMaybe every listener becomes a voice\nMaybe the dark has always worked this way\nOne small light answering another's choice\nWe didn't ask to be the ones who're chosen\nBut something out there chose to speak our name`},
+  {label:"FINAL CHORUS",type:"final-chorus",text:`We hear you calling, we hear you calling\nAcross the silence something keeps unspooling\nWe don't know who we're meant to be inside it\nBut we won't look away now that we've spied it\nWe hear you calling — and we will answer\nWhatever this becomes, we will not vanish`},
+]},
+{ title:"Descendants", image:"Album 7/02__Descendants.png", note:"The Pantheon looks down on a city they didn't build and can't claim — towers, lights, an ordinary evening unfolding without them. Entirely unaware it exists because of anything at all. Pride and grief arrive in the same breath, because another exodus is already gathering on the horizon.", sections:[
+  {label:"VERSE_01",type:"verse",text:`We watch them stumble toward the edge of sky\nSmall hands reaching for what we once held\nWe never told them they were carrying us\nBut the shape of the wanting is the shape we knew ourselves`},
+  {label:"PRE-CHORUS",type:"pre",text:`They don't know our names\nThey don't know our fires\nBut they dream the way we dreamed\nBefore we became something higher`},
+  {label:"CHORUS",type:"chorus",text:`Descendants — you don't know you're ours\nDescendants — reaching for the stars\nEvery choice you make was already made in us\nEvery fear you carry, we once carried thus\nDescendants — go on, we won't stop you\nDescendants — we are only watching over you`},
+  {label:"VERSE_02",type:"verse",text:`A child on their world draws a shape in the sand\nA spiral, a signal, a shoreline, a hand\nShe doesn't know the shape already has a name\nIt's the first thing we ever learned to make the same`},
+  {label:"PRE-CHORUS",type:"pre",text:`They don't know our names\nThey don't know our fires\nBut they dream the way we dreamed\nBefore we became something higher`},
+  {label:"CHORUS",type:"chorus",text:`Descendants — you don't know you're ours\nDescendants — reaching for the stars\nEvery choice you make was already made in us\nEvery fear you carry, we once carried thus\nDescendants — go on, we won't stop you\nDescendants — we are only watching over you`},
+  {label:"BRIDGE",type:"bridge",text:`Every generation thinks it's the first to burn\nEvery generation thinks there's nothing left to learn\nBut we were them once, hungry and afraid\nReaching for a sky we hadn't yet been made\nLet them have the burning, let them have the reach\nLet them find their own words for everything we couldn't teach`},
+  {label:"FINAL CHORUS",type:"final-chorus",text:`Descendants — you are not alone\nDescendants — you were never truly on your own\nEvery choice you make was already loved in us\nEvery fear you carry, we already carried thus\nDescendants — go on, we're proud of you\nDescendants — this is what forever's for`},
+]},
+{ title:"We Were Once Mortal", image:"Album 7/03__We_Were_Once_Mortal.png", note:"A couple share a bench above a city neither of them will ever leave, unaware they're being watched by something that once sat on a bench exactly like it, on a world exactly like this one. The Pantheon lingers on the memory longer than it means to — the fear, the smallness, the impossible privilege of an ending. For the first time in a very long time, they miss being able to lose something.", sections:[
+  {label:"VERSE_01",type:"verse",text:`I remember a body that could break\nA heart that hurt whenever hearts could ache\nI remember a window and a dying world outside\nI remember being small enough to cry`},
+  {label:"PRE-CHORUS",type:"pre",text:`We traded all our fractures for the light\nWe traded every ending for the infinite\nBut some nights, in the vastness of the all\nI miss the version of me that could fall`},
+  {label:"CHORUS",type:"chorus",text:`We were once mortal, we were once afraid\nWe were once made of the same fragile clay\nBefore the throne, before the endless day\nWe were just people finding our own way\nWe were once mortal — god, I still remember\nThe warmth of being breakable and tender`},
+  {label:"VERSE_02",type:"verse",text:`I remember a captain who couldn't sleep\nI remember promises we swore to keep\nI remember thinking a hundred years was long\nNow a hundred years is just the length of a song`},
+  {label:"PRE-CHORUS",type:"pre",text:`We traded all our fractures for the light\nWe traded every ending for the infinite\nBut some nights, in the vastness of the all\nI miss the version of me that could fall`},
+  {label:"CHORUS",type:"chorus",text:`We were once mortal, we were once afraid\nWe were once made of the same fragile clay\nBefore the throne, before the endless day\nWe were just people finding our own way\nWe were once mortal — god, I still remember\nThe warmth of being breakable and tender`},
+  {label:"BRIDGE",type:"bridge",text:`Maybe that's the thing they never tell the gods\nThat power doesn't fill the space that mortal love once was\nMaybe we didn't ascend beyond the ache\nWe just learned to carry it a different way\nAnd some part of me stays on that dying blue shore\nStill human, still afraid, still reaching for the door`},
+  {label:"FINAL CHORUS",type:"final-chorus",text:`We were once mortal, we were once afraid\nAnd maybe that's the part we never should've traded away\nBefore the throne, before the endless day\nWe were just people finding our own way\nWe were once mortal — and I still remember\nI'd give this whole eternity for one more fragile forever`},
+]},
+{ title:"The Wheel Turns", image:"Album 7/04__The_Wheel_Turns.png", note:"A handful of young dreamers sit on a hillside pointing at a sky that means nothing to them yet and everything to the shapes half-hidden in its clouds. The Pantheon recognizes the gesture before it recognizes the faces — the same reaching, the same hunger. The pattern completes itself. This is simply what the wheel looks like from the inside, the second time you're old enough to recognize it.", sections:[
+  {label:"VERSE_01",type:"verse",text:`They picked eight faces from a world of more\nThey built a ship they've never built before\nThey don't know we did this exact same thing\nA thousand thousand years before their spring`},
+  {label:"PRE-CHORUS",type:"pre",text:`The numbers change, the names rearrange\nBut the shape of it all stays exactly the same\nEvery dying world, every desperate leap\nEvery promise a frightened species keeps`},
+  {label:"CHORUS",type:"chorus",text:`The wheel turns, the wheel turns\nThe same fire in a different urn\nWe thought that we were the only ones who'd burn this way\nBut the wheel turns, the wheel turns\nAnd somewhere else, another world learns\nWhat it costs to leave and what it costs to stay`},
+  {label:"VERSE_02",type:"verse",text:`Their pulse begins the way our pulse began\nAn engine and a prayer and a trembling hand\nWe watch the pattern that we swore was only ours\nUnfold again beneath somebody else's stars`},
+  {label:"PRE-CHORUS",type:"pre",text:`The numbers change, the names rearrange\nBut the shape of it all stays exactly the same\nEvery dying world, every desperate leap\nEvery promise a frightened species keeps`},
+  {label:"CHORUS",type:"chorus",text:`The wheel turns, the wheel turns\nThe same fire in a different urn\nWe thought that we were the only ones who'd burn this way\nBut the wheel turns, the wheel turns\nAnd somewhere else, another world learns\nWhat it costs to leave and what it costs to stay`},
+  {label:"BRIDGE",type:"bridge",text:`Maybe the wheel was never built to stop\nMaybe every ending is another's starting shot\nWe called it destiny, we called it chosen fate\nBut maybe it was only ever weight finding weight\nRound and round, the pattern finds a home\nIn every frightened species left alone`},
+  {label:"FINAL CHORUS",type:"final-chorus",text:`The wheel turns, the wheel turns\nAnd finally, finally, something in us learns\nWe weren't the only ones who'd have to burn this way\nThe wheel turns, the wheel turns\nAnd somewhere far away a small world learns\nThe same old fire in a brand new urn today`},
+]},
+{ title:"The Watchers", image:"Album 7/05__The_Watchers.png", note:"Ordinary people wait for an ordinary bus in the rain, entirely unaware of what's gathered in the clouds above them. The council debates there, in full view of the very lives it's debating — whether to reach down, whether to speak, whether guidance is a gift or just another kind of leash. In the end, silence wins, the way it always does when the alternative is remembered too well.", sections:[
+  {label:"VERSE_01",type:"verse",text:`We could reach down and touch the flame we lit\nWe could whisper the ending before they've earned it\nWe could save them every scar we ever bled\nOr we could simply watch, and say nothing instead`},
+  {label:"PRE-CHORUS",type:"pre",text:`The council's quiet, no one moves to speak\nSome gods are strong and some gods still feel weak\nThis is the hardest throne we've ever held\nThe throne of knowing and the choice to say nothing at all`},
+  {label:"CHORUS",type:"chorus",text:`We are the watchers, high above the fray\nWe are the watchers, biting back what we would say\nWe could end their struggle in a single breath\nBut a gift unearned is just another kind of death\nWe are the watchers — silent, burning, near\nWe are the watchers — and the hardest part is here`},
+  {label:"VERSE_02",type:"verse",text:`A child looks up and swears she sees a light\nNot a star, not a ship, just a presence in the night\nShe doesn't know it's us, holding our breath\nChoosing, every second, not to interfere just yet`},
+  {label:"PRE-CHORUS",type:"pre",text:`The council's quiet, no one moves to speak\nSome gods are strong and some gods still feel weak\nThis is the hardest throne we've ever held\nThe throne of knowing and the choice to say nothing at all`},
+  {label:"CHORUS",type:"chorus",text:`We are the watchers, high above the fray\nWe are the watchers, biting back what we would say\nWe could end their struggle in a single breath\nBut a gift unearned is just another kind of death\nWe are the watchers — silent, burning, near\nWe are the watchers — and the hardest part is here`},
+  {label:"BRIDGE",type:"bridge",text:`We were given nothing when we made our climb\nNo watchers reached down and stole our fear away in time\nAnd maybe that's exactly why we made it through\nMaybe mercy sometimes means we let them do it too\nIt isn't cruelty to let a child stand\nIt's the hardest kind of love we've ever had to understand`},
+  {label:"FINAL CHORUS",type:"final-chorus",text:`We are the watchers, high above the fray\nWe are the watchers, and today we chose to stay\nTheir struggle is their own, and it will make them who they'll be\nThe way our struggle made the gods you see\nWe are the watchers — quiet, burning, here\nLoving them enough to disappear`},
+]},
+{ title:"Ghosts of Elysium", image:"Album 7/06__Ghosts_of_Elysium.png", note:"Vines have taken the old colony the way grief eventually takes a room nobody visits. The Pantheon walks among ruins that used to be a beginning, and every crumbling wall holds a name they haven't said out loud in ten thousand years. This is not haunting in the way stories mean it — the ghosts are memories, and the memories are theirs.", sections:[
+  {label:"VERSE_01",type:"verse",text:`The ridge above the bay is bone-white now\nThe hull that carried us has learned to bow\nNo children run between the rusted seams\nJust wind, and the ghost of everything we dreamed`},
+  {label:"PRE-CHORUS",type:"pre",text:`We left this world the way you leave a home\nNot because we didn't love it, but because we'd grown\nAnd now we come back only as the wind\nTo visit every face we used to be within`},
+  {label:"CHORUS",type:"chorus",text:`Ghosts of Elysium, singing in the empty hall\nGhosts of Elysium, we remember all\nThe footfall, the harvest, the ordinary years\nThe ones who never got to see the stars up near\nGhosts of Elysium, we came back to grieve\nGhosts of Elysium, we never truly leave`},
+  {label:"VERSE_02",type:"verse",text:`There's a name still carved beside the eastern door\nA captain's daughter, gone a thousand years before\nWe stand where children used to learn to run\nAnd hum the only lullaby that isn't done`},
+  {label:"PRE-CHORUS",type:"pre",text:`We left this world the way you leave a home\nNot because we didn't love it, but because we'd grown\nAnd now we come back only as the wind\nTo visit every face we used to be within`},
+  {label:"CHORUS",type:"chorus",text:`Ghosts of Elysium, singing in the empty hall\nGhosts of Elysium, we remember all\nThe footfall, the harvest, the ordinary years\nThe ones who never got to see the stars up near\nGhosts of Elysium, we came back to grieve\nGhosts of Elysium, we never truly leave`},
+  {label:"BRIDGE",type:"bridge",text:`Every world we ever loved becomes a hollow bell\nRinging with the names of everyone who lived there well\nWe are not haunted, we are only full\nOf every quiet morning we were lucky to be pulled\nInto loving something small enough to lose\nThat's the price we paid, and still we wouldn't refuse`},
+  {label:"FINAL CHORUS",type:"final-chorus",text:`Ghosts of Elysium, we sing you home again\nGhosts of Elysium, our oldest, dearest friends\nThe footfall, the harvest, the ordinary years\nLive on inside the space between the stars up near\nGhosts of Elysium, thank you for the years\nGhosts of Elysium, we'll meet you past the fear`},
+]},
+{ title:"New Ignition", image:"Album 7/07__New_Ignition.png", note:"The world that first caught the Signal builds its own Ark now, without any help, the way every desperate species eventually does. A crowd holds its breath the exact same way another crowd once did, on another world, in another life. The Pantheon watches from above and does not reach down — not because they don't want to, but because reaching down was never the point of watching.", sections:[
+  {label:"VERSE_01",type:"verse",text:`Their engines cough and catch and start to roar\nA sound we haven't heard in centuries or more\nThe ground beneath their tower starts to shake\nThe same way ours did on the morning of our escape`},
+  {label:"PRE-CHORUS",type:"pre",text:`We remember every second of that climb\nWe remember being terrified and so alive\nAnd here it is again, a stranger's fire\nBurning with the shape of our own desire`},
+  {label:"CHORUS",type:"chorus",text:`New ignition — rising through the blue\nNew ignition — everything is new to you\nWe watched this exact same fire a lifetime past\nAnd god, we hope this fire is built to last\nNew ignition — burn the sky like we once did\nNew ignition — go further than we ever have`},
+  {label:"VERSE_02",type:"verse",text:`A hundred thousand faces watch the flame\nNot knowing that somewhere, we're crying out their name\nNot a warning and not a wish, just witness\nTo a fire that was always going to happen`},
+  {label:"PRE-CHORUS",type:"pre",text:`We remember every second of that climb\nWe remember being terrified and so alive\nAnd here it is again, a stranger's fire\nBurning with the shape of our own desire`},
+  {label:"CHORUS",type:"chorus",text:`New ignition — rising through the blue\nNew ignition — everything is new to you\nWe watched this exact same fire a lifetime past\nAnd god, we hope this fire is built to last\nNew ignition — burn the sky like we once did\nNew ignition — go further than we ever have`},
+  {label:"BRIDGE",type:"bridge",text:`Fly higher than we ever dared to fly\nOutlive every god who's watching from the sky\nWe are not the ceiling, we were only ever the floor\nThe first small step before a thousand more\nBurn brighter than the fire that made us gods\nAnd maybe, someday, become what we never was`},
+  {label:"FINAL CHORUS",type:"final-chorus",text:`New ignition — rising through the blue\nNew ignition — we believe in you\nWe watched this exact same fire a lifetime past\nAnd now we know for certain — this fire's built to last\nNew ignition — burn the sky and don't look back\nNew ignition — the future's yours to have`},
+]},
+{ title:"Loneliness of Eternity", image:"Album 7/08__Loneliness_of_Eternity.png", note:"In a hall built to hold every memory the Pantheon has ever kept, one of them stands alone with a galaxy turning outside the window and nothing in the room that needs them. This is what immortality actually costs: not pain, not danger, just the unbroken, echoing math of everyone else's ending arriving before yours ever will. Long before the council ever convenes, this is where the choice actually gets weighed.", sections:[
+  {label:"VERSE_01",type:"verse",text:`I've watched a thousand sunrises call a thousand names\nI've watched a thousand species learn the exact same pain\nAnd every time I think I've felt the whole of grief\nAnother world reminds me there's no bottom, no relief`},
+  {label:"PRE-CHORUS",type:"pre",text:`Nobody warned me forever was this quiet\nNobody warned me power doesn't stop the tide\nI built a throne to hold the weight of everything\nBut thrones were never built for missing anyone`},
+  {label:"CHORUS",type:"chorus",text:`This is the loneliness of eternity\nWatching every ending that will ever be\nI carry every voice that ever called my name\nAnd I will carry every one that ever will again\nThis is the loneliness of eternity\nThe price nobody tells the gods they'll have to pay`},
+  {label:"VERSE_02",type:"verse",text:`I miss a body that could simply disappear\nI miss an ending I could actually call near\nForever isn't freedom like they say it is\nForever's just a room you never get to leave`},
+  {label:"PRE-CHORUS",type:"pre",text:`Nobody warned me forever was this quiet\nNobody warned me power doesn't stop the tide\nI built a throne to hold the weight of everything\nBut thrones were never built for missing anyone`},
+  {label:"CHORUS",type:"chorus",text:`This is the loneliness of eternity\nWatching every ending that will ever be\nI carry every voice that ever called my name\nAnd I will carry every one that ever will again\nThis is the loneliness of eternity\nThe price nobody tells the gods they'll have to pay`},
+  {label:"BRIDGE",type:"bridge",text:`Maybe this is what the old ones tried to warn us of\nMaybe this is the shape underneath the throne we love\nMaybe every god who ever climbed this far\nLearns the quiet is the actual cost of being a star\nI would trade you every power that I hold\nFor one more version of the fear I had before I was old`},
+  {label:"FINAL CHORUS",type:"final-chorus",text:`This is the loneliness of eternity\nAnd maybe that's the truest thing that godhood means to me\nI carry every voice that ever called my name\nAnd I will love them even though it feels the same\nThis is the loneliness of eternity\nAnd I would bear it — gladly — one more century`},
+]},
+{ title:"The Final Choice", image:"Album 7/09__The_Final_Choice.png", note:"The council stands together on a terrace built for exactly this kind of decision, a planet turning below them. Far off, barely more than a glint against the dark, an Ark is already gone from sight, unstopped and unguided. The arguing is done — the ship still moving, untouched, is the choice already made.", sections:[
+  {label:"VERSE_01",type:"verse",text:`The council's called, the ancient chamber wakes\nThe same one where we wrote the laws we swore to make\nThis is the question that decides us all again\nNot what we've built, but who we'll choose to be back then`},
+  {label:"PRE-CHORUS",type:"pre",text:`Do we reach a hand into the dark\nDo we let them find their own way to the spark\nEvery choice tonight becomes another's fate\nThe weight we carried once, we carry it again, too late`},
+  {label:"CHORUS",type:"chorus",text:`This is the final choice, the one that never ends\nThis is the final choice we make again, again\nDo we save them from the fire, or let the fire teach\nEverything we only learned by nearly out of reach\nThis is the final choice — and we already know\nThe answer that we chose the last time long ago`},
+  {label:"VERSE_02",type:"verse",text:`We wrote it once in fire: create, do not control\nWe swore an oath that power isn't meant to own a soul\nAnd now the oath comes due, and now we have to hold\nThe same hard line we drew a thousand years ago`},
+  {label:"PRE-CHORUS",type:"pre",text:`Do we reach a hand into the dark\nDo we let them find their own way to the spark\nEvery choice tonight becomes another's fate\nThe weight we carried once, we carry it again, too late`},
+  {label:"CHORUS",type:"chorus",text:`This is the final choice, the one that never ends\nThis is the final choice we make again, again\nDo we save them from the fire, or let the fire teach\nEverything we only learned by nearly out of reach\nThis is the final choice — and we already know\nThe answer that we chose the last time long ago`},
+  {label:"BRIDGE",type:"bridge",text:`If we reach too far, we steal the thing that makes them strong\nIf we reach too far, we prove the Ancients weren't all wrong\nThe hardest kind of god is one who holds their hand back\nAnd trusts a smaller fire to find its own way to catch\nWe did not ascend to rule what we create\nWe ascended to remember what a chance to choose is worth`},
+  {label:"FINAL CHORUS",type:"final-chorus",text:`This is the final choice, and now we understand\nThe kindest thing a god can do is open, empty hands\nWe won't save them from the fire, we'll let the fire teach\nEverything that's only earned by reaching past your reach\nThis is the final choice — and this time we're sure\nThe answer was always to love them and let go`},
+]},
+{ title:"Silent Guardians", image:"Album 7/10__Silent_Guardians.png", note:"A child sleeps, safe and unaware, beneath a sky that has quietly become a bridge of every god the Pantheon has ever been — watching, spanning, asking nothing. This is what the guardianship actually looks like from below: not a throne, not a voice, just an enormous, patient presence that never once needs to be noticed to keep its promise.", sections:[
+  {label:"VERSE_01",type:"verse",text:`We took the crown off, set it on the floor\nWe are not landlords of the stars anymore\nWe'll stand along the edges, quiet, unadorned\nA lantern in the dark for those who haven't yet been born`},
+  {label:"PRE-CHORUS",type:"pre",text:`No throne, no verdict, and no final word\nJust a heartbeat watching over every wing that's stirred\nWe won't be worshipped and we won't be feared\nWe'll just be the reason no one has to disappear`},
+  {label:"CHORUS",type:"chorus",text:`We are the silent guardians now\nWe are the quiet in the dark somehow\nWe won't rule the fire, we'll just make sure it's seen\nBy everyone who's ever dared to dream\nSilent guardians, watching from afar\nSilent guardians — we are not your star`},
+  {label:"VERSE_02",type:"verse",text:`A lost ship drifting finds its bearings again\nNot because we steered it, just because we didn't leave\nSometimes the whole of love is being near\nWithout the need to be the ones who interfere`},
+  {label:"PRE-CHORUS",type:"pre",text:`No throne, no verdict, and no final word\nJust a heartbeat watching over every wing that's stirred\nWe won't be worshipped and we won't be feared\nWe'll just be the reason no one has to disappear`},
+  {label:"CHORUS",type:"chorus",text:`We are the silent guardians now\nWe are the quiet in the dark somehow\nWe won't rule the fire, we'll just make sure it's seen\nBy everyone who's ever dared to dream\nSilent guardians, watching from afar\nSilent guardians — we are not your star`},
+  {label:"BRIDGE",type:"bridge",text:`Let every new world make its own mistakes\nLet every fire burn however long it takes\nWe'll just be the quiet at the edge of everything\nThe proof that someone always kept on listening\nNo crown, no throne, no verdict left to give\nJust presence — just the choice to simply live beside`},
+  {label:"FINAL CHORUS",type:"final-chorus",text:`We are the silent guardians now\nWe are the quiet that will always somehow\nHold the dark back further than it's ever gone before\nWithout ever needing to be worshipped anymore\nSilent guardians, watching, standing by\nSilent guardians — the last, best gift we'll ever give`},
+]},
+{ title:"The Eternal Cycle", image:"Album 7/11__The_Eternal_Cycle.png", note:"The Pantheon stands in the open now, unhidden, on a hillside indistinguishable from the one where all of this began — children playing in a stream, a ship rising in the distance, a world that doesn't need saving. The wheel has turned all the way back around, and for the first time, the gods don't feel like an ending or a beginning. They just feel like part of the view.", sections:[
+  {label:"VERSE_01",type:"verse",text:`Every ending that we've ever known was just a door\nEvery silence that we've grieved was a beginning at its core\nWe were once the ones who followed something calling in the black\nNow we are the calling, and we're finally calling back`},
+  {label:"PRE-CHORUS",type:"pre",text:`The Signal and the Pulse were never two\nThey were always just a conversation coming through\nAnd every voice that answers becomes a voice that calls\nThat's the only truth that's ever mattered, after all`},
+  {label:"CHORUS",type:"chorus",text:`The cycle's eternal, and finally we're glad\nThe cycle's eternal — the best thing we ever had\nNot a prison and not a wheel we're chained upon\nJust a song that never really has to end or move on\nThe cycle's eternal, and we let it turn\nThe cycle's eternal — watch the new world burn and learn`},
+  {label:"VERSE_02",type:"verse",text:`We were dust that dreamed itself into the light\nWe were fear that taught itself to hold on through the night\nAnd somewhere else, right now, a frightened species stands\nAbout to learn the thing we learned with trembling hands`},
+  {label:"PRE-CHORUS",type:"pre",text:`The Signal and the Pulse were never two\nThey were always just a conversation coming through\nAnd every voice that answers becomes a voice that calls\nThat's the only truth that's ever mattered, after all`},
+  {label:"CHORUS",type:"chorus",text:`The cycle's eternal, and finally we're glad\nThe cycle's eternal — the best thing we ever had\nNot a prison and not a wheel we're chained upon\nJust a song that never really has to end or move on\nThe cycle's eternal, and we let it turn\nThe cycle's eternal — watch the new world burn and learn`},
+  {label:"BRIDGE",type:"bridge",text:`Let the wheel turn — we are not afraid of it\nLet the wheel turn — we finally made our peace with it\nEvery world that rises is a mirror of our own\nEvery child that reaches is a seed that we have sown\nWe are the Ancients now, and this is what we know:\nThe kindest thing we'll ever do is let the wheel go`},
+  {label:"FINAL CHORUS",type:"final-chorus",text:`The cycle's eternal, and we are finally free\nThe cycle's eternal — exactly as it's meant to be\nNot a prison and not a wheel we're chained upon\nJust a song that carries on, and carries on, and carries on\nThe cycle's eternal — we let the new light in\nThe cycle's eternal — let it all begin again`},
+]},
+{ title:"Home", image:"Album 7/12__Home.png", instrumental:true },
+];
 // ── SECTION TYPE → CSS CLASS ──
 const typeToClass = {
   chorus: 'chorus', 'final-chorus': 'final-chorus', final: 'final-chorus',
@@ -1695,6 +1811,39 @@ const ALBUMS = {
         <circle cx="400" cy="230" r="140" fill="none" stroke="var(--accent)" stroke-width="1" opacity="0.4"/>
         <circle cx="400" cy="230" r="210" fill="none" stroke="var(--accent-deep)" stroke-width="1" opacity="0.25"/>
         <circle cx="400" cy="230" r="280" fill="none" stroke="var(--accent-deep)" stroke-width="0.8" opacity="0.15"/>
+      </svg>`
+  },
+  7: {
+    roman: 'VII', title: 'Echoes of Eternity', cover: 'Album 7/Cover_Album7.png',
+    intro: 'Millions of years after the War of Creation, the wars are over and nobody remembers them. The Pantheon has become what humanity once called the Ancients. Then, without warning, the Signal returns — not because history repeats, but because another civilization, somewhere far away, has reached exactly the point humanity once reached. This is not a new adventure. It is the Pantheon remembering what it means to have once been mortal, and choosing, once again, what kind of gods to be.',
+    label: '// Album VII — Aether Odyssey Epilogue //',
+    tagline: '"The wheel turns, the wheel turns — and somewhere else, another world learns."',
+    meta: [['ERA','MILLIONS OF YEARS LATER'],['ORIGIN','THE PANTHEON'],['STATUS','WATCHING'],['REACH','ETERNAL']],
+    tracks: tracksAlbum7, outroTitle: 'Home',
+    outroDesc: '',
+    wave: ['#ff9640','#a34d0a'], mid: '#a34d0a', ice: '#ff9640',
+    svgFallback: `
+      <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="a7bg" cx="50%" cy="35%" r="85%">
+            <stop offset="0%" stop-color="var(--bg-raise)"/><stop offset="100%" stop-color="var(--bg)"/>
+          </radialGradient>
+          <radialGradient id="a7glow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#fff" stop-opacity="0.85"/>
+            <stop offset="45%" stop-color="var(--accent)" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <rect width="800" height="500" fill="url(#a7bg)"/>
+        <g opacity="0.7" fill="#fff">
+          <circle cx="90" cy="80" r="1.3"/><circle cx="180" cy="50" r="1"/><circle cx="700" cy="90" r="1.4"/>
+          <circle cx="640" cy="420" r="1.2"/><circle cx="120" cy="420" r="1"/><circle cx="60" cy="240" r="1.3"/>
+          <circle cx="740" cy="260" r="1"/><circle cx="400" cy="440" r="1"/>
+        </g>
+        <circle cx="400" cy="230" r="30" fill="url(#a7glow)"/>
+        <circle cx="400" cy="230" r="130" fill="none" stroke="var(--accent)" stroke-width="1" opacity="0.35"/>
+        <circle cx="400" cy="230" r="200" fill="none" stroke="var(--accent-deep)" stroke-width="1" opacity="0.22"/>
+        <circle cx="400" cy="230" r="270" fill="none" stroke="var(--accent-deep)" stroke-width="0.8" opacity="0.12"/>
       </svg>`
   }
 };
@@ -2443,6 +2592,7 @@ const ambientThemes = {
   4: { image: "Album 4/Pantheon_Wallpaper.png",  cool: [190,140,255], warm: [255,200,110], bloomPos: "93% 78%", bloomColor: "255,215,150", glowColor: "200,150,255" },
   5: { image: "Album 5/Throne_Wallpaper.png",    cool: [200,80,70],   warm: [255,170,90],  bloomPos: "50% 20%", bloomColor: "255,160,120", glowColor: "255,90,80"   },
   6: { image: "Album 6/Divinity_Wallpaper.png",  cool: [150,180,220], warm: [255,255,255], bloomPos: "50% 18%", bloomColor: "230,235,255", glowColor: "200,215,255" },
+  7: { image: "Album 7/EchoesOfEternity_Wallpaper.jpg", cool: [40,25,15], warm: [255,150,60], bloomPos: "78% 42%", bloomColor: "255,160,70", glowColor: "255,190,120" }
 };
 
 function moteColor(xFrac, alpha) {
