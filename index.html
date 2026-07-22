@@ -41,7 +41,7 @@
   body[data-album="4"] { --accent:#ffc840; --accent-deep:#c47a00; --accent-pale:#ffe8a0; --bg:#0f0a00; --bg-panel:#140e00; --bg-raise:#221a05; --border:#402800; --border-dim:#5a3a00; --text-dim:#a07830; }
   body[data-album="5"] { --accent:#ff4d4d; --accent-deep:#a30d0d; --accent-pale:#ff9494; --bg:#0f0303; --bg-panel:#140505; --bg-raise:#220808; --border:#601010; --border-dim:#4a0808; --text-dim:#a85a5a; }
   body[data-album="6"] { --accent:#dce6f7; --accent-deep:#8fa3c4; --accent-pale:#ffffff; --bg:#05070a; --bg-panel:#0a0d12; --bg-raise:#141822; --border:#2a3550; --border-dim:#1a2238; --text-dim:#7a8aa8; }
-  body[data-album="7"] { --accent:#ff9640; --accent-deep:#a34d0a; --accent-pale:#ffd9a8; --bg:#0f0803; --bg-panel:#150c04; --bg-raise:#221507; --border:#402a10; --border-dim:#2a1a08; --text-dim:#a87830; }
+  body[data-album="7"] { --accent:#c9ccd6; --accent-deep:#3a3d42; --accent-pale:#eef0f4; --bg:#050505; --bg-panel:#0a0a0a; --bg-raise:#121212; --border:#2a2a2a; --border-dim:#1a1a1a; --text-dim:#6a6a6a; }
 
   /* ── APP SHELL ── */
   .app {
@@ -96,7 +96,7 @@
   body[data-album="4"] .topbar, body[data-album="4"] .sidebar { background: rgba(20,14,0,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
   body[data-album="5"] .topbar, body[data-album="5"] .sidebar { background: rgba(20,5,5,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
   body[data-album="6"] .topbar, body[data-album="6"] .sidebar { background: rgba(10,13,18,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
-  body[data-album="7"] .topbar, body[data-album="7"] .sidebar { background: rgba(15,8,3,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  body[data-album="7"] .topbar, body[data-album="7"] .sidebar { background: rgba(5,5,5,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 
   .topbar {
     display: flex; align-items: center; justify-content: space-between;
@@ -1821,7 +1821,7 @@ const ALBUMS = {
     meta: [['ERA','MILLIONS OF YEARS LATER'],['ORIGIN','THE PANTHEON'],['STATUS','WATCHING'],['REACH','ETERNAL']],
     tracks: tracksAlbum7, outroTitle: 'Home',
     outroDesc: '',
-    wave: ['#ff9640','#a34d0a'], mid: '#a34d0a', ice: '#ff9640',
+    wave: ['#c9ccd6','#3a3d42'], mid: '#3a3d42', ice: '#c9ccd6',
     svgFallback: `
       <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -2592,7 +2592,7 @@ const ambientThemes = {
   4: { image: "Album 4/Pantheon_Wallpaper.png",  cool: [190,140,255], warm: [255,200,110], bloomPos: "93% 78%", bloomColor: "255,215,150", glowColor: "200,150,255" },
   5: { image: "Album 5/Throne_Wallpaper.png",    cool: [200,80,70],   warm: [255,170,90],  bloomPos: "50% 20%", bloomColor: "255,160,120", glowColor: "255,90,80"   },
   6: { image: "Album 6/Divinity_Wallpaper.png",  cool: [150,180,220], warm: [255,255,255], bloomPos: "50% 18%", bloomColor: "230,235,255", glowColor: "200,215,255" },
-  7: { image: "Album 7/EchoesOfEternity_Wallpaper.jpg", cool: [40,25,15], warm: [255,150,60], bloomPos: "78% 42%", bloomColor: "255,160,70", glowColor: "255,190,120" }
+  7: { image: "Album 7/EchoesOfEternity_Wallpaper.jpg", cool: [40,45,60], warm: [230,190,120], bloomPos: "78% 42%", bloomColor: "230,200,150", glowColor: "200,205,220" }
 };
 
 function moteColor(xFrac, alpha) {
