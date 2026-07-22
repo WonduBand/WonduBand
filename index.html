@@ -2059,6 +2059,7 @@ function renderAlbumTabs() {
 // ── RENDER: TRACK NAV ──
 function renderTrackNav() {
   const el = document.getElementById('trackNav');
+  const scrollPos = el.scrollTop;
   el.innerHTML = '';
   const meta = ALBUMS[state.album];
 
@@ -2081,16 +2082,22 @@ function renderTrackNav() {
       el.appendChild(chapterRow);
       lastChapter = t.chapter;
     } else if (!t.chapter) {
+      if (lastChapter !== null) {
+        const closeDivider = document.createElement('div');
+        closeDivider.className = 'track-nav-divider';
+        el.appendChild(closeDivider);
+      }
       lastChapter = null;
     }
 
     const row = document.createElement('div');
     row.className = 'track-row' + (i === state.track ? ' active' : '');
     row.dataset.idx = i;
+    const displayTitle = t.title.replace('(Orchestral Echo)', '(OE)');
     row.innerHTML = `
       <button class="row-play-btn" title="Play ${t.title}"><span class="icon icon-tri-right"></span></button>
       <span class="t-num">${String(i+1).padStart(2,'0')}</span>
-      <span class="t-title">${t.title}</span>
+      <span class="t-title">${displayTitle}</span>
       ${t.instrumental ? '<span class="t-inst">INST</span>' : ''}
     `;
     row.addEventListener('click', () => selectTrack(i));
@@ -2100,6 +2107,7 @@ function renderTrackNav() {
     });
     el.appendChild(row);
   });
+  el.scrollTop = scrollPos;
   refreshPlayingIndicators();
 }
 
